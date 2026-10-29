@@ -63,3 +63,16 @@ describe('recovery notice window', () => {
     expect(isRecoveryNoticeVisible(recoveredAt, '2026-01-31T10:00:00.000Z')).toBe(false);
   });
 });
+
+describe('recompensa numérica', () => {
+  const input = { lastSeenLocation: '', lastSeenAt: '', wearing: '', message: '' };
+  it('rechaza texto, moneda, decimales y signos sin convertirlos en otra cantidad', () => {
+    for (const reward of ['Se ofrece recompensa', '$1000', '10.50', '-100', '1e3']) {
+      expect(normalizeLostReport({ ...input, reward })).toEqual({ ok: false, error: 'Escribe la recompensa solo con dígitos, sin símbolos ni decimales.' });
+    }
+  });
+  it('conserva la cantidad en dígitos y permite omitirla', () => {
+    expect(normalizeLostReport({ ...input, reward: '1000' })).toEqual({ ok: true, value: expect.objectContaining({ reward: '1000' }) });
+    expect(normalizeLostReport({ ...input, reward: '' })).toEqual({ ok: true, value: expect.objectContaining({ reward: null }) });
+  });
+});
