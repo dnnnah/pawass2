@@ -1,28 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { BrandMark } from '@/features/auth/brand-mark';
 import { signOut } from '@/features/auth/actions';
 
-type ActiveDestination = 'pets' | 'account';
+type ActiveDestination = 'pets' | 'lost' | 'account';
 
 export function AppHeader({ active }: { active: ActiveDestination }) {
-  const [current, setCurrent] = useState(active);
-  useEffect(() => {
-    const updateCurrent = () => setCurrent(window.location.hash === '#cuenta' ? 'account' : active);
-    updateCurrent();
-    window.addEventListener('hashchange', updateCurrent);
-    return () => window.removeEventListener('hashchange', updateCurrent);
-  }, [active]);
-
   return (
     <header className="app-header">
       <BrandMark />
       <nav aria-label="Navegación principal">
-        <Link className={`nav-link ${current === 'pets' ? 'nav-link--active' : ''}`} href="/cuenta" aria-current={current === 'pets' ? 'page' : undefined}><NavIcon name="pets" /><span>Mis mascotas</span></Link>
-        <span className="nav-link nav-link--pending" aria-label="Mascotas perdidas, disponible en una fase posterior"><NavIcon name="lost" /><span>Mascotas perdidas</span><span className="nav-pending-label">Próximamente</span></span>
-        <Link className={`nav-link ${current === 'account' ? 'nav-link--active' : ''}`} href="/cuenta#cuenta" aria-current={current === 'account' ? 'page' : undefined}><NavIcon name="account" /><span>Cuenta</span></Link>
+        <Link className={`nav-link ${active === 'pets' ? 'nav-link--active' : ''}`} href="/mascotas" aria-current={active === 'pets' ? 'page' : undefined}><NavIcon name="pets" /><span>Mis mascotas</span></Link>
+        <Link className={`nav-link ${active === 'lost' ? 'nav-link--active' : ''}`} href="/perdidas" aria-current={active === 'lost' ? 'page' : undefined}><NavIcon name="lost" /><span>Mascotas perdidas</span></Link>
+        <Link className={`nav-link ${active === 'account' ? 'nav-link--active' : ''}`} href="/cuenta" aria-current={active === 'account' ? 'page' : undefined}><NavIcon name="account" /><span>Mi cuenta</span></Link>
       </nav>
       <form action={signOut}><button className="text-button" type="submit">Cerrar sesión</button></form>
     </header>
