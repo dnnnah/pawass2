@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { BrandMark } from '@/features/auth/brand-mark';
+import { PasswordField } from '@/features/auth/password-field';
 
 export default function ResetPasswordPage() {
   const [message, setMessage] = useState('');
@@ -24,5 +25,5 @@ export default function ResetPasswordPage() {
     }
   }
 
-  return <main className="auth-layout auth-layout--centered"><div className="auth-layout__brand"><BrandMark /></div><section className="auth-panel"><h1>Crea una contraseña nueva</h1><p>Elige una contraseña de al menos 8 caracteres.</p><form className="form-stack" method="post" onSubmit={submit}><label className="field"><span>Nueva contraseña</span><input name="password" type="password" autoComplete="new-password" minLength={8} maxLength={72} required /></label><button className="button button--primary button--wide" disabled={pending}>{pending ? 'Guardando…' : 'Actualizar contraseña'}</button></form>{message && <p role="status" aria-live="polite" className="form-message">{message}</p>}</section></main>;
+  return <main className="auth-layout auth-layout--centered"><div className="auth-layout__brand"><BrandMark /></div><section className="auth-panel"><h1>Crea una contraseña nueva</h1><p>Elige una contraseña de al menos 8 caracteres.</p><form className="form-stack" method="post" onSubmit={submit}><PasswordField name="password" label="Nueva contraseña" autoComplete="new-password" minLength={8} disabled={pending} /><button className="button button--primary button--wide" disabled={pending}>{pending ? 'Guardando…' : 'Actualizar contraseña'}</button></form>{message && <p role="status" aria-live="polite" className="form-message">{message}</p>}</section></main>;
 }
