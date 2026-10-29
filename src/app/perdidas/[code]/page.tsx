@@ -1,3 +1,4 @@
+import { PetNote } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { BrandMark } from '@/features/auth/brand-mark';
@@ -62,7 +63,6 @@ export default async function LostPetPage({ params }: Props) {
         <article className="lost-detail-card">
           <div className="lost-detail-photo">{photoUrl ? <Image src={photoUrl} alt={`Foto reciente de ${pet.pet_name}`} width={720} height={480} unoptimized /> : <PawIcon />}</div>
           <div className="lost-detail-body">
-            <p className="section-label">Ayúdanos a volver a casa</p>
             <h1>{pet.pet_name}</h1>
             <p className="lost-detail-meta">{pet.species === 'perro' ? 'Perro' : 'Gato'} · Código {pet.public_code}</p>
             <section className="lost-detail-location"><h2>Última ubicación vista</h2><p>{pet.last_seen_location || 'Ubicación pendiente'}</p>{pet.last_seen_at && <time dateTime={pet.last_seen_at}>{new Date(pet.last_seen_at).toLocaleString('es-MX', { dateStyle: 'long', timeStyle: 'short' })}</time>}</section>
@@ -70,12 +70,12 @@ export default async function LostPetPage({ params }: Props) {
             {pet.message && <section className="lost-detail-section"><h2>Mensaje de su familia</h2><p>{pet.message}</p></section>}
             {pet.reward && <section className="lost-detail-section"><h2>Recompensa informativa</h2><p>{pet.reward}</p></section>}
             {pet.care_alerts?.length > 0 && <section className="lost-detail-care"><h2>Alertas de cuidado autorizadas</h2><ul>{pet.care_alerts.map((alert, index) => <li key={`${alert.category}-${index}`}><strong>{alert.label}</strong><span>{alert.severity === 'critical' ? 'Alerta crítica' : alert.severity === 'precaution' ? 'Precaución' : 'Información'}</span>{alert.instructions && <p>{alert.instructions}</p>}</li>)}</ul></section>}
-            <div className="lost-detail-contact"><h2>Contacta a su familia</h2><WhatsAppActions name={pet.pet_name} code={pet.public_code} whatsapp={pet.whatsapp_phone} urgent /><a className="button button--urgent-outline button--wide" href={`tel:${pet.rescue_phone}`}>Llamar a su familia</a></div>
+            <div className="lost-detail-contact"><h2>Contacta a su familia</h2><WhatsAppActions name={pet.pet_name} code={pet.public_code} whatsapp={pet.whatsapp_phone} callPhone={pet.rescue_phone} urgent /></div>
             <p className="privacy-note">Esta página solo contiene información elegida por su tutor para ayudar durante la búsqueda.</p>
           </div>
         </article>
       </div>
-      <footer className="rescue-footer"><a className="button button--outline" href={`/p/${pet.public_code}`}>Abrir ficha QR</a><span>PawPass · Ayuda a volver a casa</span></footer>
+      <div className="rescue-footer"><PetNote name={pet.pet_name} rescue /><a className="button button--outline" href={`/p/${pet.public_code}`}>Abrir ficha QR</a></div>
     </main>
   );
 }

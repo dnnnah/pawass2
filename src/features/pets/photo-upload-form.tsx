@@ -34,9 +34,9 @@ export function PetPhotoUploadForm({ petId, publicCode }: { petId: string; publi
       <input type="hidden" name="petId" value={petId} />
       <input type="hidden" name="publicCode" value={publicCode} />
       <label className="field"><span>Foto principal <em>opcional</em></span><input type="file" name="photo" accept="image/*" /></label>
-      <p className="form-description">La foto se convierte a WebP, se reduce a 2000 px como máximo y se guarda en un bucket privado. La ficha pública recibe una URL temporal para mostrarla.</p>
+      <p className="form-description">Elige una foto clara donde se vea su cara. Aparecerá en su ficha de rescate para ayudar a reconocerla.</p>
       {(error || state.message) && <p className="form-message" role="status" aria-live="polite">{error || state.message}</p>}
-      <button className="button button--outline" type="submit" disabled={pending}>{pending ? 'Preparando foto…' : 'Guardar foto'}</button>
+      <button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Preparando foto…' : 'Guardar foto'}</button>
     </form>
   );
 }

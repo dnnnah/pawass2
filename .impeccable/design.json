@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-29T04:02:47.084748+00:00",
+  "title": "Design System: PawPass V2",
+  "extensions": {
+    "colorMeta": {
+      "blue": {
+        "role": "primary",
+        "displayName": "blue",
+        "tonalRamp": ["oklch(15% 0.0868 227.41)", "oklch(27% 0.0868 227.41)", "oklch(38% 0.0868 227.41)", "oklch(50% 0.0868 227.41)", "oklch(61% 0.0868 227.41)", "oklch(73% 0.0868 227.41)", "oklch(84% 0.0868 227.41)", "oklch(95% 0.0868 227.41)"]
+      },
+      "blue-deep": {
+        "role": "primary",
+        "displayName": "blue-deep",
+        "tonalRamp": ["oklch(15% 0.0734 228.13)", "oklch(27% 0.0734 228.13)", "oklch(38% 0.0734 228.13)", "oklch(50% 0.0734 228.13)", "oklch(61% 0.0734 228.13)", "oklch(73% 0.0734 228.13)", "oklch(84% 0.0734 228.13)", "oklch(95% 0.0734 228.13)"]
+      },
+      "blue-light": {
+        "role": "primary",
+        "displayName": "blue-light",
+        "tonalRamp": ["oklch(15% 0.0158 216.67)", "oklch(27% 0.0158 216.67)", "oklch(38% 0.0158 216.67)", "oklch(50% 0.0158 216.67)", "oklch(61% 0.0158 216.67)", "oklch(73% 0.0158 216.67)", "oklch(84% 0.0158 216.67)", "oklch(95% 0.0158 216.67)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "ink",
+        "tonalRamp": ["oklch(15% 0.0498 229.92)", "oklch(27% 0.0498 229.92)", "oklch(38% 0.0498 229.92)", "oklch(50% 0.0498 229.92)", "oklch(61% 0.0498 229.92)", "oklch(73% 0.0498 229.92)", "oklch(84% 0.0498 229.92)", "oklch(95% 0.0498 229.92)"]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "muted",
+        "tonalRamp": ["oklch(15% 0.0370 227.03)", "oklch(27% 0.0370 227.03)", "oklch(38% 0.0370 227.03)", "oklch(50% 0.0370 227.03)", "oklch(61% 0.0370 227.03)", "oklch(73% 0.0370 227.03)", "oklch(84% 0.0370 227.03)", "oklch(95% 0.0370 227.03)"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "paper",
+        "tonalRamp": ["oklch(15% 0.0000 89.88)", "oklch(27% 0.0000 89.88)", "oklch(38% 0.0000 89.88)", "oklch(50% 0.0000 89.88)", "oklch(61% 0.0000 89.88)", "oklch(73% 0.0000 89.88)", "oklch(84% 0.0000 89.88)", "oklch(95% 0.0000 89.88)"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "surface",
+        "tonalRamp": ["oklch(15% 0.0060 223.45)", "oklch(27% 0.0060 223.45)", "oklch(38% 0.0060 223.45)", "oklch(50% 0.0060 223.45)", "oklch(61% 0.0060 223.45)", "oklch(73% 0.0060 223.45)", "oklch(84% 0.0060 223.45)", "oklch(95% 0.0060 223.45)"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "line",
+        "tonalRamp": ["oklch(15% 0.0196 217.25)", "oklch(27% 0.0196 217.25)", "oklch(38% 0.0196 217.25)", "oklch(50% 0.0196 217.25)", "oklch(61% 0.0196 217.25)", "oklch(73% 0.0196 217.25)", "oklch(84% 0.0196 217.25)", "oklch(95% 0.0196 217.25)"]
+      },
+      "danger": {
+        "role": "semantic",
+        "displayName": "danger",
+        "tonalRamp": ["oklch(15% 0.1680 21.27)", "oklch(27% 0.1680 21.27)", "oklch(38% 0.1680 21.27)", "oklch(50% 0.1680 21.27)", "oklch(61% 0.1680 21.27)", "oklch(73% 0.1680 21.27)", "oklch(84% 0.1680 21.27)", "oklch(95% 0.1680 21.27)"]
+      },
+      "danger-soft": {
+        "role": "semantic",
+        "displayName": "danger-soft",
+        "tonalRamp": ["oklch(15% 0.0186 9.30)", "oklch(27% 0.0186 9.30)", "oklch(38% 0.0186 9.30)", "oklch(50% 0.0186 9.30)", "oklch(61% 0.0186 9.30)", "oklch(73% 0.0186 9.30)", "oklch(84% 0.0186 9.30)", "oklch(95% 0.0186 9.30)"]
+      },
+      "accent-violet": {
+        "role": "secondary",
+        "displayName": "accent-violet",
+        "tonalRamp": ["oklch(15% 0.1274 292.96)", "oklch(27% 0.1274 292.96)", "oklch(38% 0.1274 292.96)", "oklch(50% 0.1274 292.96)", "oklch(61% 0.1274 292.96)", "oklch(73% 0.1274 292.96)", "oklch(84% 0.1274 292.96)", "oklch(95% 0.1274 292.96)"]
+      },
+      "accent-cyan": {
+        "role": "secondary",
+        "displayName": "accent-cyan",
+        "tonalRamp": ["oklch(15% 0.1035 226.68)", "oklch(27% 0.1035 226.68)", "oklch(38% 0.1035 226.68)", "oklch(50% 0.1035 226.68)", "oklch(61% 0.1035 226.68)", "oklch(73% 0.1035 226.68)", "oklch(84% 0.1035 226.68)", "oklch(95% 0.1035 226.68)"]
+      },
+      "accent-cobalt": {
+        "role": "secondary",
+        "displayName": "accent-cobalt",
+        "tonalRamp": ["oklch(15% 0.1439 264.74)", "oklch(27% 0.1439 264.74)", "oklch(38% 0.1439 264.74)", "oklch(50% 0.1439 264.74)", "oklch(61% 0.1439 264.74)", "oklch(73% 0.1439 264.74)", "oklch(84% 0.1439 264.74)", "oklch(95% 0.1439 264.74)"]
+      },
+      "surface-violet": {
+        "role": "neutral",
+        "displayName": "surface-violet",
+        "tonalRamp": ["oklch(15% 0.0095 299.24)", "oklch(27% 0.0095 299.24)", "oklch(38% 0.0095 299.24)", "oklch(50% 0.0095 299.24)", "oklch(61% 0.0095 299.24)", "oklch(73% 0.0095 299.24)", "oklch(84% 0.0095 299.24)", "oklch(95% 0.0095 299.24)"]
+      },
+      "photo-violet": {
+        "role": "neutral",
+        "displayName": "photo-violet",
+        "tonalRamp": ["oklch(15% 0.0165 301.21)", "oklch(27% 0.0165 301.21)", "oklch(38% 0.0165 301.21)", "oklch(50% 0.0165 301.21)", "oklch(61% 0.0165 301.21)", "oklch(73% 0.0165 301.21)", "oklch(84% 0.0165 301.21)", "oklch(95% 0.0165 301.21)"]
+      },
+      "line-violet": {
+        "role": "neutral",
+        "displayName": "line-violet",
+        "tonalRamp": ["oklch(15% 0.0477 298.83)", "oklch(27% 0.0477 298.83)", "oklch(38% 0.0477 298.83)", "oklch(50% 0.0477 298.83)", "oklch(61% 0.0477 298.83)", "oklch(73% 0.0477 298.83)", "oklch(84% 0.0477 298.83)", "oklch(95% 0.0477 298.83)"]
+      },
+      "surface-cobalt": {
+        "role": "neutral",
+        "displayName": "surface-cobalt",
+        "tonalRamp": ["oklch(15% 0.0131 251.56)", "oklch(27% 0.0131 251.56)", "oklch(38% 0.0131 251.56)", "oklch(50% 0.0131 251.56)", "oklch(61% 0.0131 251.56)", "oklch(73% 0.0131 251.56)", "oklch(84% 0.0131 251.56)", "oklch(95% 0.0131 251.56)"]
+      },
+      "line-cobalt": {
+        "role": "neutral",
+        "displayName": "line-cobalt",
+        "tonalRamp": ["oklch(15% 0.0371 244.45)", "oklch(27% 0.0371 244.45)", "oklch(38% 0.0371 244.45)", "oklch(50% 0.0371 244.45)", "oklch(61% 0.0371 244.45)", "oklch(73% 0.0371 244.45)", "oklch(84% 0.0371 244.45)", "oklch(95% 0.0371 244.45)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {"displayName": "Título principal", "purpose": "Encabezados de página."},
+      "title": {"displayName": "Nombre de mascota", "purpose": "Tarjetas."},
+      "body": {"displayName": "Lectura", "purpose": "Texto y formularios."},
+      "label": {"displayName": "Etiqueta", "purpose": "Nombres de campos."}
+    },
+    "shadows": [
+      {"name": "rescue", "value": "0 16px 40px rgba(32, 70, 91, 0.09)", "purpose": "Ficha QR."},
+      {"name": "account-contact", "value": "0 10px 28px rgba(26, 66, 84, .06)", "purpose": "Contacto de cuenta."},
+      {"name": "navigation-menu", "value": "0 12px 30px #173b4b14", "purpose": "Panel de navegación desplegable."}
+    ],
+    "motion": [
+      {"name": "control-transition", "value": "120ms ease", "purpose": "Estados de controles; respeta reduced-motion."}
+    ],
+    "breakpoints": [
+      {"name": "mobile", "value": "620px"},
+      {"name": "lost-detail", "value": "760px"},
+      {"name": "editor", "value": "880px"}
+    ]
+  },
+  "components": [
+    {"name": "Primario", "kind": "button", "refersTo": "button-primary", "description": "Acción primario.", "html": "<button class=\"ds-button-primary\">Guardar cambios</button>", "css": ".ds-button-primary {font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif; min-height:48px; border:2px solid transparent; border-radius:12px; padding:.75rem 1.1rem; font-weight:700; background:var(--blue); color:#fff; cursor:pointer; transition:background-color 120ms ease;} .ds-button-primary:hover {background:var(--blue-deep);} .ds-button-primary:focus-visible {outline:3px solid var(--focus);outline-offset:3px;} .ds-button-primary:active {transform:translateY(1px);} .ds-button-primary:disabled {opacity:.58;cursor:not-allowed;} @media(prefers-reduced-motion:reduce) {.ds-button-primary {transition:none;}}"},
+    {"name": "Secundario", "kind": "button", "refersTo": "button-secondary", "description": "Acción secundario.", "html": "<button class=\"ds-button-secondary\">Guardar cambios</button>", "css": ".ds-button-secondary {font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif; min-height:48px; border:2px solid #527483; border-radius:12px; padding:.75rem 1.1rem; font-weight:700; background:transparent; color:var(--ink); cursor:pointer; transition:background-color 120ms ease;} .ds-button-secondary:hover {background:#f0f6f8;} .ds-button-secondary:focus-visible {outline:3px solid var(--focus);outline-offset:3px;} .ds-button-secondary:active {transform:translateY(1px);} .ds-button-secondary:disabled {opacity:.58;cursor:not-allowed;} @media(prefers-reduced-motion:reduce) {.ds-button-secondary {transition:none;}}"},
+    {"name": "Terciario", "kind": "button", "refersTo": "button-tertiary", "description": "Acción terciario.", "html": "<button class=\"ds-button-tertiary\">Guardar cambios</button>", "css": ".ds-button-tertiary {font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif; min-height:48px; border:2px solid transparent; border-radius:12px; padding:.75rem 1.1rem; font-weight:700; background:transparent; color:var(--blue-deep); cursor:pointer; transition:background-color 120ms ease;text-decoration:underline; text-underline-offset:.2em;} .ds-button-tertiary:hover {background:transparent;} .ds-button-tertiary:focus-visible {outline:3px solid var(--focus);outline-offset:3px;} .ds-button-tertiary:active {transform:translateY(1px);} .ds-button-tertiary:disabled {opacity:.58;cursor:not-allowed;} @media(prefers-reduced-motion:reduce) {.ds-button-tertiary {transition:none;}}"},
+    {"name": "Campo", "kind": "input", "description": "Etiqueta y entrada de texto.", "html": "<label class=\"ds-field\">Nombre<input placeholder=\"Nombre de tu mascota\"></label>", "css": ".ds-field{font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif;display:grid;gap:.4rem;color:var(--ink);font-size:.92rem;font-weight:700}.ds-field input{font:inherit;min-height:48px;border:1px solid #9db3bf;border-radius:9px;background:#fff;padding:.7rem .8rem;color:var(--ink)}.ds-field input:hover{border-color:var(--blue)}.ds-field input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"},
+    {"name": "Estado habitual", "kind": "chip", "description": "Estado con texto, sin depender del color.", "html": "<span class=\"ds-state\">En casa</span>", "css": ".ds-state{font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif;display:inline-flex;border-radius:999px;background:var(--blue-light);color:var(--blue-deep);padding:.3rem .65rem;font-size:.78rem;font-weight:700}"},
+    {"name": "Tarjeta", "kind": "card", "refersTo": "card", "description": "Cuerpo de tarjeta con superficie azul suave.", "html": "<div class=\"ds-card-list\"><article class=\"ds-card\"><h2>Niko</h2><p>Perro · Su ficha y cuidados</p></article><article class=\"ds-card\"><h2>Luna</h2><p>Gata · Su ficha y cuidados</p></article></div>", "css": ".ds-card{font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif;border:1px solid #bed8e3;border-radius:16px;background:#f5fafc;padding:1.35rem;color:var(--ink)}.ds-card h2{font-size:2rem;line-height:1.12;margin:0 0 .35rem}.ds-card p{color:var(--ink-soft);margin:0} .ds-card-list{display:grid;gap:1.5rem}.ds-card:nth-child(even){border-color:#d5cbed;background:#faf8ff}"},
+    {"name": "Navegación de secciones", "kind": "nav", "description": "Acceso a bloques del editor.", "html": "<nav class=\"ds-nav\" aria-label=\"Secciones\"><a href=\"#identidad\">Identidad</a><a href=\"#contactos\">Contactos</a></nav>", "css": ".ds-nav{font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;border-bottom:1px solid var(--line)}.ds-nav a{display:inline-flex;align-items:center;min-height:48px;color:var(--blue-deep);font-size:.9rem;font-weight:650;text-decoration:none}.ds-nav a:hover{text-decoration:underline}.ds-nav a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"},
+    {"name": "PetTrail del pie global", "kind": "custom", "description": "Variante compacta del pie compartido, cercana al contenido.", "html": "<div class=\"ds-trail\" aria-hidden=\"true\"><svg class=\"ds-figure ds-sparkle\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m16 4 3.2 8.8L28 16l-8.8 3.2L16 28l-3.2-8.8L4 16l8.8-3.2L16 4Z\"/><path d=\"M26 3v5M23.5 5.5h5\"/></svg><svg class=\"ds-figure ds-dog\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10 11 8 4 3 7l2 14 5-3m12-7 2-7 5 3-2 14-5-3M10 9c4-2 8-2 12 0v12c0 5-12 5-12 0V9Z\"/><path d=\"m14 18 2 2 2-2m-2 2v3\"/><circle cx=\"13\" cy=\"14\" r=\".6\"/><circle cx=\"19\" cy=\"14\" r=\".6\"/></svg><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\" aria-hidden=\"true\" class=\"ds-paw\">\n  <g fill=\"#176986\">\n    <ellipse cx=\"6.1\" cy=\"11.2\" rx=\"3.2\" ry=\"4.2\" transform=\"rotate(-18 6.1 11.2)\"/>\n    <ellipse cx=\"12.6\" cy=\"6.9\" rx=\"3.1\" ry=\"4.2\" transform=\"rotate(-6 12.6 6.9)\"/>\n    <ellipse cx=\"20.1\" cy=\"7.1\" rx=\"3.1\" ry=\"4.2\" transform=\"rotate(8 20.1 7.1)\"/>\n    <ellipse cx=\"26.3\" cy=\"11.8\" rx=\"3.1\" ry=\"4.1\" transform=\"rotate(19 26.3 11.8)\"/>\n    <path d=\"M16.1 14.4c-2.8 0-4.5 2.8-6 4.7-1.5 1.9-3.4 3.5-3.4 5.5 0 2.7 2.1 4.6 4.8 4.6 2.5 0 3.6-1.5 6.6-1.5 3 0 4 1.5 6.5 1.5 2.8 0 4.9-1.9 4.9-4.6 0-2-1.8-3.6-3.3-5.5-1.5-1.9-3.2-4.7-6.1-4.7Z\"/>\n  </g>\n</svg>\n<svg class=\"ds-figure ds-heart\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 27S4 20 4 11a6 6 0 0 1 12-1 6 6 0 0 1 12 1c0 9-12 16-12 16Z\"/></svg><svg class=\"ds-figure ds-cat\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 13 5 4l9 5h4l9-5-1 9c5 15-25 15-20 0Z\"/><path d=\"m14 18 2 2 2-2m-2 2v3M3 18l7 1m-7 5 7-2m12-3 7-1m-7 4 7 2\"/><circle cx=\"11\" cy=\"15\" r=\".6\"/><circle cx=\"21\" cy=\"15\" r=\".6\"/></svg><svg class=\"ds-figure ds-collar\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 9c7 4 17 4 24 0v6c-7 4-17 4-24 0V9Z\"/><path d=\"M14 17v4m4-4v4\"/><path d=\"m11 24 5-4 5 4-5 5-5-5Z\"/><circle cx=\"16\" cy=\"24\" r=\".6\"/></svg><svg class=\"ds-figure ds-sparkle\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m16 4 3.2 8.8L28 16l-8.8 3.2L16 28l-3.2-8.8L4 16l8.8-3.2L16 4Z\"/><path d=\"M26 3v5M23.5 5.5h5\"/></svg></div>", "css": ".ds-trail{display:flex;align-items:center;justify-content:center;gap:clamp(.75rem,3vw,2rem);padding:1.2rem 0}.ds-figure{width:44px;height:44px}.ds-paw{width:26px;height:26px}.ds-dog{color:var(--accent-cobalt);transform:rotate(-8deg)}.ds-cat{color:var(--accent-cyan);transform:rotate(8deg)}.ds-heart,.ds-collar{color:var(--accent-violet)}.ds-heart{fill:#eee8fa}.ds-sparkle{color:var(--accent-cyan);width:26px;height:26px;fill:#e0f5fb}@media(max-width:620px){.ds-trail{gap:.8rem}.ds-figure{width:34px;height:34px}.ds-sparkle{width:17px;height:17px}.ds-paw{width:20px;height:20px}} .ds-trail{margin:.15rem 0 .5rem;padding:.65rem 0}.ds-trail .ds-figure{width:26px;height:26px}.ds-trail .ds-sparkle{width:18px;height:18px}"},
+    {"name": "Menú de cabecera", "kind": "nav", "description": "Botón de menú común a todas las anchuras; el ejemplo muestra su estado abierto. El componente real gestiona Escape, clic fuera y selección.", "html": "<div class=\"ds-header-menu\"><button class=\"ds-menu-toggle\" aria-expanded=\"true\" aria-controls=\"ds-app-menu\" aria-label=\"Cerrar menú de navegación\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m6 6 12 12M6 18 18 6\"/></svg>Menú</button><nav class=\"ds-app-menu\" id=\"ds-app-menu\" aria-label=\"Navegación principal\"><a href=\"/mascotas\" aria-current=\"page\">Mis mascotas</a><a href=\"/perdidas\">Mascotas perdidas</a><a href=\"/cuenta\">Mi cuenta</a><button>Cerrar sesión</button></nav></div>", "css": ".ds-header-menu{font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif;display:grid;justify-items:end;gap:.5rem}.ds-menu-toggle{display:inline-flex;min-height:48px;align-items:center;gap:.6rem;border:1px solid var(--line);border-radius:10px;background:#fff;padding:.6rem .8rem;color:var(--blue-deep);font:inherit;font-weight:700;cursor:pointer}.ds-menu-toggle svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}.ds-menu-toggle:hover,.ds-menu-toggle[aria-expanded=\"true\"]{border-color:var(--blue);background:var(--blue-light)}.ds-app-menu{display:flex;width:min(340px,calc(100vw - 2rem));flex-direction:column;gap:.25rem;border:1px solid var(--line);border-radius:12px;background:#fff;padding:.6rem;box-shadow:0 12px 30px #173b4b14}.ds-app-menu a{display:flex;min-height:48px;align-items:center;border-radius:8px;padding:.75rem;color:var(--ink-soft);font-size:.95rem;text-decoration:none}.ds-app-menu a:hover,.ds-app-menu a[aria-current=\"page\"]{background:var(--blue-light);color:var(--blue-deep)}.ds-app-menu button{min-height:44px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--blue-deep);font:inherit;text-align:left;text-decoration:underline;padding:.5rem .75rem}.ds-header-menu :focus-visible{outline:3px solid var(--focus);outline-offset:3px}@media(max-width:620px){.ds-menu-toggle{min-height:44px;padding:.45rem .65rem}}"},
+    {"name": "Teléfono nacional", "kind": "input", "description": "País y lada separados del número; ejemplo del formato al perder foco. En edición el componente muestra solo dígitos.", "html": "<fieldset class=\"ds-phone\"><legend>Teléfono</legend><div><label><span>País o lada</span><select><option>México (+52)</option></select></label><label><span>Número nacional</span><input type=\"tel\" inputmode=\"numeric\" autocomplete=\"tel-national\" value=\"55 1234 5678\"></label></div><small>Elige el país y escribe solo el número nacional.</small></fieldset>", "css": ".ds-phone{font-family:\"Nunito Sans Variable\",ui-sans-serif,system-ui,sans-serif;border:0;padding:0;color:var(--ink)}.ds-phone legend{font-size:.92rem;font-weight:700;margin-bottom:.4rem}.ds-phone>div{display:grid;grid-template-columns:minmax(125px,.8fr) minmax(0,1.2fr);gap:.5rem}.ds-phone label span{display:block;font-size:.8rem}.ds-phone input,.ds-phone select{width:100%;min-height:48px;border:1px solid #9db3bf;border-radius:9px;background:#fff;padding:.7rem .8rem;color:var(--ink);font:inherit;box-sizing:border-box}.ds-phone small{color:var(--ink-soft);font-size:.8rem}.ds-phone input:hover,.ds-phone select:hover{border-color:var(--blue)}.ds-phone :focus-visible{outline:3px solid var(--focus);outline-offset:3px}"}
+  ],
+  "narrative": {
+    "northStar": "Azul mineral para cuidar",
+    "overview": "PawPass conserva la continuidad de la maqueta azul-rescate-06 y su huella, con las decisiones posteriores aprobadas: lienzo blanco, detalles azules, fotografías completas y Nunito Sans Variable. La personalidad combina 75% profesional y 25% juguetón: información clara, mensajes cálidos y figuras visibles de corazón, gato, perro, estrella, collar y huella. Los acentos violeta, cian y cobalto aportan el color más llamativo aprobado, con tarjetas alternas pastel.\n\nLa decoración acompaña el cuidado sin competir con el nombre, la fotografía, el estado o el contacto. Esta documentación describe el sistema implementado en modo Operate; no sustituye la especificación funcional ni convierte la maqueta en una composición obligatoria.",
+    "keyCharacteristics": ["Blanco con superficies pastel y acentos azules, violetas y cian.", "Fotografías completas, sin recorte.", "Acciones sólido / contorno / texto.", "Calidez discreta y legibilidad accesible."],
+    "rules": [
+      {"name": "The Azul cotidiano Rule", "body": "Las tareas habituales y WhatsApp usan azul; el rojo identifica pérdida, emergencia o alerta crítica. No introducir verde ni amarillo como colores de interfaz; la marca oficial multicolor de Google es una excepción de identidad externa.", "section": "colors"},
+      {"name": "The Foto completa Rule", "body": "Mostrar la fotografía con object-fit: contain; el espacio sobrante conserva el fondo suave del contenedor.", "section": "components"}
+    ],
+    "dos": ["Do conservar la huella después de “pawpass”.", "Do ofrecer foco visible, etiquetas claras y controles táctiles accesibles conforme a WCAG 2.2 AA.", "Do mantener WhatsApp primero, llamada secundaria cuando esté disponible y ubicación como acción terciaria.", "Do utilizar mensajes personalizados y figuras visibles sin ocultar información."],
+    "donts": ["Don't recortar las fotografías para llenar una tarjeta.", "Don't usar verde o amarillo como colores propios de interfaz ni rojo para estados cotidianos; conservar la marca oficial multicolor de Google.", "Don't usar decoración como sustituto de etiquetas o estados textuales."]
+  }
+}

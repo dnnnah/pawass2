@@ -13,6 +13,8 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
   const [state, action, pending] = useActionState(submit, initialState);
   const [pendingConversion, startTransition] = useTransition();
   const [photoError, setPhotoError] = useState('');
+  const legacyReward = Boolean(report?.reward && !/^[0-9]+$/.test(report.reward));
+  const [reward, setReward] = useState(legacyReward ? '' : report?.reward || '');
   const isPending = pending || pendingConversion;
   const dateTimeDefault = report?.last_seen_at ? report.last_seen_at.slice(0, 16) : '';
   async function prepareAndSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -37,7 +39,7 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
         <label className="field"><span>Fecha y hora aproximadas <em>opcional</em></span><input type="datetime-local" name="lastSeenAt" defaultValue={dateTimeDefault} /></label>
         <label className="field"><span>¿Qué llevaba puesto? <em>opcional</em></span><input name="wearing" maxLength={160} defaultValue={report?.wearing || ''} placeholder="Ej. Collar azul y pechera roja" /></label>
         <label className="field"><span>Mensaje para quien la encuentre <em>opcional</em></span><textarea name="message" maxLength={500} rows={3} defaultValue={report?.message || ''} placeholder="Cualquier detalle que ayude a reconocerla o acercarse con calma." /></label>
-        <label className="field"><span>Recompensa informativa <em>opcional</em></span><input name="reward" maxLength={100} defaultValue={report?.reward || ''} placeholder="Ej. Se ofrece recompensa" /></label>
+        <label className="field"><span>Recompensa informativa <em>opcional</em></span><input name="reward" inputMode="numeric" pattern="[0-9]*" maxLength={100} value={reward} onChange={(event) => { if (/^[0-9]*$/.test(event.target.value)) setReward(event.target.value); }} placeholder="Ej. 1000" /><small>Solo dígitos, sin símbolos ni decimales.</small>{legacyReward && <small>La recompensa anterior contiene texto. Escribe una cantidad en dígitos o deja el campo vacío para retirarla al guardar.</small>}</label>
         <label className="field"><span>Foto reciente <em>opcional</em></span><input type="file" name="recentPhoto" accept="image/*" /></label>
         <p className="form-description">Se convierte a WebP, con un máximo de 2000 px y 5 MB. Se borra del almacenamiento al recuperar a la mascota.</p>
         {photoError && <p className="form-message" role="alert">{photoError}</p>}

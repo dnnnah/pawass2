@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export function WhatsAppActions({ name, code, whatsapp, urgent = false }: { name: string; code: string; whatsapp: string; urgent?: boolean }) {
+export function WhatsAppActions({ name, code, whatsapp, urgent = false, callPhone }: { name: string; code: string; whatsapp: string; urgent?: boolean; callPhone?: string }) {
   const [message, setMessage] = useState('');
   const text = encodeURIComponent(`Hola, encontré a ${name} (${code}). ¿Puedes ayudarme a reunirle contigo?`);
   const number = whatsapp.replace(/\D/g, '');
@@ -27,8 +27,9 @@ export function WhatsAppActions({ name, code, whatsapp, urgent = false }: { name
 
   return (
     <div className="whatsapp-actions">
-      <a className={`button ${urgent ? 'button--danger' : 'button--whatsapp'}`} href={href} target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
-      <button className="button button--outline" type="button" onClick={includeLocation}>Incluir mi ubicación actual</button>
+      <a className="button button--whatsapp" href={href} target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+      {callPhone && <a className={`button ${urgent ? 'button--urgent-outline' : 'button--outline'} button--wide`} href={`tel:${callPhone}`}>Llamar a su familia</a>}
+      <button className="button button--text" type="button" onClick={includeLocation}>Incluir mi ubicación actual</button>
       {message && <p className="form-message" role="status" aria-live="polite">{message}</p>}
     </div>
   );

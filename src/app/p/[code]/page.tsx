@@ -1,3 +1,4 @@
+import { PetNote } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { BrandMark } from '@/features/auth/brand-mark';
@@ -50,13 +51,11 @@ export default async function RescuePage({ params }: Props) {
       <article className="rescue-card">
         <div className={`rescue-photo ${photoUrl ? 'rescue-photo--image' : 'rescue-photo--empty'}`}>{photoUrl ? <Image src={photoUrl} alt={`Foto de ${pet.pet_name}`} width={560} height={420} unoptimized /> : <PawIllustration />}</div>
         <div className="rescue-card__body">
-          <p className="section-label">Alguien está buscando ayudarte</p>
           <h1>{pet.pet_name}</h1>
           <p className="species-label">{pet.species === 'perro' ? 'Perro' : 'Gato'} <span aria-hidden="true">·</span> Código {code}</p>
           <p className="rescue-instruction">{showHomeNotice && !status?.lost ? 'Esta mascota ya volvió a casa.' : 'Si me encontraste, comunícate con mi familia.'}</p>
           <div className="rescue-actions">
-            <a className={`button ${status?.lost ? 'button--urgent-outline' : 'button--primary'} button--wide rescue-call`} href={`tel:${pet.rescue_phone}`}>Llamar a mi familia</a>
-            <WhatsAppActions name={pet.pet_name} code={code} whatsapp={pet.whatsapp_phone} urgent={Boolean(status?.lost)} />
+            <WhatsAppActions name={pet.pet_name} code={code} whatsapp={pet.whatsapp_phone} callPhone={pet.rescue_phone} urgent={Boolean(status?.lost)} />
           </div>
           {visibleCareAlerts.length > 0 && (
             <section className="rescue-care" aria-labelledby="rescue-care-heading">
@@ -74,7 +73,7 @@ export default async function RescuePage({ params }: Props) {
           <p className="privacy-note">Esta ficha solo comparte los datos que el tutor autorizó para ayudar a su mascota a volver a casa.</p>
         </div>
       </article>
-      <footer className="rescue-footer"><BrandMark /><span>Una forma sencilla de volver a casa.</span></footer>
+      <PetNote name={pet.pet_name} rescue={!showHomeNotice || Boolean(status?.lost)} recovered={showHomeNotice && !status?.lost} />
     </main>
   );
 }

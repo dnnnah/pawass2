@@ -1,3 +1,4 @@
+import { PetNote, PetTrail } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { BrandMark } from '@/features/auth/brand-mark';
@@ -35,9 +36,9 @@ export default async function PetsPage() {
     <main className="account-shell">
       <AppHeader active="pets" />
       <div className="account-main pets-dashboard">
-        <div className="welcome"><div><h1>Mis mascotas</h1><p>Sus fichas, contactos y alertas, en un lugar.</p></div></div>
+        <header className="welcome"><div><h1 id="pets-heading">Mis mascotas</h1><p>{profile?.first_name && <>Hola, <strong>{profile.first_name}</strong>. </>}Sus fichas, contactos y cuidados, siempre a la mano.</p></div><span className="section-count">{(pets || []).length} {(pets || []).length === 1 ? 'mascota' : 'mascotas'}</span></header>
+        <PetTrail />
         <section className="pets-section" aria-labelledby="pets-heading">
-          <div className="section-title"><div><p className="section-label">Tu hogar PawPass</p><h2 id="pets-heading">Tus mascotas</h2></div><span className="section-count">{(pets || []).length} {(pets || []).length === 1 ? 'ficha' : 'fichas'}</span></div>
           {!profileComplete && <div className="profile-needed"><strong>Completa tus contactos para activar una ficha QR.</strong><p>Guarda tu nombre y teléfono de rescate antes de registrar una mascota.</p><a href="/cuenta">Ir a Mi cuenta</a></div>}
           {(pets || []).length > 0 && <div className="pet-list">{(pets || []).map((pet) => {
             const code = codeByPet.get(pet.id);
@@ -45,7 +46,7 @@ export default async function PetsPage() {
           })}</div>}
           {profileComplete ? <PetCreateControl phone={profile!.rescue_phone!} whatsapp={profile!.whatsapp_phone!} hasPets={Boolean((pets || []).length)} /> : (pets || []).length === 0 ? <p className="empty-pets">Cuando completes tus contactos, podrás crear una ficha de rescate.</p> : null}
         </section>
-        <footer className="account-footer">Las alertas de cuidado se editan desde la ficha privada de cada mascota. Solo aparecen en el QR cuando las autorizas.</footer>
+        <PetNote /><p className="account-footer">Las alertas de cuidado se editan desde la ficha privada de cada mascota. Solo aparecen en el QR cuando las autorizas.</p>
       </div>
     </main>
   );

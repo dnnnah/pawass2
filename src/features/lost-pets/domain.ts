@@ -24,6 +24,7 @@ export function normalizeLostReport(input: LostReportInput):
   if (lastSeenLocation.length > 160) return { ok: false, error: 'La ubicación debe tener 160 caracteres o menos.' };
   if (wearing.length > 160) return { ok: false, error: 'La descripción debe tener 160 caracteres o menos.' };
   if (message.length > 500) return { ok: false, error: 'El mensaje debe tener 500 caracteres o menos.' };
+  if (reward && !/^[0-9]+$/.test(reward)) return { ok: false, error: 'Escribe la recompensa solo con dígitos, sin símbolos ni decimales.' };
   if (reward.length > 100) return { ok: false, error: 'La recompensa debe tener 100 caracteres o menos.' };
 
   let lastSeenAt: string | null = null;
