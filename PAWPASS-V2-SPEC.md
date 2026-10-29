@@ -14,6 +14,8 @@ PawPass V2 es un proyecto nuevo. Las decisiones, estados y estructuras de PawPas
 
 **Arquitectura base aprobada:** una aplicación web modular con React, Next.js, TypeScript y Tailwind CSS. Supabase provee autenticación, PostgreSQL y almacenamiento de archivos. Supabase Auth ofrecerá tanto correo y contraseña como Google OAuth; las sesiones se integrarán con Next.js.
 
+**Organización del código:** Módulos Verticales (Feature-Driven). Cada módulo de producto agrupa interfaz, acciones, reglas de dominio y contratos relacionados bajo `src/features/<modulo>`; `src/app` ensambla las rutas y layouts. Las utilidades compartidas se reservan para lógica realmente transversal.
+
 ### Stack obligatorio y responsabilidad de cada parte
 
 | Capa | Elección | Responsabilidad |
