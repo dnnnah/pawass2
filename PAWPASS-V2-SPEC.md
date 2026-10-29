@@ -6,9 +6,9 @@
 
 PawPass es una aplicación web instalable (PWA) abierta a tutores de cualquier país, con contenido inicial y lenguaje enfocados en México. Permite al tutor registrar la identidad y salud de sus mascotas, facilitar el contacto cuando alguien escanea su placa QR y publicar una alerta cuando una mascota se pierde. La aplicación no divide a sus usuarios ni a sus mascotas en productos separados por país.
 
-La primera versión pública incluye **cuenta y mascota, alertas de cuidado, ficha de rescate por QR, alerta y tablón de mascotas perdidas, cartel de búsqueda y carnet de salud privado**. La comunidad de perfiles públicos y las “patitas” se definirán y construirán en una etapa posterior.
+La primera versión pública incluye **cuenta y mascota, alertas de cuidado, ficha de rescate por QR, alerta y tablón de mascotas perdidas, carnet de salud privado y cartel de búsqueda**. Por petición del autor, el carnet se adelanta a la fase 4 y el cartel pasa a la fase 5; luego se cierra la primera versión con accesibilidad, SEO y PWA. La comunidad de perfiles públicos y las “patitas” se construirán después.
 
-El orden de definición y construcción es: **cuenta y mascota → alertas de cuidado → QR y pérdida → cartel → carnet de salud completo**. Las alertas de cuidado se preparan antes que el carnet completo porque el QR de rescate debe poder mostrarlas desde el inicio.
+El orden de definición y construcción es: **cuenta y mascota → alertas de cuidado → QR y pérdida → carnet de salud privado (fase 4) → cartel de búsqueda (fase 5) → cierre de primera versión con accesibilidad, SEO y PWA**. Pawgram es posterior a la primera versión. Las alertas de cuidado se preparan antes que el carnet completo porque el QR de rescate debe poder mostrarlas desde el inicio.
 
 PawPass V2 es un proyecto nuevo. Las decisiones, estados y estructuras de PawPass anterior no se heredan automáticamente.
 
@@ -122,7 +122,7 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 - Tras marcarla como recuperada, el QR muestra la ficha habitual con el aviso **“Ya está en casa” durante 30 días**. Después vuelve a la ficha habitual sin ese aviso. Una nueva alerta activa reemplaza el aviso de recuperación.
 - El tutor conserva un historial privado de sus episodios de pérdida y recuperación, con sus fechas correspondientes.
 
-## 7. Cartel de “Se busca” — fase posterior
+## 7. Cartel de “Se busca” — fase 5
 
 - La alerta puede estar activa antes de que el cartel esté listo. La descarga se habilita cuando existe **al menos una foto** de la mascota y se ha indicado la última zona vista.
 - PawPass genera dos imágenes PNG de alta calidad: **9:16** para historias y estados, y **4:5** para publicaciones.
@@ -133,6 +133,8 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 - Si una persona escanea un cartel antiguo después de la recuperación, llega a la misma ficha QR y ve el aviso temporal “Ya está en casa”.
 
 ## 8. PWA, archivos y eliminación
+
+La PWA es parte del cierre de la primera versión posterior a las fases 4 y 5. Los documentos del carnet usan un bucket privado y permisos de propietario en Storage. La aplicación no conserva ni presenta URLs públicas o firmadas para documentos; la descarga se sirve desde una ruta autenticada que comprueba sesión y propiedad. Los documentos y registros de salud solo se consultan en el área privada autenticada, nunca desde el QR ni el tablón.
 
 - La primera versión puede instalarse como PWA. Sin internet muestra una pantalla clara de desconexión. Consultar o modificar datos requiere conexión; no habrá edición ni sincronización diferida sin internet.
 - Todas las fotos subidas (principal, galería y extravío) se convierten a WebP con calidad objetivo del 80 % antes de almacenarse. Los documentos conservan su formato permitido.
