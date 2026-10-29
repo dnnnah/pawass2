@@ -1,8 +1,10 @@
-.superpowers/
-.next/
 node_modules/
-.env
-.env.*
+.next/
+out/
+coverage/
+.env*
 !.env.example
-*.local
+*.tsbuildinfo
+supabase/.temp/
 .DS_Store
+.superpowers/
