@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { getAuthRedirectPath } from './auth-routing';
 
 export async function updateSession(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -17,6 +18,12 @@ export async function updateSession(request: NextRequest) {
       },
     },
   });
-  await supabase.auth.getClaims();
+  const { data } = await supabase.auth.getClaims();
+  const redirectPath = getAuthRedirectPath(request.nextUrl.pathname, Boolean(data?.claims?.sub));
+  if (redirectPath) {
+    const redirectResponse = NextResponse.redirect(new URL(redirectPath, request.url));
+    response.cookies.getAll().forEach((cookie) => redirectResponse.cookies.set(cookie));
+    return redirectResponse;
+  }
   return response;
 }

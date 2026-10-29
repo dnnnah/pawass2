@@ -5,6 +5,7 @@ import { AppHeader } from '@/features/navigation/app-header';
 import { HealthRecordManager, type HealthDocumentRow, type HealthRecordRow } from '@/features/health-record/health-record-manager';
 import type { PetSpecies } from '@/features/health-record/domain';
 import { createClient } from '@/lib/supabase/server';
+import { getIdentityFromClaims } from '@/lib/supabase/identity';
 
 export const metadata: Metadata = {
   title: 'Carnet de salud | PawPass',
@@ -19,11 +20,12 @@ export default async function HealthRecordPage({ params }: Props) {
   if (!isUuid(id)) notFound();
   const supabase = await createClient();
   if (!supabase) return <main className="setup-page"><h1>Conecta Supabase para continuar</h1><p>El carnet privado necesita una sesión segura con el proyecto de datos.</p></main>;
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/');
+  const { data } = await supabase.auth.getClaims();
+  const identity = getIdentityFromClaims(data?.claims);
+  if (!identity) redirect('/');
 
   const { data: pet } = await supabase.from('pets').select('id,name,species')
-    .eq('id', id).eq('owner_id', user.id).maybeSingle();
+    .eq('id', id).eq('owner_id', identity.id).maybeSingle();
   if (!pet) notFound();
 
   const [{ data: records }, { data: documents }] = await Promise.all([

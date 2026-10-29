@@ -4,6 +4,7 @@ import { AppHeader } from '@/features/navigation/app-header';
 import { ProfileForm } from '@/features/profile/profile-form';
 import { DeleteAccountForm } from '@/features/profile/delete-account-form';
 import { createClient } from '@/lib/supabase/server';
+import { getIdentityFromClaims } from '@/lib/supabase/identity';
 
 export const metadata: Metadata = { title: 'Mi cuenta | PawPass', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
@@ -11,9 +12,10 @@ export const dynamic = 'force-dynamic';
 export default async function AccountPage() {
   const supabase = await createClient();
   if (!supabase) redirect('/');
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/');
-  const { data: profile } = await supabase.from('profiles').select('first_name,surname1,surname2,rescue_phone,whatsapp_phone').eq('id', user.id).maybeSingle();
+  const { data } = await supabase.auth.getClaims();
+  const identity = getIdentityFromClaims(data?.claims);
+  if (!identity) redirect('/');
+  const { data: profile } = await supabase.from('profiles').select('first_name,surname1,surname2,rescue_phone,whatsapp_phone').eq('id', identity.id).maybeSingle();
   const profileData = profile || { first_name: null, surname1: null, surname2: null, rescue_phone: null, whatsapp_phone: null };
   return (
     <main className="account-shell">
@@ -21,7 +23,7 @@ export default async function AccountPage() {
       <div className="account-main account-settings">
         <div className="account-page-heading"><p className="section-label">Configuración privada</p><h1>Mi cuenta</h1><p>Administra tu identidad y los contactos que reciben las alertas de rescate.</p></div>
         <section className="section-panel account-contact-panel" aria-labelledby="contact-heading">
-          <ProfileForm profile={profileData} email={user.email || ''} />
+          <ProfileForm profile={profileData} email={identity.email || ''} />
         </section>
         <section className="account-privacy-note" aria-labelledby="privacy-heading">
           <h2 id="privacy-heading">Tu privacidad</h2>

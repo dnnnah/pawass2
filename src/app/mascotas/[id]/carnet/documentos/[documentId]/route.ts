@@ -1,5 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { getIdentityFromClaims } from '@/lib/supabase/identity';
 
 const DOCUMENT_BUCKET = 'pet-health-documents';
 const CONTENT_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png', 'image/webp']);
@@ -11,10 +12,11 @@ export async function GET(_request: Request, { params }: Props) {
   if (!isUuid(id) || !isUuid(documentId)) notFound();
   const supabase = await createClient();
   if (!supabase) notFound();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/');
+  const { data } = await supabase.auth.getClaims();
+  const identity = getIdentityFromClaims(data?.claims);
+  if (!identity) redirect('/');
 
-  const { data: pet } = await supabase.from('pets').select('id').eq('id', id).eq('owner_id', user.id).maybeSingle();
+  const { data: pet } = await supabase.from('pets').select('id').eq('id', id).eq('owner_id', identity.id).maybeSingle();
   if (!pet) notFound();
   const { data: document } = await supabase.from('pet_health_documents')
     .select('storage_path,original_filename,mime_type')

@@ -1,16 +1,8 @@
-import { redirect } from 'next/navigation';
 import { AuthPanel } from '@/features/auth/auth-panel';
 import { BrandMark } from '@/features/auth/brand-mark';
 import { hasSupabaseEnvironment, isLocalTestLoginEnabled } from '@/lib/supabase/env';
-import { createClient } from '@/lib/supabase/server';
 
-export default async function HomePage() {
-  const supabase = await createClient();
-  if (supabase) {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) redirect('/mascotas');
-  }
-
+export default function HomePage() {
   return (
     <main className="auth-layout">
       <div className="auth-layout__brand"><BrandMark /></div>
