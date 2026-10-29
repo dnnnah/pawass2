@@ -64,7 +64,7 @@ export async function deleteCareAlert(formData: FormData): Promise<void> {
 }
 
 function revalidateCareAlertViews(petId: string) {
-  revalidatePath('/cuenta');
+  revalidatePath('/mascotas');
   revalidatePath(`/mascotas/${petId}`);
 }
 
