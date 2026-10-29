@@ -5,7 +5,7 @@ import { safeRedirectPath } from '@/lib/domain';
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
-  const next = request.nextUrl.searchParams.get('next') || '/cuenta';
+  const next = request.nextUrl.searchParams.get('next') || '/mascotas';
   const safeNext = safeRedirectPath(next, getSiteUrl());
   const supabase = await createClient();
 

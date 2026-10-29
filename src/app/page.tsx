@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation';
 import { AuthPanel } from '@/features/auth/auth-panel';
 import { BrandMark } from '@/features/auth/brand-mark';
-import { hasSupabaseEnvironment } from '@/lib/supabase/env';
+import { hasSupabaseEnvironment, isLocalTestLoginEnabled } from '@/lib/supabase/env';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function HomePage() {
   const supabase = await createClient();
   if (supabase) {
     const { data: { user } } = await supabase.auth.getUser();
-    if (user) redirect('/cuenta');
+    if (user) redirect('/mascotas');
   }
 
   return (
@@ -22,7 +22,7 @@ export default async function HomePage() {
           <div className="story-note"><span className="story-note__dot"/><span>Una ficha lista cuando importa.</span></div>
           <p>Su nombre.<br/>Una forma de volver a casa.</p>
         </div>
-        <AuthPanel configured={hasSupabaseEnvironment()} />
+        <AuthPanel configured={hasSupabaseEnvironment()} showDevTestAccount={isLocalTestLoginEnabled()} />
       </div>
       <footer className="auth-footer">PawPass · Cuidado que acompaña</footer>
     </main>
