@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -80,7 +81,6 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
   return (
     <section className="auth-panel" aria-labelledby="auth-heading">
       <div className="auth-panel__intro">
-        <p className="section-label">Tu hogar para su cuidado</p>
         <h1 id="auth-heading">{heading}</h1>
         <p>Registra a tus mascotas y deja a la mano una forma segura de contactarte.</p>
       </div>
@@ -94,7 +94,7 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
 
       {mode !== 'recuperar' && (
         <button className="button button--outline google-button" type="button" disabled={!configured || pending} onClick={handleGoogle}>
-          Continuar con Google
+          <Image src="/google-g.svg" width={20} height={20} alt="" aria-hidden="true" />Continuar con Google
         </button>
       )}
 

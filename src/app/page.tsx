@@ -24,7 +24,6 @@ export default async function HomePage() {
         </div>
         <AuthPanel configured={hasSupabaseEnvironment()} showDevTestAccount={isLocalTestLoginEnabled()} />
       </div>
-      <footer className="auth-footer">PawPass · Cuidado que acompaña</footer>
     </main>
   );
 }
