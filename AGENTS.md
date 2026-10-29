@@ -13,8 +13,15 @@ La fuente de verdad funcional es [PAWPASS-V2-SPEC.md](PAWPASS-V2-SPEC.md). [PROD
 - Crear todos los pull requests mediante **GitHub CLI (`gh`)**; no crearlos desde la interfaz web.
 - Mantener como referencia visual aprobada el HTML local `.superpowers/brainstorm/56993-1793234858/content/azul-rescate-06.html` y su `paw-mark.svg`, junto con la sección 13 de `PAWPASS-V2-SPEC.md`. La maqueta guía la continuidad visual; no sustituye los requisitos funcionales ni de accesibilidad.
 - Mantener accesibilidad **WCAG 2.2 AA** y SEO como requisitos transversales. Verificar la privacidad antes de publicar o indexar páginas, metadatos, imágenes y archivos.
+- Para la fase 3, el alcance implementable es modo mascota perdida, ficha pública de pérdida, tablón `/perdidas`, recuperación y aviso “Ya está en casa” por 30 días. El cartel de búsqueda pertenece a una fase posterior.
+- La interfaz habitual usa azul mineral, estados neutrales y jerarquía de acciones sólido / contorno / texto. No usar verde ni amarillo como colores de interfaz; rojo solo para pérdidas, emergencias y alertas críticas. WhatsApp mantiene una acción azul de marca.
+- El logo coloca la huellita después de “pawpass”. “Mi cuenta” es una página dedicada. El alta solo se muestra al elegir agregar y se divide en tres pasos: alta básica con consentimiento, detalles opcionales y contactos/visibilidad opcionales; los dos últimos se pueden aplazar.
+- Llamadas y WhatsApp heredan el mismo teléfono de la cuenta por defecto. Solo se separan cuando el tutor elige explícitamente otro número.
+- La eliminación de mascota y cuenta necesita doble confirmación, limpia registros y archivos y mantiene la reserva técnica del código público sin datos identificables.
+- El acceso rápido de la cuenta de prueba solo aparece en desarrollo local; nunca se habilita públicamente ni usa secretos incrustados en cliente. La cuenta es temporal y eliminable.
+- En registro se solicita repetir la contraseña y se valida la coincidencia antes del envío; los campos de contraseña admiten mostrar/ocultar con controles accesibles.
 - En el diseño habitual, usar azul; reservar rojo para emergencias, pérdidas y alertas críticas. Pawgram es el nombre confirmado del espacio social futuro. Pawshot y Pawsnap siguen siendo candidatos para la función de fotos.
 
-## Estado inicial
+## Estado de fase
 
-Este repositorio empieza con documentación. No iniciar la implementación de una fase por el mero hecho de preparar el repositorio; primero concretar su alcance con el autor.
+Las fases 1 y 2 están implementadas y fusionadas según el estado actual de GitHub. La fase 3 tiene alcance aprobado en `PAWPASS-V2-SPEC.md` y en `docs/superpowers/specs/2026-10-28-fase-3-mascota-perdida-y-cuenta-design.md`. El cartel de búsqueda sigue reservado para su fase posterior.
