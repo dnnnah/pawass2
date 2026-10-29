@@ -41,7 +41,8 @@ export function PetDetailsForm({
 }) {
   const [state, action, pending] = useActionState(savePetDetails, initialState);
   const [ageMode, setAgeMode] = useState<'date' | 'approx' | 'unknown'>(details.birth_date ? 'date' : details.approximate_age_years !== null && details.approximate_age_years !== undefined ? 'approx' : 'unknown');
-  const [customBreed, setCustomBreed] = useState(Boolean(details.breed && !breeds[species].includes(details.breed)));
+  const [selectedBreed, setSelectedBreed] = useState(details.breed && !breeds[species].includes(details.breed) ? 'Otra' : details.breed || '');
+  const customBreed = selectedBreed === 'Otra';
 
   useEffect(() => {
     if (state.ok) onComplete?.();
@@ -51,9 +52,10 @@ export function PetDetailsForm({
     <form action={action} className="form-stack pet-details-form">
       <input type="hidden" name="petId" value={petId} />
       <input type="hidden" name="approximateDeclaredAt" value={details.approximate_age_declared_at || ''} />
+      <fieldset className="editor-group"><legend>Aspecto e identidad</legend><p className="form-description">Completa lo que conozcas. Puedes dejar los datos opcionales para después.</p>
       <div className="form-grid form-grid--two">
         <label className="field"><span>Raza</span>
-          <select name="breed" value={customBreed ? 'Otra' : details.breed || ''} onChange={(event) => setCustomBreed(event.target.value === 'Otra')}>
+          <select name="breed" value={selectedBreed} onChange={(event) => setSelectedBreed(event.target.value)}>
             <option value="">Elige una raza (opcional)</option>
             {breeds[species].map((breed) => <option key={breed} value={breed}>{breed}</option>)}
           </select>
@@ -67,6 +69,7 @@ export function PetDetailsForm({
         <label className="field"><span>Talla <em>opcional</em></span><select name="size" defaultValue={details.size || ''}><option value="">Sin especificar</option><option value="pequena">Pequeña</option><option value="mediana">Mediana</option><option value="grande">Grande</option></select></label>
         <label className="field"><span>Color <em>opcional</em></span><input name="color" defaultValue={details.color || ''} maxLength={100} placeholder="Ej. Negro y blanco" /></label>
       </div>
+      </fieldset>
       <fieldset className="field age-field">
         <legend>Edad de {species === 'perro' ? 'tu perro' : 'tu gato'}</legend>
         <div className="age-options">
@@ -77,6 +80,7 @@ export function PetDetailsForm({
         {ageMode === 'date' && <label className="field"><span>Fecha de nacimiento</span><input type="date" name="birthDate" defaultValue={details.birth_date || ''} max={new Date().toISOString().slice(0, 10)} /></label>}
         {ageMode === 'approx' && <div className="form-grid form-grid--two"><label className="field"><span>Años</span><input type="number" name="approximateYears" min="0" max="40" defaultValue={details.approximate_age_years ?? ''} /></label><label className="field"><span>Meses</span><input type="number" name="approximateMonths" min="0" max="11" defaultValue={details.approximate_age_months ?? ''} /></label></div>}
       </fieldset>
+      <fieldset className="editor-group"><legend>Datos privados de cuidado</legend><p className="form-description">El microchip, la clave RUAC y estos datos de salud no aparecen en la ficha QR.</p>
       <div className="form-grid form-grid--two">
         <label className="field"><span>Peso en kg <em>opcional</em></span><input type="number" name="weightKg" min="0.1" max="300" step="0.1" defaultValue={details.weight_kg ?? ''} placeholder="Ej. 12.5" /></label>
         <label className="field"><span>Microchip <em>opcional</em></span><input name="microchip" defaultValue={details.microchip || ''} maxLength={80} autoComplete="off" /></label>
@@ -85,7 +89,7 @@ export function PetDetailsForm({
         <label className="field"><span>Clave RUAC <em>opcional</em></span><input name="ruac" defaultValue={details.ruac || ''} maxLength={40} autoComplete="off" /></label>
         <label className="field"><span>Esterilización <em>opcional</em></span><select name="sterilized" defaultValue={details.sterilized === true ? 'yes' : details.sterilized === false ? 'no' : ''}><option value="">Sin especificar</option><option value="yes">Sí</option><option value="no">No</option></select></label>
       </div>
-      <p className="form-description">Estos datos se guardan en tu cuenta privada. La ficha QR no mostrará RUAC, microchip ni datos de salud.</p>
+      </fieldset>
       {state.message && <p className={`form-message ${state.ok ? 'form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
       <button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : continueLabel}</button>
     </form>

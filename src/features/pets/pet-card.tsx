@@ -1,3 +1,4 @@
+import { PetDetail } from '@/features/brand/pet-note';
 import { QRCodeSVG } from 'qrcode.react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -24,6 +25,7 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
           <div><h2>{pet.name}</h2><p>{pet.species === 'perro' ? 'Perro' : 'Gato'} <span aria-hidden="true">·</span> <span className="code-pill">{code}</span></p></div>
           <span className={`pet-state ${isLost ? 'pet-state--lost' : ''}`}><span aria-hidden="true" />{isLost ? 'Perdida' : 'En casa'}</span>
         </div>
+        <p className="pet-card__note"><PetDetail kind="collar" /> {pet.name}, sus pequeños detalles a la mano.</p>
         <LostReportForm petId={pet.id} report={report} />
         {isLost && report && <>
           <p className="pet-card__lost-summary">{report.last_seen_location || 'Ubicación pendiente'} · Alerta activa desde {new Date(report.lost_at).toLocaleDateString('es-MX')}</p>
