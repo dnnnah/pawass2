@@ -7,6 +7,7 @@ import {
   safeRedirectPath,
   validateQuickPetInput,
 } from '../src/lib/domain';
+import { validatePasswordConfirmation } from '../src/features/auth/domain';
 
 describe('isPublicPetCode', () => {
   it('accepts six unambiguous uppercase characters after the PC prefix', () => {
@@ -23,8 +24,8 @@ describe('isPublicPetCode', () => {
 describe('safeRedirectPath', () => {
   it('keeps redirects on the application origin', () => {
     expect(safeRedirectPath('/cuenta?tab=mascotas', 'https://pawpass.example')).toBe('/cuenta?tab=mascotas');
-    expect(safeRedirectPath('//evil.example/steal', 'https://pawpass.example')).toBe('/cuenta');
-    expect(safeRedirectPath('/\\\\evil.example', 'https://pawpass.example')).toBe('/cuenta');
+    expect(safeRedirectPath('//evil.example/steal', 'https://pawpass.example')).toBe('/mascotas');
+    expect(safeRedirectPath('/\\\\evil.example', 'https://pawpass.example')).toBe('/mascotas');
   });
 });
 
@@ -47,10 +48,29 @@ describe('profile and quick-pet input validation', () => {
     });
   });
 
+  it('uses the calls phone as WhatsApp by default when no separate WhatsApp number is chosen', () => {
+    expect(normalizeProfileInput({
+      firstName: 'Ana', surname1: '', surname2: '',
+      phone: '55 1234 5678', phoneCountry: 'MX', whatsapp: '', whatsappCountry: '',
+    })).toEqual({
+      ok: true,
+      value: { firstName: 'Ana', surname1: null, surname2: null, phone: '+525512345678', whatsapp: '+525512345678' },
+    });
+  });
+
   it('requires explicit privacy acceptance before a pet can be created', () => {
     expect(validateQuickPetInput({ name: 'Luna', species: 'gato', privacyAccepted: false })).toEqual({
       ok: false,
       error: 'Debes aceptar la publicación de la ficha QR para continuar.',
+    });
+  });
+});
+
+describe('password confirmation', () => {
+  it('accepts a repeated password only when both entries match', () => {
+    expect(validatePasswordConfirmation('MiClaveSegura8', 'MiClaveSegura8')).toEqual({ ok: true });
+    expect(validatePasswordConfirmation('MiClaveSegura8', 'MiClaveSegura9')).toEqual({
+      ok: false, error: 'Las contraseñas no coinciden.',
     });
   });
 });

@@ -33,15 +33,15 @@ export function isPublicPetCode(code: string): boolean {
 }
 
 export function safeRedirectPath(path: string, origin: string): string {
-  if (!path.startsWith('/')) return '/cuenta';
+  if (!path.startsWith('/')) return '/mascotas';
   try {
     const appOrigin = new URL(origin).origin;
     const destination = new URL(path, appOrigin);
     return destination.origin === appOrigin
       ? `${destination.pathname}${destination.search}${destination.hash}`
-      : '/cuenta';
+      : '/mascotas';
   } catch {
-    return '/cuenta';
+    return '/mascotas';
   }
 }
 
@@ -69,12 +69,15 @@ export function normalizeProfileInput(_input: ProfileInput): ValidationResult<Va
     return { ok: false, error: 'Revisa el nombre y los apellidos (máximo 80 caracteres).'};
   }
 
-  if (!getCountries().includes(_input.phoneCountry as CountryCode) || !getCountries().includes(_input.whatsappCountry as CountryCode)) {
+  const hasSeparateWhatsapp = Boolean(_input.whatsapp.trim());
+  const whatsappCountry = hasSeparateWhatsapp ? _input.whatsappCountry : _input.phoneCountry;
+  if (!getCountries().includes(_input.phoneCountry as CountryCode) || (hasSeparateWhatsapp && !getCountries().includes(whatsappCountry as CountryCode))) {
     return { ok: false, error: 'Selecciona una lada internacional válida.' };
   }
 
   const phone = normalizePhoneNumber(_input.phone, _input.phoneCountry as CountryCode);
-  const whatsapp = normalizePhoneNumber(_input.whatsapp, _input.whatsappCountry as CountryCode);
+  const whatsappInput = hasSeparateWhatsapp ? _input.whatsapp : _input.phone;
+  const whatsapp = normalizePhoneNumber(whatsappInput, whatsappCountry as CountryCode);
   if (!phone || !whatsapp) {
     return { ok: false, error: 'Escribe un teléfono y WhatsApp válidos con su lada internacional.' };
   }
