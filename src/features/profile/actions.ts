@@ -55,9 +55,18 @@ export async function deleteAccount(_previous: FormState, formData: FormData): P
     ? await supabase.from('lost_pet_reports').select('recent_photo_path').in('pet_id', petIds)
     : { data: [], error: null };
   if (reportsResponse.error) return { ok: false, message: 'No pudimos preparar la limpieza de tus fotos de búsqueda.' };
+  const healthDocumentsResponse = petIds.length
+    ? await supabase.from('pet_health_documents').select('storage_path').in('pet_id', petIds)
+    : { data: [], error: null };
+  if (healthDocumentsResponse.error) return { ok: false, message: 'No pudimos preparar la limpieza de tus documentos de salud.' };
 
   const primaryPhotos = (pets || []).map((pet) => pet.primary_photo_path).filter((path): path is string => Boolean(path));
   const lostPhotos = (reportsResponse.data || []).map((report) => report.recent_photo_path).filter((path): path is string => Boolean(path));
+  const healthDocumentPaths = (healthDocumentsResponse.data || []).map((document) => document.storage_path);
+  if (healthDocumentPaths.length) {
+    const { error } = await supabase.storage.from('pet-health-documents').remove(healthDocumentPaths);
+    if (error) return { ok: false, message: 'No pudimos quitar tus documentos de salud; la cuenta sigue intacta.' };
+  }
   if (primaryPhotos.length) {
     const { error } = await admin.storage.from('pet-photos').remove(primaryPhotos);
     if (error) return { ok: false, message: 'No pudimos quitar las fotos de perfil; la cuenta sigue intacta.' };
