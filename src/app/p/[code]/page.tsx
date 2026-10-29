@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getSiteUrl } from '@/lib/supabase/env';
 
 type Props = { params: Promise<{ code: string }> };
+type PublicCareAlert = { category: string; label: string; severity: 'critical' | 'precaution' | 'informative'; instructions: string };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { code } = await params;
@@ -25,8 +26,12 @@ export default async function RescuePage({ params }: Props) {
   if (!isPublicPetCode(code)) notFound();
   const supabase = await createClient();
   if (!supabase) return <SetupNotice />;
-  const { data, error } = await supabase.rpc('get_public_rescue_card', { p_code: code });
+  const [{ data, error }, { data: careAlerts }] = await Promise.all([
+    supabase.rpc('get_public_rescue_card', { p_code: code }),
+    supabase.rpc('get_public_care_alerts', { p_code: code }),
+  ]);
   const pet = data?.[0];
+  const visibleCareAlerts = (careAlerts || []) as PublicCareAlert[];
   if (error || !pet?.rescue_phone || !pet.whatsapp_phone) notFound();
 
   return (
@@ -43,12 +48,31 @@ export default async function RescuePage({ params }: Props) {
             <a className="button button--primary button--wide rescue-call" href={`tel:${pet.rescue_phone}`}>Llamar a mi familia</a>
             <WhatsAppActions name={pet.pet_name} code={code} whatsapp={pet.whatsapp_phone} />
           </div>
+          {visibleCareAlerts.length > 0 && (
+            <section className="rescue-care" aria-labelledby="rescue-care-heading">
+              <h2 id="rescue-care-heading">Alertas de cuidado</h2>
+              <ul>
+                {visibleCareAlerts.map((alert, index) => (
+                  <li className={`rescue-care__item rescue-care__item--${alert.severity}`} key={`${alert.category}-${index}`}>
+                    <div className="rescue-care__heading"><strong>{alert.label}</strong><span>{severityLabel(alert.severity)}</span></div>
+                    {alert.instructions && <p>{alert.instructions}</p>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           <p className="privacy-note">Esta ficha solo comparte los datos que el tutor autorizó para ayudar a su mascota a volver a casa.</p>
         </div>
       </article>
       <footer className="rescue-footer"><BrandMark /><span>Una forma sencilla de volver a casa.</span></footer>
     </main>
   );
+}
+
+function severityLabel(severity: string) {
+  if (severity === 'critical') return 'Alerta crítica';
+  if (severity === 'precaution') return 'Precaución';
+  return 'Información';
 }
 
 function SetupNotice() {
