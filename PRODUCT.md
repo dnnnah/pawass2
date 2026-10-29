@@ -30,7 +30,7 @@ La aplicación está abierta a tutores de cualquier país y no los divide por pa
 
 ## Compromisos de marca
 
-El nombre confirmado es PawPass. El idioma inicial es español. La dirección visual aprobada usa fotografías protagonistas, fondo azul mineral claro, superficies blancas y texto azul oscuro. El logo dice “pawpass” junto a una huellita azul. Azul identifica acciones habituales; rojo se reserva para pérdidas, alertas críticas y acciones urgentes.
+El nombre confirmado es PawPass. El idioma inicial es español. La dirección visual aprobada conserva la referencia azul mineral con fondo blanco, superficies pastel alternas y detalles azules, violetas, cian y cobalto, texto azul oscuro y fotografías protagonistas completas, sin recorte. Nunito Sans Variable se autoaloja mediante npm. La personalidad combina 75% profesional y 25% juguetón, con mensajes cálidos personalizados y figuras visibles de huella, estrella, collar, perro, gato y corazón. El logo coloca la huellita después de “pawpass”. Azul identifica las acciones habituales, incluido WhatsApp aun durante una pérdida; rojo se reserva para pérdidas, emergencias y alertas críticas. La jerarquía de acciones es sólido, contorno y texto; no se usan verde ni amarillo como colores propios de interfaz. El botón de Google conserva su marca oficial multicolor autoalojada como excepción de identidad externa. Un único pie global comparte la marca, las figuras decorativas y un mensaje cálido en toda la aplicación. La navegación principal usa menú hamburguesa en todas las anchuras.
 
 ## Evidencia disponible
 

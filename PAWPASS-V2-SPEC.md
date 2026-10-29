@@ -43,7 +43,7 @@ Las claves secretas de Supabase permanecen en el servidor. Los datos privados se
 - En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces y valida que coincidan antes de enviarla a Supabase.
 - Los correos de confirmación y recuperación de contraseña deben funcionar en producción mediante un servicio de envío configurado para la aplicación.
 - Después de autenticarse, completa su perfil antes de crear mascotas. El nombre es obligatorio; los dos campos de apellido son opcionales.
-- El teléfono para llamadas y WhatsApp usan el mismo número por defecto. El tutor puede separarlos expresamente si quiere. Cada número guardado incluye lada internacional.
+- El teléfono para llamadas y WhatsApp usan el mismo número por defecto. El tutor puede separarlos expresamente si quiere. Cada número guardado incluye lada internacional. En los formularios se elige el país/lada por separado y se introducen solo dígitos; fuera de edición, el número nacional de diez dígitos se presenta como `55 1234 5678`.
 - Se aceptan teléfonos y números de WhatsApp con lada de otros países. La lada de México aparece preseleccionada y el tutor puede cambiarla; esto no limita dónde puede usarse PawPass.
 - Se valida el formato de ambos números y se pide al tutor confirmarlos visualmente. No se exige verificación por SMS en la primera versión.
 - El perfil puede guardar la ciudad o zona habitual. Estos datos **no se usarán** como sustitutos de la última ubicación vista en una alerta de pérdida.
@@ -112,12 +112,12 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 - Al publicar la alerta se avisa qué datos serán visibles en el tablón público. El QR ya está activo desde la creación de la mascota y no necesita un paso de activación adicional.
 - El aviso de publicación explica que la alerta activa podrá aparecer en buscadores y que el número de contacto visible en su ficha pública podría quedar expuesto en esos resultados.
 - La alerta aparece de inmediato en `/perdidas`. Si aún no se indicó la última ubicación, se muestra **“Ubicación pendiente”**; no se toma la ciudad habitual del tutor como si fuera el lugar del extravío.
-- El tutor puede agregar o editar: foto reciente del extravío, qué llevaba puesto, ciudad, zona o colonia, fecha y hora aproximadas, mensaje de ayuda, instrucciones y recompensa informativa opcional.
+- El tutor puede agregar o editar: foto reciente del extravío, qué llevaba puesto, ciudad, zona o colonia, fecha y hora aproximadas, mensaje de ayuda, instrucciones y recompensa informativa opcional, escrita solo con dígitos, sin símbolos ni decimales.
 - La ubicación se describe en texto para que cualquier tutor pueda indicar dónde se vio a la mascota, sin dividir el producto ni el tablón por países. No se exige publicar una coordenada precisa.
 - La ficha de pérdida reutiliza identidad, contacto y alertas de cuidado elegidas. Añade únicamente los datos específicos del extravío.
 - Cada episodio de pérdida conserva fechas y estado. El contenido de pérdida se separa de los datos de salud y nunca añade información clínica que el tutor no haya autorizado ya para el QR.
 - La ficha de pérdida tiene una URL pública propia, permite volver a la ficha QR y solo expone identidad, contactos efectivos, alertas elegidas y detalles del extravío.
-- El tablón permite filtrar por especie y buscar por la ubicación escrita; cada ficha permite contactar al tutor por WhatsApp.
+- El tablón muestra las alertas al abrirse y permite filtrar automáticamente por especie, sin botón de búsqueda ni búsqueda por zona; cada ficha permite contactar al tutor por WhatsApp.
 - Una mascota puede tener una alerta de pérdida activa a la vez. Al cerrar la alerta, sale de inmediato del tablón.
 - Tras marcarla como recuperada, el QR muestra la ficha habitual con el aviso **“Ya está en casa” durante 30 días**. Después vuelve a la ficha habitual sin ese aviso. Una nueva alerta activa reemplaza el aviso de recuperación.
 - El tutor conserva un historial privado de sus episodios de pérdida y recuperación, con sus fechas correspondientes.
@@ -174,10 +174,10 @@ Los nombres **Pawshot** y **Pawsnap** son candidatos para la acción o sección 
 ## 13. Dirección de interfaz aprobada
 
 - La pantalla principal privada muestra primero las mascotas del tutor. Cada mascota presenta una acción de **“Reportar perdida”** claramente visible. El carnet de salud y los documentos se consultan desde la ficha de esa mascota.
-- La navegación móvil principal de la primera versión contiene **Mis mascotas**, **Mascotas perdidas** y **Cuenta**. Salud y documentos se consultan dentro de cada mascota.
-- La ficha pública del QR muestra primero la foto y el nombre de la mascota, seguidos de botones grandes para llamar o abrir WhatsApp. Las alertas de cuidado elegidas aparecen a continuación, con jerarquía según su importancia.
+- La navegación principal usa un menú hamburguesa en todas las anchuras y contiene **Mis mascotas**, **Mascotas perdidas** y **Mi cuenta**. Salud y documentos se consultan dentro de cada mascota.
+- La ficha pública del QR muestra primero la foto y el nombre de la mascota, seguidos primero de WhatsApp como acción sólida, después de llamada como acción de contorno y de ubicación como apoyo textual. Las alertas de cuidado elegidas aparecen a continuación, con jerarquía según su importancia.
 - Cuando hay una alerta de pérdida activa, la parte superior de la ficha QR muestra una franja clara de **“Mascota perdida”** y mantiene foto, nombre y botones de contacto en las primeras posiciones.
-- La estructura visual prioriza fotografías de las mascotas, fichas sencillas y cercanía. El fondo es azul mineral muy claro, las superficies principales son blancas y el texto usa azul oscuro de alto contraste.
+- La estructura visual prioriza fotografías de las mascotas, fichas sencillas y cercanía. El fondo es blanco, con superficies y detalles azules en las fichas y texto azul oscuro de alto contraste. La tipografía es Nunito Sans Variable autoalojada; el carácter combina 75% profesional y 25% juguetón, con figuras de huellas, corazones, estrellas, collares, perros y gatos y acentos decorativos cian, cobalto y violeta.
 - El logo muestra la palabra **“pawpass” junto a una huellita**. La huellita y la identidad habitual usan azul, no rojo.
 - Orden confirmado del logo: palabra **“pawpass” primero y huellita después**.
 - El **azul mineral** es el color de acciones y estados habituales. El **rojo** se reserva para estado de pérdida, alertas críticas y acciones urgentes como “Reportar perdida” y el contacto durante una pérdida.
