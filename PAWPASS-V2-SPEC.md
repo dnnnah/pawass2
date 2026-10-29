@@ -40,9 +40,10 @@ Las claves secretas de Supabase permanecen en el servidor. Los datos privados se
 ## 2. Cuenta y contactos de rescate
 
 - El tutor puede autenticarse con correo y contraseña o con Google.
+- En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces y valida que coincidan antes de enviarla a Supabase.
 - Los correos de confirmación y recuperación de contraseña deben funcionar en producción mediante un servicio de envío configurado para la aplicación.
 - Después de autenticarse, completa su perfil antes de crear mascotas. El nombre es obligatorio; los dos campos de apellido son opcionales.
-- Teléfono para llamadas y número de WhatsApp son obligatorios. Pueden ser el mismo número o números distintos. Cada uno incluye lada internacional.
+- El teléfono para llamadas y WhatsApp usan el mismo número por defecto. El tutor puede separarlos expresamente si quiere. Cada número guardado incluye lada internacional.
 - Se aceptan teléfonos y números de WhatsApp con lada de otros países. La lada de México aparece preseleccionada y el tutor puede cambiarla; esto no limita dónde puede usarse PawPass.
 - Se valida el formato de ambos números y se pide al tutor confirmarlos visualmente. No se exige verificación por SMS en la primera versión.
 - El perfil puede guardar la ciudad o zona habitual. Estos datos **no se usarán** como sustitutos de la última ubicación vista en una alerta de pérdida.
@@ -62,6 +63,14 @@ Las claves secretas de Supabase permanecen en el servidor. Los datos privados se
 ### Publicación inmediata del QR
 
 La ficha QR queda activa al crear la mascota. Antes de guardar el alta, PawPass muestra los datos que estarán accesibles a cualquier persona que tenga o escriba el código y pide aceptación explícita del tutor. La mascota **no aparece por ello en un listado público**.
+
+### Alta en tres pasos
+
+1. **Crear ficha:** nombre, especie y aceptación explícita de la información pública del QR. Guardar este paso crea y activa la ficha.
+2. **Identidad:** raza y mezcla opcional, sexo, talla, color y fecha de nacimiento o edad aproximada. Este paso se puede completar después.
+3. **Detalles y contacto:** peso, microchip, RUAC, esterilización, foto y contactos distintos para la mascota. Este paso es opcional y aplazable. Los campos de salud siguen en las alertas de cuidado y no se copian automáticamente al QR.
+
+El acceso al alta se muestra únicamente después de que el tutor elija “Agregar mascota”. Un paso omitido se puede retomar desde la ficha privada de la mascota.
 
 ## 4. Ficha pública de rescate por QR
 
@@ -97,6 +106,8 @@ La ficha QR queda activa al crear la mascota. Antes de guardar el alta, PawPass 
 
 ## 6. Modo mascota perdida y tablón público
 
+**Fase 3 aprobada:** incluye estado de pérdida, página pública de pérdida, tablón `/perdidas`, recuperación e indicador temporal del QR. El cartel de “Se busca” se implementa en una fase posterior.
+
 - El tutor puede activar una alerta de pérdida inmediatamente con la información ya registrada; no se exige completar zona, foto reciente ni otros campos antes de publicarla.
 - Al publicar la alerta se avisa qué datos serán visibles en el tablón público. El QR ya está activo desde la creación de la mascota y no necesita un paso de activación adicional.
 - El aviso de publicación explica que la alerta activa podrá aparecer en buscadores y que el número de contacto visible en su ficha pública podría quedar expuesto en esos resultados.
@@ -104,12 +115,14 @@ La ficha QR queda activa al crear la mascota. Antes de guardar el alta, PawPass 
 - El tutor puede agregar o editar: foto reciente del extravío, qué llevaba puesto, ciudad, zona o colonia, fecha y hora aproximadas, mensaje de ayuda, instrucciones y recompensa informativa opcional.
 - La ubicación se describe en texto para que cualquier tutor pueda indicar dónde se vio a la mascota, sin dividir el producto ni el tablón por países. No se exige publicar una coordenada precisa.
 - La ficha de pérdida reutiliza identidad, contacto y alertas de cuidado elegidas. Añade únicamente los datos específicos del extravío.
+- Cada episodio de pérdida conserva fechas y estado. El contenido de pérdida se separa de los datos de salud y nunca añade información clínica que el tutor no haya autorizado ya para el QR.
+- La ficha de pérdida tiene una URL pública propia, permite volver a la ficha QR y solo expone identidad, contactos efectivos, alertas elegidas y detalles del extravío.
 - El tablón permite filtrar por especie y buscar por la ubicación escrita; cada ficha permite contactar al tutor por WhatsApp.
 - Una mascota puede tener una alerta de pérdida activa a la vez. Al cerrar la alerta, sale de inmediato del tablón.
 - Tras marcarla como recuperada, el QR muestra la ficha habitual con el aviso **“Ya está en casa” durante 30 días**. Después vuelve a la ficha habitual sin ese aviso. Una nueva alerta activa reemplaza el aviso de recuperación.
 - El tutor conserva un historial privado de sus episodios de pérdida y recuperación, con sus fechas correspondientes.
 
-## 7. Cartel de “Se busca”
+## 7. Cartel de “Se busca” — fase posterior
 
 - La alerta puede estar activa antes de que el cartel esté listo. La descarga se habilita cuando existe **al menos una foto** de la mascota y se ha indicado la última zona vista.
 - PawPass genera dos imágenes PNG de alta calidad: **9:16** para historias y estados, y **4:5** para publicaciones.
@@ -125,6 +138,8 @@ La ficha QR queda activa al crear la mascota. Antes de guardar el alta, PawPass 
 - Todas las fotos subidas (principal, galería y extravío) se convierten a WebP con calidad objetivo del 80 % antes de almacenarse. Los documentos conservan su formato permitido.
 - Eliminar una mascota o la cuenta completa requiere doble confirmación, incluida una acción explícita del tutor.
 - La eliminación comprende registros relacionados y archivos almacenados; no deben quedar fotos ni documentos huérfanos. Los códigos públicos retirados permanecen reservados sin conservar datos personales de la mascota.
+- La eliminación desde producto pide una confirmación inicial y otra acción explícita de alta intención (por ejemplo escribir el nombre/código de la mascota o `ELIMINAR CUENTA`). La operación del servidor verifica sesión y propiedad. El código público queda reservado anónimamente.
+- El acceso rápido a la cuenta de prueba solo está disponible en desarrollo local. No se despliegan contraseñas de prueba ni secretos en el cliente y debe poder eliminarse desde la cuenta.
 
 ## 9. Etapa posterior: comunidad pública
 
@@ -164,8 +179,11 @@ Los nombres **Pawshot** y **Pawsnap** son candidatos para la acción o sección 
 - Cuando hay una alerta de pérdida activa, la parte superior de la ficha QR muestra una franja clara de **“Mascota perdida”** y mantiene foto, nombre y botones de contacto en las primeras posiciones.
 - La estructura visual prioriza fotografías de las mascotas, fichas sencillas y cercanía. El fondo es azul mineral muy claro, las superficies principales son blancas y el texto usa azul oscuro de alto contraste.
 - El logo muestra la palabra **“pawpass” junto a una huellita**. La huellita y la identidad habitual usan azul, no rojo.
+- Orden confirmado del logo: palabra **“pawpass” primero y huellita después**.
 - El **azul mineral** es el color de acciones y estados habituales. El **rojo** se reserva para estado de pérdida, alertas críticas y acciones urgentes como “Reportar perdida” y el contacto durante una pérdida.
 - La jerarquía de botones es consistente en ambos contextos: acción principal con relleno sólido, acción secundaria con contorno y acción terciaria como texto sin relleno. La pareja principal/secundaria usa azul en flujos habituales y rojo en emergencias.
+- No usar verde ni amarillo como colores de interfaz. Los estados de éxito y precaución usan texto, iconografía y superficies neutrales o azules accesibles; el verde de marca de WhatsApp no se aplica al botón de PawPass.
+- “Mis mascotas” y “Mi cuenta” son páginas distintas con estructura propia. El formulario de alta permanece oculto hasta que se elige agregar una mascota.
 
 ## 14. Calidad transversal: accesibilidad y SEO
 
@@ -185,5 +203,6 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 - Las páginas públicas que se acuerde indexar deben entregar contenido y metadatos útiles desde el servidor, con títulos, descripciones y URL canónicas coherentes. Se prepararán `sitemap.xml` y `robots.txt` según la política de indexación aprobada.
 - Las áreas autenticadas, el expediente privado y los documentos no se indexan. Ningún dato privado debe incorporarse a metadatos, datos estructurados, mapas del sitio o vistas previas para compartir.
 - El tablón `/perdidas` y las fichas de pérdida **mientras la alerta esté activa** son indexables. La ficha QR habitual, sin alerta activa, lleva `noindex`. Al recuperar a la mascota, su ficha vuelve a `noindex` y sale del mapa del sitio de alertas; los buscadores pueden tardar en reflejar la retirada.
+- La ficha QR `/p/PC-XXXXXX` lleva `noindex` tanto en estado normal como durante una pérdida; la ruta pública separada de pérdida y el tablón son indexables solo mientras la alerta está activa. La vista de recuperación lleva `noindex`.
 - La política de indexación se aplica con directivas de página que los rastreadores puedan leer. `robots.txt` no debe impedir que un rastreador vea el `noindex` de una ficha pública. El SEO no debe ampliar por accidente la exposición de datos de salud o información privada.
 - Se revisarán indexación, rendimiento y resultados de búsqueda en cada fase que añada páginas públicas.

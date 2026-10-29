@@ -43,3 +43,13 @@ La fuente de verdad funcional es [PAWPASS-V2-SPEC.md](PAWPASS-V2-SPEC.md), aprob
 3. Permitir registrar una mascota y activar una alerta con pocos datos, completándolos después.
 4. Resolver los flujos principales antes de ampliar el producto con funciones sociales.
 5. Diseñar y verificar accesibilidad WCAG 2.2 AA y SEO desde la primera versión, sin exponer datos privados en páginas indexables.
+
+## Fase 3 aprobada
+
+La fase 3 implementa el modo mascota perdida, el QR con estado de pérdida, el tablón público `/perdidas`, el flujo de recuperación y el aviso “Ya está en casa” durante 30 días. El cartel de búsqueda no forma parte de esta fase.
+
+La experiencia mantiene azul mineral para tareas habituales, neutros para estados informativos y rojo solo para pérdida, emergencia y alertas críticas. La jerarquía de acciones es sólido, contorno y texto. La huella va después de “pawpass”; “Mi cuenta” es independiente del panel “Mis mascotas”. El alta aparece por elección y tiene tres pasos, con nombre, especie y consentimiento público en el primero; los detalles y contactos son opcionales y aplazables. Llamadas y WhatsApp comparten número por defecto.
+
+Los flujos de eliminación de mascota y cuenta requieren dos confirmaciones, limpian datos y archivos asociados y preservan la reserva anónima del código público. El acceso rápido a la cuenta de prueba existe únicamente en desarrollo local, sin credenciales públicas ni secretos cliente.
+
+El acceso y el cambio de contraseña permiten revelar el texto con un control de mostrar/ocultar. Durante el registro, el tutor repite su contraseña y el formulario detecta discrepancias antes de enviar.

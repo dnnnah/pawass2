@@ -12,7 +12,7 @@ begin
     raw_app_meta_data, raw_user_meta_data, created_at, updated_at
   ) values (
     '00000000-0000-0000-0000-000000000000', test_user_id, 'authenticated', 'authenticated', test_email,
-    extensions.crypt('PawPass-Test-2026!', extensions.gen_salt('bf')),
+    extensions.crypt(gen_random_uuid()::text, extensions.gen_salt('bf')),
     statement_timestamp(), '', '', '', '', '', '', '', '',
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{"seed":true}'::jsonb,
@@ -44,7 +44,7 @@ begin
     updated_at = statement_timestamp();
 
   update public.profiles set
-    first_name = 'Tutora de prueba',
+    first_name = 'Prueba',
     surname1 = 'Semilla',
     surname2 = null,
     rescue_phone = '+12025550101',
