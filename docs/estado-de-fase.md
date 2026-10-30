@@ -27,5 +27,6 @@ Actualizado el 29 de octubre de 2026.
 - [x] Revisión visual en móvil y escritorio con datos ficticios.
 - [x] Descargar y comprobar los cuatro tamaños PNG.
 - [x] Decodificar el QR del PNG y verificar que abre la ruta de rescate.
+- [x] Guardar una captura 4:5 de verificación con mascota, ubicación y teléfono ficticios en [`docs/ux-review/2026-10-29/cartel-4x5-prueba.png`](ux-review/2026-10-29/cartel-4x5-prueba.png).
 - [x] `npm test` (49 pruebas), `npm run typecheck`, `npm run lint` y `npm run build` en una copia aislada del repo para proteger `next-env.d.ts`.
 - [ ] Crear PR en español con GitHub CLI; dejarlo abierto para revisión del autor.
