@@ -7,7 +7,8 @@ import { PetCreateControl } from '@/features/pets/quick-pet-form';
 import { PetCard } from '@/features/pets/pet-card';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
 import { createClient } from '@/lib/supabase/server';
-import { createPhotoUrl } from '@/lib/supabase/photo-url';
+import { createPhotoUrls } from '@/lib/supabase/photo-url';
+import { getIdentityFromClaims } from '@/lib/supabase/identity';
 
 export const metadata: Metadata = { title: 'Mis mascotas | PawPass', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
@@ -15,12 +16,13 @@ export const dynamic = 'force-dynamic';
 export default async function PetsPage() {
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/');
+  const { data } = await supabase.auth.getClaims();
+  const identity = getIdentityFromClaims(data?.claims);
+  if (!identity) redirect('/');
 
   const [{ data: profile }, { data: pets }] = await Promise.all([
-    supabase.from('profiles').select('first_name,rescue_phone,whatsapp_phone').eq('id', user.id).maybeSingle(),
-    supabase.from('pets').select('id,name,species,created_at,primary_photo_path').eq('owner_id', user.id).order('created_at', { ascending: false }),
+    supabase.from('profiles').select('first_name,rescue_phone,whatsapp_phone').eq('id', identity.id).maybeSingle(),
+    supabase.from('pets').select('id,name,species,created_at,primary_photo_path').eq('owner_id', identity.id).order('created_at', { ascending: false }),
   ]);
   const petIds = (pets || []).map((pet) => pet.id);
   const [{ data: codes }, { data: reports }] = await Promise.all([
@@ -31,7 +33,8 @@ export default async function PetsPage() {
   const profileComplete = Boolean(profile?.first_name && profile?.rescue_phone && profile?.whatsapp_phone);
   const codeByPet = new Map((codes || []).map((item) => [item.pet_id, item.code]));
   const reportByPet = new Map((reports || []).map((report) => [report.pet_id, report as LostReportRow]));
-  const photoUrlByPet = new Map(await Promise.all((pets || []).map(async (pet) => [pet.id, await createPhotoUrl('pet-photos', pet.primary_photo_path)] as const)));
+  const photoUrls = await createPhotoUrls('pet-photos', (pets || []).map((pet) => pet.primary_photo_path));
+  const photoUrlByPet = new Map((pets || []).map((pet) => [pet.id, pet.primary_photo_path ? photoUrls.get(pet.primary_photo_path) || null : null] as const));
   return (
     <main className="account-shell">
       <AppHeader active="pets" />

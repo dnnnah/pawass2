@@ -13,7 +13,8 @@ La fuente de verdad funcional es [PAWPASS-V2-SPEC.md](PAWPASS-V2-SPEC.md). [PROD
 - Crear todos los pull requests mediante **GitHub CLI (`gh`)**; no crearlos desde la interfaz web.
 - Mantener como referencia visual aprobada el HTML local `.superpowers/brainstorm/56993-1793234858/content/azul-rescate-06.html` y su `paw-mark.svg`, junto con la sección 13 de `PAWPASS-V2-SPEC.md`. La maqueta guía la continuidad visual; no sustituye los requisitos funcionales ni de accesibilidad.
 - Mantener accesibilidad **WCAG 2.2 AA** y SEO como requisitos transversales. Verificar la privacidad antes de publicar o indexar páginas, metadatos, imágenes y archivos.
-- Para la fase 3, el alcance implementable es modo mascota perdida, ficha pública de pérdida, tablón `/perdidas`, recuperación y aviso “Ya está en casa” por 30 días. El cartel de búsqueda pertenece a una fase posterior.
+- La fase 3 cubre modo mascota perdida, ficha pública de pérdida, tablón `/perdidas`, recuperación y aviso “Ya está en casa” por 30 días. El cartel se aplaza a la fase 5.
+- La fase 4 adelanta el carnet privado por mascota: vacunas, desparasitaciones, cirugías/intervenciones y documentos clasificados. El cartel no forma parte de esta fase.
 - La interfaz habitual usa azul mineral, estados neutrales y jerarquía de acciones sólido / contorno / texto. No usar verde ni amarillo como colores de interfaz; rojo solo para pérdidas, emergencias y alertas críticas. WhatsApp mantiene una acción azul de marca.
 - El logo coloca la huellita después de “pawpass”. “Mi cuenta” es una página dedicada. El alta solo se muestra al elegir agregar y se divide en tres pasos: alta básica con consentimiento, detalles opcionales y contactos/visibilidad opcionales; los dos últimos se pueden aplazar.
 - Llamadas y WhatsApp heredan el mismo teléfono de la cuenta por defecto. Solo se separan cuando el tutor elige explícitamente otro número.
@@ -24,4 +25,14 @@ La fuente de verdad funcional es [PAWPASS-V2-SPEC.md](PAWPASS-V2-SPEC.md). [PROD
 
 ## Estado de fase
 
-Las fases 1 y 2 están implementadas y fusionadas según el estado actual de GitHub. La fase 3 tiene alcance aprobado en `PAWPASS-V2-SPEC.md` y en `docs/superpowers/specs/2026-10-28-fase-3-mascota-perdida-y-cuenta-design.md`. El cartel de búsqueda sigue reservado para su fase posterior.
+Las fases 1 y 2 están implementadas según el estado de GitHub. La fase 3 tiene alcance aprobado en `PAWPASS-V2-SPEC.md` y en `docs/superpowers/specs/2026-10-28-fase-3-mascota-perdida-y-cuenta-design.md`. Orden actualizado por petición del autor: **fase 4, carnet privado → fase 5, cartel de búsqueda → cierre de primera versión con accesibilidad, SEO y PWA**. Pawgram queda para después de la primera versión. Antes de aplicar migraciones nuevas, comparar la base remota con todas las migraciones locales pendientes; al iniciar fase 4, Supabase reportó solo las tres migraciones base en su historial.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

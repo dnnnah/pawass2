@@ -24,7 +24,7 @@ La ficha QR se consulta en un navegador móvil sin instalar la PWA. La PWA puede
 
 ## Capacidades y límites
 
-La primera versión incluye cuenta, mascotas, alertas de cuidado, QR, pérdidas, tablón, cartel y carnet privado. La comunidad de mascotas públicas, **Pawgram**, se desarrollará después y será voluntaria. **Pawshot** y **Pawsnap** son nombres candidatos, aún sin elegir, para la función de subir una foto nueva o reciente. No hay adopciones, refugios, chat, pagos, rastreo en tiempo real ni carnet imprimible.
+La primera versión incluye cuenta, mascotas, alertas de cuidado, QR, pérdidas, tablón, carnet privado y cartel. Por petición del autor, el carnet privado se implementa en la fase 4 y el cartel pasa a la fase 5; luego se cierra la primera versión con accesibilidad, SEO y PWA. La comunidad de mascotas públicas, **Pawgram**, se desarrollará después y será voluntaria. **Pawshot** y **Pawsnap** son nombres candidatos, aún sin elegir, para la función de subir una foto nueva o reciente. No hay adopciones, refugios, chat, pagos, rastreo en tiempo real ni carnet imprimible.
 
 La aplicación está abierta a tutores de cualquier país y no los divide por país. El contenido inicial de los catálogos de salud se enfoca en México; los números de contacto aceptan ladas internacionales. Los documentos y el historial clínico completo son privados. Las rutas públicas reciben solo información autorizada.
 
@@ -53,3 +53,12 @@ La experiencia mantiene azul mineral para tareas habituales, neutros para estado
 Los flujos de eliminación de mascota y cuenta requieren dos confirmaciones, limpian datos y archivos asociados y preservan la reserva anónima del código público. El acceso rápido a la cuenta de prueba existe únicamente en desarrollo local, sin credenciales públicas ni secretos cliente.
 
 El acceso y el cambio de contraseña permiten revelar el texto con un control de mostrar/ocultar. Durante el registro, el tutor repite su contraseña y el formulario detecta discrepancias antes de enviar.
+
+## Orden actualizado de fases
+
+1. Fases 1 y 2: cuenta/mascotas y alertas de cuidado.
+2. Fase 3: mascota perdida, tablón y recuperación.
+3. Fase 4: carnet de salud privado por mascota, incluidos registros de vacunación y desparasitación, cirugías/intervenciones y documentos privados clasificados.
+4. Fase 5: cartel de búsqueda.
+5. Cierre de primera versión: accesibilidad WCAG 2.2 AA, SEO y PWA.
+6. Después de primera versión: Pawgram.

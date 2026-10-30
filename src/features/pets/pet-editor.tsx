@@ -36,7 +36,7 @@ export function PetEditor({ pet, code, photoUrl, report, alerts }: {
           <LostReportForm petId={pet.id} report={report} />
         </section>
         <nav className="editor-nav" aria-label="Secciones de la ficha">
-          <a href="#identidad">Identidad y detalles</a><a href="#fotografia">Fotografía</a><a href="#cuidados">Alertas de cuidado</a><a href="#contactos">Contacto de rescate</a>
+          <a href="#identidad">Identidad y detalles</a><a href="#fotografia">Fotografía</a><a href="#cuidados">Alertas de cuidado</a><Link href={`/mascotas/${pet.id}/carnet`}>Carnet de salud</Link><a href="#contactos">Contacto de rescate</a>
         </nav>
         <div className="pet-editor-layout"><div className="pet-editor-content">
         <section className="pet-details-editor" id="identidad" aria-labelledby="identity-heading">

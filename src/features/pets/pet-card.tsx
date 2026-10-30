@@ -33,6 +33,7 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
           <RecoverPetForm report={report} />
         </>}
         <Link className="button button--outline button--wide" href={`/mascotas/${pet.id}`}>Editar ficha de {pet.name}</Link>
+        <Link className="button button--outline button--wide" href={`/mascotas/${pet.id}/carnet`}>Abrir carnet de salud de {pet.name}</Link>
         <details className="pet-card__qr">
           <summary>Mostrar código QR</summary>
           <div className="pet-card__qr-preview"><QRCodeSVG value={publicUrl} size={144} level="M" title={`Código QR público de ${pet.name}`} /><a href={`/p/${code}`} target="_blank" rel="noreferrer">Abrir ficha habitual</a></div>

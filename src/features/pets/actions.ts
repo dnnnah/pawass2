@@ -155,17 +155,24 @@ export async function deletePet(_previous: FormState, formData: FormData): Promi
   if (!supabase) return { ok: false, message: 'Supabase todavía no está configurado.' };
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: 'Inicia sesión para eliminar esta mascota.' };
-  const [{ data: pet }, { data: code }, { data: reports }] = await Promise.all([
+  const [{ data: pet }, { data: code }, { data: reports }, { data: healthDocuments, error: healthDocumentsError }] = await Promise.all([
     supabase.from('pets').select('name,primary_photo_path').eq('id', petId).eq('owner_id', user.id).maybeSingle(),
     supabase.from('public_code_reservations').select('code').eq('pet_id', petId).maybeSingle(),
     supabase.from('lost_pet_reports').select('recent_photo_path').eq('pet_id', petId),
+    supabase.from('pet_health_documents').select('storage_path').eq('pet_id', petId),
   ]);
   if (!pet || !code || confirmation !== code.code) return { ok: false, message: 'El código de confirmación no coincide con esta mascota.' };
+  if (healthDocumentsError) return { ok: false, message: 'No pudimos preparar la limpieza de los documentos de salud.' };
 
   const admin = createAdminClient();
   const primaryPhoto = pet.primary_photo_path;
   const lostPhotos = (reports || []).map((report) => report.recent_photo_path).filter((path): path is string => Boolean(path));
+  const healthDocumentPaths = (healthDocuments || []).map((document) => document.storage_path);
   if ((primaryPhoto || lostPhotos.length) && !admin) return { ok: false, message: 'Falta configurar la clave privada de servidor para limpiar sus archivos.' };
+  if (healthDocumentPaths.length) {
+    const { error } = await supabase.storage.from('pet-health-documents').remove(healthDocumentPaths);
+    if (error) return { ok: false, message: 'No pudimos quitar los documentos de salud; no eliminamos la ficha.' };
+  }
   if (admin && primaryPhoto) {
     const { error } = await admin.storage.from('pet-photos').remove([primaryPhoto]);
     if (error) return { ok: false, message: 'No pudimos quitar la foto de esta mascota; no eliminamos su ficha.' };
