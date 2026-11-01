@@ -47,15 +47,17 @@ export function CareAlertManager({ petId, alerts }: { petId: string; alerts: Car
               </div>
               <p className="care-alert-item__visibility">{alert.qr_visible ? 'Visible en ficha QR' : 'Solo tú puedes verla'}</p>
               {alert.instructions && <p className="care-alert-item__instructions">{alert.instructions}</p>}
-              <details className="care-alert-editor">
-                <summary>Editar alerta</summary>
-                <CareAlertForm petId={petId} alert={alert} />
-              </details>
-              <form action={deleteCareAlert}>
-                <input type="hidden" name="petId" value={petId} />
-                <input type="hidden" name="alertId" value={alert.id} />
-                <button className="text-button" type="submit">Eliminar alerta</button>
-              </form>
+              <div className="care-alert-item__actions">
+                <details className="care-alert-editor">
+                  <summary className="button button--outline">Editar alerta</summary>
+                  <CareAlertForm petId={petId} alert={alert} />
+                </details>
+                <form action={deleteCareAlert}>
+                  <input type="hidden" name="petId" value={petId} />
+                  <input type="hidden" name="alertId" value={alert.id} />
+                  <button className="button care-alert-delete" type="submit">Eliminar alerta</button>
+                </form>
+              </div>
             </li>
           ))}
         </ol>

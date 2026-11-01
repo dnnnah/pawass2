@@ -100,6 +100,7 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 ### Otros datos y documentos
 
 - El carnet privado permite registrar cirugías e intervenciones con fecha y notas.
+- Cada sección del carnet muestra su cantidad de registros y agrupa las acciones para agregar, editar y eliminar. La prioridad y la visibilidad QR se presentan explícitamente en las alertas autorizables; el carnet de salud permanece privado.
 - El tutor puede subir documentos clasificados, como cartilla de vacunación, certificado de esterilización, registro de microchip, receta, estudio médico o identificación.
 - Los documentos y el historial clínico completo son privados para el tutor autenticado; nunca se entregan desde la ficha QR ni desde el tablón público.
 - Las fotos de galería y los documentos son grupos distintos de archivos. La posible publicación de fotos en la comunidad se definirá en la etapa posterior.
@@ -116,6 +117,8 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 - La ubicación se describe en texto para que cualquier tutor pueda indicar dónde se vio a la mascota, sin dividir el producto ni el tablón por países. No se exige publicar una coordenada precisa.
 - La ficha de pérdida reutiliza identidad, contacto y alertas de cuidado elegidas. Añade únicamente los datos específicos del extravío.
 - Cada episodio de pérdida conserva fechas y estado. El contenido de pérdida se separa de los datos de salud y nunca añade información clínica que el tutor no haya autorizado ya para el QR.
+- El editor y la confirmación de recuperación tienen una ruta privada dedicada, separada de la tarjeta de mascota. Los estados “Perdida” y “En casa” se distinguen con texto, señal visual y acciones específicas.
+- La fecha y la hora aproximadas del extravío se capturan en campos independientes; el tutor completa ambos o deja ambos vacíos.
 - La ficha de pérdida tiene una URL pública propia, permite volver a la ficha QR y solo expone identidad, contactos efectivos, alertas elegidas y detalles del extravío.
 - El tablón muestra las alertas al abrirse y permite filtrar automáticamente por especie, sin botón de búsqueda ni búsqueda por zona; cada ficha permite contactar al tutor por WhatsApp.
 - Una mascota puede tener una alerta de pérdida activa a la vez. Al cerrar la alerta, sale de inmediato del tablón.
@@ -197,6 +200,7 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 - La navegación y las acciones deben funcionar con teclado; el foco ha de ser visible y seguir un orden lógico. Formularios, errores, estados y botones deben tener nombres e instrucciones comprensibles para lectores de pantalla.
 - El color nunca es el único indicador de pérdida, gravedad o estado de salud: se acompañará de texto e iconografía comprensible. La jerarquía azul/rojo debe conservar contraste suficiente.
 - La interfaz debe soportar ampliación de texto, reflujo en móvil y preferencias de movimiento reducido. Las áreas táctiles, mensajes de error y pasos de autenticación deben diseñarse para un uso accesible.
+- Las rutas dinámicas deben ofrecer respuesta visual inmediata y prefetch de su estructura de navegación mediante estados de carga; los datos personales siguen usando respuestas `no-store`.
 - Las fotografías informativas tendrán texto alternativo útil. El cartel tendrá una descripción textual accesible de la información que transmite, además de su imagen descargable o imprimible. El QR conservará una URL y un código legibles para acceso alternativo al escaneo.
 - Cada fase verificará sus flujos con revisión automática y pruebas manuales de teclado, lector de pantalla y móvil antes de considerarse terminada.
 

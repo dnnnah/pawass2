@@ -3,7 +3,6 @@ import { QRCodeSVG } from 'qrcode.react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getSiteUrl } from '@/lib/supabase/env';
-import { LostReportForm, RecoverPetForm } from '@/features/lost-pets/lost-report-form';
 import { getPosterEditorHref } from '@/features/lost-pets/poster-domain';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
 import './pet-card.css';
@@ -28,7 +27,7 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
           <span className={`pet-state ${isLost ? 'pet-state--lost' : ''}`}><span aria-hidden="true" />{isLost ? 'Perdida' : 'En casa'}</span>
         </div>
         <p className="pet-card__note"><PetDetail kind="collar" /> {pet.name}, sus pequeños detalles a la mano.</p>
-        <LostReportForm petId={pet.id} report={report} />
+        <div className={`pet-card__loss-state ${isLost ? 'pet-card__loss-state--lost' : 'pet-card__loss-state--home'}`}><strong>{isLost ? 'Alerta de pérdida activa' : 'En casa'}</strong><span>{isLost ? 'La alerta pública está visible en el tablón.' : 'No hay una alerta pública activa.'}</span><Link className={`button ${isLost ? 'button--danger' : 'button--outline'} button--wide`} href={`/mascotas/${pet.id}/perdida`}>{isLost ? 'Ver reporte y confirmar regreso' : 'Reportar pérdida'}</Link></div>
         {isLost && report && <>
           <p className="pet-card__lost-summary">{report.last_seen_location || 'Ubicación pendiente'} · Alerta activa desde {new Date(report.lost_at).toLocaleDateString('es-MX')}</p>
           <Link className="button button--primary button--wide pet-card__poster-link" href={getPosterEditorHref(pet.id)}>
@@ -36,13 +35,12 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
             Crear cartel y descargar imagen
           </Link>
           <Link className="button button--outline button--wide" href={`/perdidas/${code}`}>Ver ficha pública de pérdida</Link>
-          <RecoverPetForm report={report} />
         </>}
         <Link className="button button--outline button--wide" href={`/mascotas/${pet.id}`}>Editar ficha de {pet.name}</Link>
         <Link className="button button--outline button--wide" href={`/mascotas/${pet.id}/carnet`}>Abrir carnet de salud de {pet.name}</Link>
         <details className="pet-card__qr">
-          <summary>Mostrar código QR</summary>
-          <div className="pet-card__qr-preview"><QRCodeSVG value={publicUrl} size={144} level="M" title={`Código QR público de ${pet.name}`} /><a href={`/p/${code}`} target="_blank" rel="noreferrer">Abrir ficha habitual</a></div>
+          <summary>Ver código QR público</summary>
+          <div className="pet-card__qr-preview"><p>Este QR abre una ficha pública con el contacto de rescate y solo las alertas que autorizaste.</p><QRCodeSVG value={publicUrl} size={160} level="M" title={`Código QR público de ${pet.name}`} /><a href={`/p/${code}`} target="_blank" rel="noreferrer">Probar ficha pública <span className="sr-only">(abre en otra pestaña)</span></a></div>
         </details>
       </div>
     </article>

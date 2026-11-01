@@ -1,6 +1,8 @@
 export type LostReportInput = {
   lastSeenLocation: string;
-  lastSeenAt: string;
+  lastSeenDate?: string;
+  lastSeenTime?: string;
+  lastSeenAt?: string;
   wearing: string;
   message: string;
   reward: string;
@@ -28,6 +30,7 @@ export function getLostReportRevalidationPaths(petId: string, publicCode: string
   return [
     '/mascotas',
     `/mascotas/${petId}`,
+    `/mascotas/${petId}/perdida`,
     '/perdidas',
     ...(publicCode ? [`/perdidas/${publicCode}`, `/p/${publicCode}`] : []),
   ];
@@ -47,8 +50,13 @@ export function normalizeLostReport(input: LostReportInput):
   if (reward.length > 100) return { ok: false, error: 'La recompensa debe tener 100 caracteres o menos.' };
 
   let lastSeenAt: string | null = null;
-  if (input.lastSeenAt.trim()) {
-    const parsed = new Date(input.lastSeenAt);
+  const date = input.lastSeenDate?.trim() || '';
+  const time = input.lastSeenTime?.trim() || '';
+  if (date && !time) return { ok: false, error: 'Indica también la hora aproximada, o deja ambos campos vacíos.' };
+  if (time && !date) return { ok: false, error: 'Indica también el día aproximado, o deja ambos campos vacíos.' };
+  const rawDateTime = date ? `${date}T${time}` : input.lastSeenAt?.trim() || '';
+  if (rawDateTime) {
+    const parsed = new Date(rawDateTime);
     if (!Number.isFinite(parsed.getTime())) return { ok: false, error: 'Revisa la fecha y hora aproximadas.' };
     lastSeenAt = parsed.toISOString();
   }

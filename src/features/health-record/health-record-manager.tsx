@@ -72,10 +72,10 @@ export function HealthRecordManager({
   return (
     <div className="health-record-layout">
       <nav className="health-record-nav" aria-label="Apartados del carnet de salud">
-        <a href="#vacunas">Vacunas <span>{vaccinations.length}</span></a>
-        <a href="#desparasitaciones">Desparasitaciones <span>{dewormings.length}</span></a>
-        <a href="#intervenciones">Cirugías e intervenciones <span>{procedures.length}</span></a>
-        <a href="#documentos">Documentos <span>{documents.length}</span></a>
+        <Link href="#vacunas">Vacunas <span>{vaccinations.length}</span></Link>
+        <Link href="#desparasitaciones">Desparasitaciones <span>{dewormings.length}</span></Link>
+        <Link href="#intervenciones">Cirugías e intervenciones <span>{procedures.length}</span></Link>
+        <Link href="#documentos">Documentos <span>{documents.length}</span></Link>
       </nav>
 
       <DoseSection id="vacunas" kind="vaccination" petId={petId} species={species} records={vaccinations} />
@@ -96,7 +96,7 @@ function DoseSection({ id, kind, petId, species, records }: {
   return (
     <section className="health-panel" id={id} aria-labelledby={`${id}-heading`}>
       <header className="health-panel__heading">
-        <div><h2 id={`${id}-heading`}>{kind === 'vaccination' ? 'Vacunas' : 'Desparasitaciones'}</h2></div>
+        <div><h2 id={`${id}-heading`}>{kind === 'vaccination' ? 'Vacunas' : 'Desparasitaciones'}</h2><span className="section-count">{records.length} {records.length === 1 ? 'registro' : 'registros'}</span></div>
         <DoseStatusBadge status={status} />
       </header>
       <p className="health-panel__intro">Registra cada aplicación con su fecha. PawPass no calcula vencimientos si no confirmas una próxima fecha.</p>

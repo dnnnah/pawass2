@@ -16,7 +16,8 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
   const legacyReward = Boolean(report?.reward && !/^[0-9]+$/.test(report.reward));
   const [reward, setReward] = useState(legacyReward ? '' : report?.reward || '');
   const isPending = pending || pendingConversion;
-  const dateTimeDefault = report?.last_seen_at ? report.last_seen_at.slice(0, 16) : '';
+  const lastSeenDate = report?.last_seen_at ? localDatePart(report.last_seen_at) : '';
+  const lastSeenTime = report?.last_seen_at ? localTimePart(report.last_seen_at) : '';
   async function prepareAndSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setPhotoError('');
@@ -30,13 +31,12 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
     startTransition(() => action(data));
   }
   return (
-    <details className={`lost-report-editor ${report ? 'lost-report-editor--active' : ''}`}>
-      <summary className={`button ${report ? 'button--outline' : 'button--danger'} button--wide`}>{report ? 'Editar alerta de pérdida' : 'Reportar perdida'}</summary>
+    <div className={`lost-report-editor ${report ? 'lost-report-editor--active' : ''}`}>
       <form action={action} onSubmit={prepareAndSubmit} className="form-stack lost-report-form">
         {report ? <input type="hidden" name="reportId" value={report.id} /> : <input type="hidden" name="petId" value={petId} />}
         {!report && <div className="lost-public-notice"><strong>La alerta será pública e indexable.</strong><p>Mostrará el nombre, los contactos de rescate, las alertas ya autorizadas para el QR y los detalles que agregues aquí. Si no indicas ubicación, aparecerá “Ubicación pendiente”.</p><label className="consent-check"><input type="checkbox" name="publicConsent" required /><span>Entiendo qué información se publicará y acepto crear la alerta.</span></label></div>}
         <label className="field"><span>Última ubicación vista <em>opcional</em></span><input name="lastSeenLocation" maxLength={160} defaultValue={report?.last_seen_location || ''} placeholder="Ciudad, colonia o zona" /></label>
-        <label className="field"><span>Fecha y hora aproximadas <em>opcional</em></span><input type="datetime-local" name="lastSeenAt" defaultValue={dateTimeDefault} /></label>
+        <fieldset className="lost-time-fields"><legend>Cuándo se perdió <em>opcional</em></legend><div className="form-grid form-grid--two"><label className="field"><span>Día aproximado</span><input type="date" name="lastSeenDate" defaultValue={lastSeenDate} /></label><label className="field"><span>Hora aproximada</span><input type="time" name="lastSeenTime" defaultValue={lastSeenTime} /></label></div><p>Completa el día y la hora, o deja ambos campos vacíos.</p></fieldset>
         <label className="field"><span>¿Qué llevaba puesto? <em>opcional</em></span><input name="wearing" maxLength={160} defaultValue={report?.wearing || ''} placeholder="Ej. Collar azul y pechera roja" /></label>
         <label className="field"><span>Mensaje para quien la encuentre <em>opcional</em></span><textarea name="message" maxLength={500} rows={3} defaultValue={report?.message || ''} placeholder="Cualquier detalle que ayude a reconocerla o acercarse con calma." /></label>
         <label className="field"><span>Recompensa informativa <em>opcional</em></span><input name="reward" inputMode="numeric" pattern="[0-9]*" maxLength={100} value={reward} onChange={(event) => { if (/^[0-9]*$/.test(event.target.value)) setReward(event.target.value); }} placeholder="Ej. 1000" /><small>Solo dígitos, sin símbolos ni decimales.</small>{legacyReward && <small>La recompensa anterior contiene texto. Escribe una cantidad en dígitos o deja el campo vacío para retirarla al guardar.</small>}</label>
@@ -46,8 +46,20 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
         {state.message && <p className={`form-message ${state.ok ? 'form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
         <button className="button button--danger" type="submit" disabled={isPending}>{isPending ? 'Guardando…' : report ? 'Guardar cambios' : 'Publicar alerta ahora'}</button>
       </form>
-    </details>
+    </div>
   );
+}
+
+function localDatePart(value: string): string {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return '';
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function localTimePart(value: string): string {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return '';
+  return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 }
 
 export function RecoverPetForm({ report }: { report: LostReportRow }) {

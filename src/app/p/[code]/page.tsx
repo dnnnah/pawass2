@@ -9,6 +9,7 @@ import { getSiteUrl } from '@/lib/supabase/env';
 import { isRecoveryNoticeVisible } from '@/features/lost-pets/domain';
 import { createPhotoUrl } from '@/lib/supabase/photo-url';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Props = { params: Promise<{ code: string }> };
 type PublicCareAlert = { category: string; label: string; severity: 'critical' | 'precaution' | 'informative'; instructions: string };
@@ -46,7 +47,7 @@ export default async function RescuePage({ params }: Props) {
   return (
     <main className="rescue-page">
       <header className="rescue-header"><BrandMark /><span>Ficha de rescate</span></header>
-      {status?.lost && <div className="rescue-state-banner rescue-state-banner--lost"><strong>Mascota perdida</strong><span>Su familia busca ayuda para encontrarla.</span><a href={`/perdidas/${code}`}>Ver alerta y ubicación</a></div>}
+      {status?.lost && <div className="rescue-state-banner rescue-state-banner--lost"><strong>Mascota perdida</strong><span>Su familia busca ayuda para encontrarla.</span><Link href={`/perdidas/${code}`}>Ver alerta y ubicación</Link></div>}
       {!status?.lost && showHomeNotice && <div className="rescue-state-banner rescue-state-banner--home"><strong>Ya está en casa</strong><span>Gracias por ayudar a reunir a {pet.pet_name} con su familia.</span></div>}
       <article className="rescue-card">
         <div className={`rescue-photo ${photoUrl ? 'rescue-photo--image' : 'rescue-photo--empty'}`}>{photoUrl ? <Image src={photoUrl} alt={`Foto de ${pet.pet_name}`} width={560} height={420} unoptimized /> : <PawIllustration />}</div>

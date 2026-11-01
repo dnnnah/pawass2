@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { AppHeader } from '@/features/navigation/app-header';
 import { CareAlertManager, type CareAlertRecord } from '@/features/care-alerts/care-alert-manager';
-import { LostReportForm } from '@/features/lost-pets/lost-report-form';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
 import { PetContactEditor } from './pet-contact-editor';
 import { PetDetailsForm, type PetDetailsValues } from './pet-details-form';
@@ -41,9 +40,9 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
             <h1 id="pet-name">{pet.name}</h1>
             <p>{pet.species === 'perro' ? 'Perro' : 'Gato'}{code && <> · Código <bdi>{code}</bdi></>}</p>
             {code && <a className="text-button" href={`/p/${code}`} target="_blank" rel="noreferrer">Abrir ficha QR</a>}
-            {report && <a className="button button--primary pet-detail-poster-link" href="#cartel-se-busca"><PosterDownloadIcon />Crear cartel y descargar imagen</a>}
+            {report && <Link className="button button--primary pet-detail-poster-link" href="#cartel-se-busca"><PosterDownloadIcon />Crear cartel y descargar imagen</Link>}
           </div>
-          <LostReportForm petId={pet.id} report={report} />
+          <div className={`pet-detail-loss-state ${report ? 'pet-detail-loss-state--lost' : 'pet-detail-loss-state--home'}`}><p><strong>{report ? 'Alerta pública activa' : 'No hay una pérdida activa'}</strong><span>{report ? 'Confirma el regreso o edita la información publicada.' : 'Puedes crear un reporte si tu mascota se pierde.'}</span></p><Link className={`button ${report ? 'button--danger' : 'button--outline'}`} href={`/mascotas/${pet.id}/perdida`}>{report ? 'Gestionar estado de pérdida' : 'Reportar pérdida'}</Link></div>
         </section>
         {report && <div id="cartel-se-busca" className="pet-poster-section">
           {posterReady && code && rescuePhone ? <LostPetPoster pet={{
@@ -71,7 +70,7 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
           </div>}
         </div>}
         <nav className="editor-nav" aria-label="Secciones de la ficha">
-          <a href="#identidad">Identidad y detalles</a><a href="#fotografia">Fotografía</a><a href="#cuidados">Alertas de cuidado</a>{report && <a href="#cartel-se-busca">Cartel de búsqueda</a>}<Link href={`/mascotas/${pet.id}/carnet`}>Carnet de salud</Link><a href="#contactos">Contacto de rescate</a>
+          <Link href="#identidad">Identidad y detalles</Link><Link href="#fotografia">Fotografía</Link><Link href="#cuidados">Alertas de cuidado</Link>{report && <Link href="#cartel-se-busca">Cartel de búsqueda</Link>}<Link href={`/mascotas/${pet.id}/carnet`}>Carnet de salud</Link><Link href="#contactos">Contacto de rescate</Link>
         </nav>
         <div className="pet-editor-layout"><div className="pet-editor-content">
         <section className="pet-details-editor" id="identidad" aria-labelledby="identity-heading">

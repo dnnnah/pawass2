@@ -8,6 +8,20 @@ import {
 } from '../src/features/lost-pets/domain';
 
 describe('lost report input', () => {
+  it('combines the separate date and time in the matching local timezone', () => {
+    expect(normalizeLostReport({
+      lastSeenLocation: '', lastSeenDate: '2026-10-29', lastSeenTime: '18:45', wearing: '', message: '', reward: '',
+    })).toEqual({ ok: true, value: expect.objectContaining({ lastSeenAt: new Date('2026-10-29T18:45').toISOString() }) });
+  });
+
+  it('requires both date and time when the approximate moment is supplied', () => {
+    expect(normalizeLostReport({
+      lastSeenLocation: '', lastSeenDate: '', lastSeenTime: '18:45', wearing: '', message: '', reward: '',
+    })).toEqual({ ok: false, error: 'Indica también el día aproximado, o deja ambos campos vacíos.' });
+    expect(normalizeLostReport({
+      lastSeenLocation: '', lastSeenDate: '2026-10-29', lastSeenTime: '', wearing: '', message: '', reward: '',
+    })).toEqual({ ok: false, error: 'Indica también la hora aproximada, o deja ambos campos vacíos.' });
+  });
   it('allows an immediate report with no optional location or photo', () => {
     expect(normalizeLostReport({
       lastSeenLocation: '',
@@ -50,6 +64,7 @@ describe('lost report input', () => {
     expect(getLostReportRevalidationPaths('pet-123', 'PC-AB2345')).toEqual([
       '/mascotas',
       '/mascotas/pet-123',
+      '/mascotas/pet-123/perdida',
       '/perdidas',
       '/perdidas/PC-AB2345',
       '/p/PC-AB2345',
