@@ -2,7 +2,7 @@
 
 import { getCountries, type CountryCode } from 'libphonenumber-js';
 import { normalizePhoneNumber, validateQuickPetInput } from '@/lib/domain';
-import { normalizePetDetailsInput } from './domain';
+import { getPetRevalidationPaths, normalizePetDetailsInput } from './domain';
 import { createAdminClient, createClient } from '@/lib/supabase/server';
 import type { FormState } from '@/features/profile/actions';
 import { revalidatePath } from 'next/cache';
@@ -144,6 +144,7 @@ export async function savePetContactOverride(_previous: FormState, formData: For
     updated_at: new Date().toISOString(),
   }).eq('id', petId).eq('owner_id', user.id);
   if (error) return { ok: false, message: 'No se pudo actualizar el contacto de esta mascota.' };
+  for (const path of getPetRevalidationPaths(petId)) revalidatePath(path);
   return { ok: true, message: enabled ? 'Esta mascota usará el contacto elegido.' : 'Esta mascota heredará los contactos de tu cuenta.' };
 }
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizePetDetailsInput, resolveDefaultRescueNumbers } from '../src/features/pets/domain';
+import { getPetRevalidationPaths, normalizePetDetailsInput, resolveDefaultRescueNumbers } from '../src/features/pets/domain';
 
 describe('optional pet identity details', () => {
   it('accepts either an exact birth date or an approximate age', () => {
@@ -23,5 +23,14 @@ describe('default rescue numbers', () => {
     expect(resolveDefaultRescueNumbers('+525512345678', '+14155552671')).toEqual({
       rescuePhone: '+525512345678', whatsappPhone: '+14155552671',
     });
+  });
+});
+
+describe('pet editor revalidation', () => {
+  it('refreshes the pet list and the edited pet after contact changes', () => {
+    expect(getPetRevalidationPaths('pet-123')).toEqual([
+      '/mascotas',
+      '/mascotas/pet-123',
+    ]);
   });
 });

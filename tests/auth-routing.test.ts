@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getAuthRedirectPath } from '../src/lib/supabase/auth-routing';
+import { getAuthRedirectPath, getBrandHomePath } from '../src/lib/supabase/auth-routing';
 
 describe('auth route redirects', () => {
   it('sends unauthenticated requests for private pages to sign in', () => {
@@ -10,6 +10,11 @@ describe('auth route redirects', () => {
 
   it('sends authenticated visitors away from sign in to their pets', () => {
     expect(getAuthRedirectPath('/', true)).toBe('/mascotas');
+  });
+
+  it('sends the brand mark to the pets page for signed-in visitors', () => {
+    expect(getBrandHomePath(true)).toBe('/mascotas');
+    expect(getBrandHomePath(false)).toBe('/');
   });
 
   it('leaves public pages and matching authenticated pages alone', () => {

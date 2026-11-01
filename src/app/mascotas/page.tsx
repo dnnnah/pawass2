@@ -33,7 +33,7 @@ export default async function PetsPage() {
   const profileComplete = Boolean(profile?.first_name && profile?.rescue_phone && profile?.whatsapp_phone);
   const codeByPet = new Map((codes || []).map((item) => [item.pet_id, item.code]));
   const reportByPet = new Map((reports || []).map((report) => [report.pet_id, report as LostReportRow]));
-  const photoUrls = await createPhotoUrls('pet-photos', (pets || []).map((pet) => pet.primary_photo_path));
+  const photoUrls = await createPhotoUrls('pet-photos', (pets || []).map((pet) => pet.primary_photo_path), supabase);
   const photoUrlByPet = new Map((pets || []).map((pet) => [pet.id, pet.primary_photo_path ? photoUrls.get(pet.primary_photo_path) || null : null] as const));
   return (
     <main className="account-shell">

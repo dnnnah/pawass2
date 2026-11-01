@@ -14,6 +14,25 @@ export type LostReport = {
   reward: string | null;
 };
 
+export function toLostReportDatabaseFields(report: LostReport) {
+  return {
+    last_seen_location: report.lastSeenLocation,
+    last_seen_at: report.lastSeenAt,
+    wearing: report.wearing,
+    message: report.message,
+    reward: report.reward,
+  };
+}
+
+export function getLostReportRevalidationPaths(petId: string, publicCode: string | null): string[] {
+  return [
+    '/mascotas',
+    `/mascotas/${petId}`,
+    '/perdidas',
+    ...(publicCode ? [`/perdidas/${publicCode}`, `/p/${publicCode}`] : []),
+  ];
+}
+
 export function normalizeLostReport(input: LostReportInput):
   | { ok: true; value: LostReport }
   | { ok: false; error: string } {

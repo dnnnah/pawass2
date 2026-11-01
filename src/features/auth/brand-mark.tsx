@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-export function BrandMark() {
+export function BrandMark({ href = '/' }: { href?: string }) {
   return (
-    <Link href="/" className="brand" aria-label="PawPass, inicio">
+    <Link href={href} className="brand" aria-label="PawPass, inicio">
       <span>pawpass</span>
       <Image src="/paw-mark.svg" width={32} height={32} alt="" aria-hidden="true" className="brand__paw" />
     </Link>

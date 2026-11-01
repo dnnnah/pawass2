@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   isRecoveryNoticeVisible,
+  getLostReportRevalidationPaths,
   normalizeLostReport,
   projectPublicLostPet,
+  toLostReportDatabaseFields,
 } from '../src/features/lost-pets/domain';
 
 describe('lost report input', () => {
@@ -23,6 +25,35 @@ describe('lost report input', () => {
         reward: null,
       },
     });
+  });
+
+  it('maps normalized report fields to the database column names', () => {
+    const report = normalizeLostReport({
+      lastSeenLocation: 'Centro',
+      lastSeenAt: '2026-10-29T12:00',
+      wearing: 'Collar azul',
+      message: 'Ayuda a volver a casa',
+      reward: '1000',
+    });
+
+    if (!report.ok) throw new Error(report.error);
+    expect(toLostReportDatabaseFields(report.value)).toEqual({
+      last_seen_location: 'Centro',
+      last_seen_at: expect.any(String),
+      wearing: 'Collar azul',
+      message: 'Ayuda a volver a casa',
+      reward: '1000',
+    });
+  });
+
+  it('revalidates the pet editor after report details change', () => {
+    expect(getLostReportRevalidationPaths('pet-123', 'PC-AB2345')).toEqual([
+      '/mascotas',
+      '/mascotas/pet-123',
+      '/perdidas',
+      '/perdidas/PC-AB2345',
+      '/p/PC-AB2345',
+    ]);
   });
 
   it('rejects excessive public report text', () => {

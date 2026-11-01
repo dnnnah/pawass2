@@ -4,7 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getSiteUrl } from '@/lib/supabase/env';
 import { LostReportForm, RecoverPetForm } from '@/features/lost-pets/lost-report-form';
+import { getPosterEditorHref } from '@/features/lost-pets/poster-domain';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
+import './pet-card.css';
 
 type Pet = {
   id: string;
@@ -29,6 +31,10 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
         <LostReportForm petId={pet.id} report={report} />
         {isLost && report && <>
           <p className="pet-card__lost-summary">{report.last_seen_location || 'Ubicación pendiente'} · Alerta activa desde {new Date(report.lost_at).toLocaleDateString('es-MX')}</p>
+          <Link className="button button--primary button--wide pet-card__poster-link" href={getPosterEditorHref(pet.id)}>
+            <PosterDownloadIcon />
+            Crear cartel y descargar imagen
+          </Link>
           <Link className="button button--outline button--wide" href={`/perdidas/${code}`}>Ver ficha pública de pérdida</Link>
           <RecoverPetForm report={report} />
         </>}
@@ -41,4 +47,8 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
       </div>
     </article>
   );
+}
+
+function PosterDownloadIcon() {
+  return <svg className="pet-card__poster-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" /></svg>;
 }

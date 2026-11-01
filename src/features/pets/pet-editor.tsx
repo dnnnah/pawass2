@@ -9,6 +9,10 @@ import { PetContactEditor } from './pet-contact-editor';
 import { PetDetailsForm, type PetDetailsValues } from './pet-details-form';
 import { DeletePetForm } from './delete-pet-form';
 import { PetPhotoUploadForm } from './photo-upload-form';
+import { LostPetPoster, type PosterAlert } from '@/features/lost-pets/lost-pet-poster';
+import { isPosterReady, getRescueQrUrl } from '@/features/lost-pets/poster-domain';
+import { getSiteUrl } from '@/lib/supabase/env';
+import './pet-editor.css';
 
 type EditorPet = PetDetailsValues & {
   id: string; name: string; species: 'perro' | 'gato';
@@ -16,10 +20,15 @@ type EditorPet = PetDetailsValues & {
   rescue_phone_override: string | null; whatsapp_phone_override: string | null;
 };
 
-export function PetEditor({ pet, code, photoUrl, report, alerts }: {
-  pet: EditorPet; code: string; photoUrl: string | null;
+export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone, whatsappPhone, report, alerts }: {
+  pet: EditorPet; code: string; photoUrl: string | null; recentLostPhotoUrl: string | null; rescuePhone: string | null; whatsappPhone?: string | null;
   report: LostReportRow | null; alerts: CareAlertRecord[];
 }) {
+  const posterPhotoUrl = recentLostPhotoUrl || photoUrl;
+  const posterReady = isPosterReady({ active: Boolean(report), photoUrl: posterPhotoUrl, lastSeenLocation: report?.last_seen_location || null });
+  const posterAlerts: PosterAlert[] = alerts
+    .filter((alert) => alert.qr_visible)
+    .map(({ label, severity, instructions }) => ({ label, severity, instructions }));
   return (
     <main className="account-shell">
       <AppHeader active="pets" />
@@ -32,11 +41,37 @@ export function PetEditor({ pet, code, photoUrl, report, alerts }: {
             <h1 id="pet-name">{pet.name}</h1>
             <p>{pet.species === 'perro' ? 'Perro' : 'Gato'}{code && <> · Código <bdi>{code}</bdi></>}</p>
             {code && <a className="text-button" href={`/p/${code}`} target="_blank" rel="noreferrer">Abrir ficha QR</a>}
+            {report && <a className="button button--primary pet-detail-poster-link" href="#cartel-se-busca"><PosterDownloadIcon />Crear cartel y descargar imagen</a>}
           </div>
           <LostReportForm petId={pet.id} report={report} />
         </section>
+        {report && <div id="cartel-se-busca" className="pet-poster-section">
+          {posterReady && code && rescuePhone ? <LostPetPoster pet={{
+            name: pet.name,
+            species: pet.species,
+            code,
+            photoUrl: posterPhotoUrl!,
+            phone: rescuePhone,
+            whatsappPhone: whatsappPhone || rescuePhone,
+            qrUrl: getRescueQrUrl(code, getSiteUrl()),
+            lastSeenLocation: report.last_seen_location!,
+            lastSeenAt: report.last_seen_at,
+            wearing: report.wearing,
+            message: report.message,
+            reward: report.reward,
+            alerts: posterAlerts,
+          }} /> : <div className="poster-unavailable">
+            <h2 id="poster-heading">Cartel de búsqueda</h2>
+            <p>Completa estos datos para habilitar la descarga del cartel:</p>
+            <ul>
+              {!posterPhotoUrl && <li>Agrega una foto de {pet.name}.</li>}
+              {!report.last_seen_location?.trim() && <li>Indica la última zona vista.</li>}
+              {!rescuePhone && <li>Actualiza el teléfono de llamadas en Mi cuenta o en Contacto de rescate.</li>}
+            </ul>
+          </div>}
+        </div>}
         <nav className="editor-nav" aria-label="Secciones de la ficha">
-          <a href="#identidad">Identidad y detalles</a><a href="#fotografia">Fotografía</a><a href="#cuidados">Alertas de cuidado</a><Link href={`/mascotas/${pet.id}/carnet`}>Carnet de salud</Link><a href="#contactos">Contacto de rescate</a>
+          <a href="#identidad">Identidad y detalles</a><a href="#fotografia">Fotografía</a><a href="#cuidados">Alertas de cuidado</a>{report && <a href="#cartel-se-busca">Cartel de búsqueda</a>}<Link href={`/mascotas/${pet.id}/carnet`}>Carnet de salud</Link><a href="#contactos">Contacto de rescate</a>
         </nav>
         <div className="pet-editor-layout"><div className="pet-editor-content">
         <section className="pet-details-editor" id="identidad" aria-labelledby="identity-heading">
@@ -55,4 +90,8 @@ export function PetEditor({ pet, code, photoUrl, report, alerts }: {
       </div>
     </main>
   );
+}
+
+function PosterDownloadIcon() {
+  return <svg className="pet-detail-poster-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" /></svg>;
 }

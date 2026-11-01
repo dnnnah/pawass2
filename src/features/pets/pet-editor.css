@@ -1,0 +1,23 @@
+.pet-poster-section { margin: 1.5rem 0; scroll-margin-top: 96px; }
+
+.pet-detail-poster-link { width: fit-content; gap: .6rem; margin-top: .5rem; }
+.pet-detail-poster-icon { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.9; }
+
+.poster-unavailable {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #c8d9de;
+  border-radius: 16px;
+  background: #f5fafc;
+  color: #173b4b;
+}
+
+.poster-unavailable h2 { margin: 0; font-size: 2rem; }
+.poster-unavailable p { margin: 0.6rem 0; }
+.poster-unavailable ul { margin: 0; padding-left: 1.4rem; line-height: 1.6; }
+
+@media (max-width: 620px) {
+  .pet-detail-poster-link { width: 100%; margin-top: .75rem; }
+  .pet-poster-section { scroll-margin-top: 76px; }
+  .poster-unavailable { padding: 1.1rem; }
+  .poster-unavailable h2 { font-size: 1.5rem; }
+}
