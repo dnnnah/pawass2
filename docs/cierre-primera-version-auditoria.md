@@ -60,6 +60,8 @@ La auditoría pública no envía mensajes ni solicita ubicación. Los datos visi
 - El carnet agrupa identidad de salud, listas y formularios en secciones visuales claras. Cada tipo de registro muestra cantidad, nivel/prioridad cuando aplica, acciones para agregar/editar/eliminar y visibilidad pública solo para alertas de cuidado que el tutor puede autorizar para el QR. Vacunas, desparasitaciones, intervenciones y documentos siguen privados.
 - Investigar el tiempo de navegación por ruta y reducir espera real y percibida con medición de datos, prefetch y estados de carga apropiados. No ocultar errores ni introducir caché de datos de usuario.
 - Se conserva el acceso actual, valorado positivamente, y la decisión expresa de máximo dos alertas de cuidado en el cartel.
+- Las tarjetas de mascota deben separar **Ficha pública**, **Editor de mascota** y **Pérdida**. Una sola acción lleva a la vista pública vigente: QR habitual o ficha de búsqueda activa. El QR permanente mantiene `/p/<código>` y enlaza a la ficha de búsqueda si la alerta está activa.
+- El editor y el carnet deben mostrar grupos, conteos y acciones con jerarquía clara. Las rutas inválidas necesitan una página 404 propia y útil.
 
 ## Revisión de producto añadida
 
@@ -79,6 +81,8 @@ Los cambios anteriores no requieren nuevas decisiones de alcance: detallan la ex
 - La pérdida ahora se gestiona desde `/mascotas/[id]/perdida`; crear y editar ya no despliega el formulario debajo de la tarjeta. La página separa el estado perdido de la confirmación explícita de regreso y explica el cierre de la alerta, retiro de foto y aviso QR de 30 días.
 - El formulario muestra campos etiquetados por separado para día y hora. Si se indica el momento, ambos campos son obligatorios para no publicar una hora inventada; ambos pueden dejarse vacíos. El timestamp existente se conserva y se interpreta en la zona horaria local del tutor.
 - Carnet y alertas de cuidado ahora usan superficies delimitadas, contadores por tipo, prioridad visible, acciones agrupadas y texto de visibilidad QR. La vista del QR aclara qué información verá cualquier persona con el código.
+- Las tarjetas de mascota ahora distinguen las áreas pública, privada y de pérdida; con alerta activa, la vista pública abre la ficha de búsqueda y las acciones separan editar alerta, confirmar el regreso y crear cartel. El QR físico conserva su ruta estable.
+- La ficha de mascota presenta accesos agrupados para información, fotografía, cuidados, carnet y contactos. El carnet delimita registros y acciones de edición/eliminación; se añadió una página 404 propia con rutas de regreso. La inspección visual de las tarjetas, el carnet de ejemplo y la 404 se hizo con registros ficticios, sin escritura al backend.
 - Las rutas dinámicas tienen `loading.tsx` para prefetch parcial y respuesta visual. Los enlaces internos usan navegación de Next.js. En navegador, la navegación del tablón a la ficha pública se completó en aproximadamente 100 ms.
 - La inspección del tablón reveló overflow de un motivo decorativo; después del ajuste no hay overflow horizontal incluso a 244 CSS px (el navegador integrado de esta sesión no aplicó el override solicitado de 320 px).
 - GET local confirmó `Cache-Control: no-store` en `/cuenta`, `/mascotas`, `/p/<código>` y `/perdidas/<código>`. `robots.txt` responde `Allow: /`; `manifest.webmanifest` ofrece `standalone` e iconos 192/512; `/service-worker.js` responde `no-store` y `Service-Worker-Allowed: /`.

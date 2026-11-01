@@ -11,6 +11,7 @@ import { PetPhotoUploadForm } from './photo-upload-form';
 import { LostPetPoster, type PosterAlert } from '@/features/lost-pets/lost-pet-poster';
 import { isPosterReady, getRescueQrUrl } from '@/features/lost-pets/poster-domain';
 import { getSiteUrl } from '@/lib/supabase/env';
+import { getPublicPetViewHref } from './pet-card-domain';
 import './pet-editor.css';
 
 type EditorPet = PetDetailsValues & {
@@ -28,6 +29,7 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
   const posterAlerts: PosterAlert[] = alerts
     .filter((alert) => alert.qr_visible)
     .map(({ label, severity, instructions }) => ({ label, severity, instructions }));
+  const publicViewHref = code ? getPublicPetViewHref(code, report?.status === 'active') : '';
   return (
     <main className="account-shell">
       <AppHeader active="pets" />
@@ -39,10 +41,10 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
             <p className={`pet-detail-state ${report ? 'pet-detail-state--lost' : ''}`}><span aria-hidden="true" />{report ? 'Perdida' : 'En casa'}</p>
             <h1 id="pet-name">{pet.name}</h1>
             <p>{pet.species === 'perro' ? 'Perro' : 'Gato'}{code && <> · Código <bdi>{code}</bdi></>}</p>
-            {code && <a className="text-button" href={`/p/${code}`} target="_blank" rel="noreferrer">Abrir ficha QR</a>}
+            {publicViewHref && <Link className="text-button" href={publicViewHref}>Ver ficha pública actual</Link>}
             {report && <Link className="button button--primary pet-detail-poster-link" href="#cartel-se-busca"><PosterDownloadIcon />Crear cartel y descargar imagen</Link>}
           </div>
-          <div className={`pet-detail-loss-state ${report ? 'pet-detail-loss-state--lost' : 'pet-detail-loss-state--home'}`}><p><strong>{report ? 'Alerta pública activa' : 'No hay una pérdida activa'}</strong><span>{report ? 'Confirma el regreso o edita la información publicada.' : 'Puedes crear un reporte si tu mascota se pierde.'}</span></p><Link className={`button ${report ? 'button--danger' : 'button--outline'}`} href={`/mascotas/${pet.id}/perdida`}>{report ? 'Gestionar estado de pérdida' : 'Reportar pérdida'}</Link></div>
+          <div className={`pet-detail-loss-state ${report ? 'pet-detail-loss-state--lost' : 'pet-detail-loss-state--home'}`}><p><strong>{report ? 'Alerta pública activa' : 'No hay una pérdida activa'}</strong><span>{report ? 'Edita el aviso o confirma por separado que volvió a casa.' : 'Puedes crear un reporte si tu mascota se pierde.'}</span></p><div className="pet-detail-loss-state__actions"><Link className={`button ${report ? 'button--danger' : 'button--outline'}`} href={`/mascotas/${pet.id}/perdida`}>{report ? 'Editar alerta' : 'Reportar pérdida'}</Link>{report && <Link className="button button--outline" href={`/mascotas/${pet.id}/perdida#confirmar-regreso`}>Confirmar regreso</Link>}</div></div>
         </section>
         {report && <div id="cartel-se-busca" className="pet-poster-section">
           {posterReady && code && rescuePhone ? <LostPetPoster pet={{
@@ -69,22 +71,27 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
             </ul>
           </div>}
         </div>}
-        <nav className="editor-nav" aria-label="Secciones de la ficha">
-          <Link href="#identidad">Identidad y detalles</Link><Link href="#fotografia">Fotografía</Link><Link href="#cuidados">Alertas de cuidado</Link>{report && <Link href="#cartel-se-busca">Cartel de búsqueda</Link>}<Link href={`/mascotas/${pet.id}/carnet`}>Carnet de salud</Link><Link href="#contactos">Contacto de rescate</Link>
+        <nav className="editor-nav" aria-label="Secciones del editor de mascota">
+          <Link className="editor-nav__item" href="#identidad"><span>01</span><span><strong>Información</strong><small>Identidad y datos privados</small></span></Link>
+          <Link className="editor-nav__item" href="#fotografia"><span>02</span><span><strong>Fotografía</strong><small>Imagen de la ficha</small></span></Link>
+          <Link className="editor-nav__item" href="#cuidados"><span>03</span><span><strong>Alertas de cuidado</strong><small>Prioridad y visibilidad QR</small></span></Link>
+          <Link className="editor-nav__item" href={`/mascotas/${pet.id}/carnet`}><span>04</span><span><strong>Carnet de salud</strong><small>Vacunas y documentos privados</small></span></Link>
+          <Link className="editor-nav__item" href="#contactos"><span>05</span><span><strong>Contacto de rescate</strong><small>Llamadas y WhatsApp</small></span></Link>
+          {report && <Link className="editor-nav__item editor-nav__item--urgent" href="#cartel-se-busca"><span>06</span><span><strong>Cartel de búsqueda</strong><small>Compartir la alerta activa</small></span></Link>}
         </nav>
         <div className="pet-editor-layout"><div className="pet-editor-content">
         <section className="pet-details-editor" id="identidad" aria-labelledby="identity-heading">
-          <header className="editor-heading"><h2 id="identity-heading">Identidad y detalles</h2><p>Guarda cada sección cuando termines de editarla.</p></header>
+          <header className="editor-heading"><p className="pet-editor-kicker">01 · Editor privado</p><h2 id="identity-heading">Información de {pet.name}</h2><p>Organiza sus datos por grupo. Guarda los cambios antes de pasar a otra sección.</p></header>
           <PetDetailsForm petId={pet.id} species={pet.species} details={pet} continueLabel="Guardar detalles" />
         </section>
-        <section id="fotografia" className="pet-photo-editor" aria-labelledby="pet-photo-heading"><h2 id="pet-photo-heading">Fotografía</h2><PetPhotoUploadForm petId={pet.id} publicCode={code} /></section>
+        <section id="fotografia" className="pet-photo-editor" aria-labelledby="pet-photo-heading"><p className="pet-editor-kicker">02 · Apariencia pública</p><h2 id="pet-photo-heading">Fotografía</h2><p>Esta imagen se usa en la ficha pública de rescate.</p><PetPhotoUploadForm petId={pet.id} publicCode={code} /></section>
         <div id="cuidados"><CareAlertManager petId={pet.id} alerts={alerts} /></div>
         <section id="contactos" className="pet-detail-contact" aria-labelledby="contact-heading">
           <div><h2 id="contact-heading">Contacto de rescate</h2><p>Por defecto, llamadas y WhatsApp usan los teléfonos de Mi cuenta. Aquí puedes elegir un contacto distinto para esta mascota.</p></div>
           <PetContactEditor petId={pet.id} enabled={pet.contact_override_enabled} phone={pet.rescue_phone_override} whatsapp={pet.whatsapp_phone_override} />
         </section>
         <DeletePetForm petId={pet.id} publicCode={code} />
-        </div><aside className="editor-help"><PetDetail kind="dog" /><h2>Su ficha, lista para ayudar</h2><p>Una fotografía clara y un contacto actualizado ayudan a que quien encuentre a {pet.name} sepa qué hacer.</p><h3>Tú decides qué se comparte</h3><p>Los datos privados de cuidado permanecen en tu cuenta. Solo las alertas que autorices aparecerán en el QR.</p>{code && <a className="button button--outline button--wide" href={`/p/${code}`} target="_blank" rel="noreferrer">Revisar ficha pública <span className="sr-only">(abre en otra pestaña)</span></a>}</aside></div>
+        </div><aside className="editor-help"><PetDetail kind="dog" /><h2>Su ficha, lista para ayudar</h2><p>Una fotografía clara y un contacto actualizado ayudan a que quien encuentre a {pet.name} sepa qué hacer.</p><h3>Tú decides qué se comparte</h3><p>Los datos privados de cuidado permanecen en tu cuenta. Solo las alertas que autorices aparecerán en el QR.</p>{publicViewHref && <Link className="button button--outline button--wide" href={publicViewHref}>Revisar ficha pública actual</Link>}</aside></div>
         <PetNote name={pet.name} />
       </div>
     </main>

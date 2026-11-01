@@ -716,6 +716,7 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   html { scroll-behavior: auto; }
   .button { transition: none; }
 }
+
 .pet-detail { width: 28px; height: 28px; flex: 0 0 auto; color: var(--blue); }
 .pet-note { display: flex; width: 100%; justify-content: center; align-items: center; gap: .8rem; padding: 1.6rem 0; color: var(--blue-deep); }
 .pet-note p { margin: 0; font-size: 1rem; text-align: center; }
@@ -895,4 +896,85 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 @media (forced-colors: active) {
   .health-status > span { outline: 1px solid currentColor; }
   .health-form, .health-confirm-date, .health-suggestion, .health-record-privacy { border: 1px solid CanvasText; }
+}
+
+/* Dashboard action areas: current public view, private editor, and lost mode. */
+.pet-card__areas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.pet-card__area { display: flex; min-width: 0; flex-direction: column; gap: .65rem; border: 1px solid #cfdee3; border-radius: 14px; background: #f8fbfc; padding: 1rem; }
+.pet-card__area--public { grid-column: 1 / -1; background: #f2f8fa; }
+.pet-card__area--loss-active { border-color: #dfa9ae; background: #fff8f8; }
+.pet-card__area-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .7rem; }
+.pet-card__area-heading h3 { margin: 0; font-size: 1.15rem; line-height: 1.25; }
+.pet-card__eyebrow, .pet-editor-kicker { margin: 0 0 .2rem; color: #526a74; font-size: .74rem; font-weight: 800; letter-spacing: .045em; text-transform: uppercase; }
+.pet-card__area > p { flex: 1 1 auto; margin: 0; color: #405e69; font-size: .88rem; line-height: 1.5; }
+.pet-card__area-badge { display: inline-flex; min-height: 30px; flex: 0 0 auto; align-items: center; border: 1px solid #c4d9e0; border-radius: 999px; background: #fff; padding: .2rem .55rem; color: #315d70; font-size: .74rem; font-weight: 800; }
+.pet-card__area-badge--lost { border-color: #dfa9ae; background: #fcebed; color: #77252d; }
+.pet-card__area-actions { display: grid; gap: .5rem; margin-top: auto; }
+.pet-card__area .button { width: 100%; min-height: 46px; }
+.pet-card__area .pet-card__poster-link { margin: 0; }
+.pet-detail-loss-state__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
+.pet-detail-loss-state__actions .button { min-height: 44px; }
+.pet-card__qr { margin-top: .1rem; text-align: left; }
+.pet-card__qr summary { margin: 0; text-decoration: none; }
+.pet-card__qr-preview { padding-top: .7rem; }
+.pet-card__qr-preview a { justify-content: center; text-align: center; }
+
+/* Clear jump targets and field groups in the pet information editor. */
+.editor-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; margin: 1.25rem 0 1.5rem; border: 0; }
+.editor-nav__item { display: flex; min-width: 0; min-height: 72px; align-items: flex-start; gap: .65rem; border: 1px solid #cfdee3; border-radius: 12px; background: #fff; padding: .75rem; text-decoration: none; }
+.editor-nav__item:hover { border-color: #176986; background: #f2f8fa; text-decoration: none; }
+.editor-nav__item > span:first-child { display: grid; width: 1.7rem; height: 1.7rem; flex: 0 0 1.7rem; place-items: center; border-radius: 50%; background: #e2f0f4; color: #12556e; font-size: .73rem; font-weight: 800; }
+.editor-nav__item > span:last-child { display: grid; gap: .15rem; }
+.editor-nav__item strong { color: #173b4b; font-size: .88rem; }
+.editor-nav__item small { color: #526a74; font-size: .75rem; line-height: 1.35; }
+.editor-nav__item--urgent { border-color: #dfa9ae; background: #fff8f8; }
+.pet-editor-kicker { color: #12556e; }
+.editor-group { border: 1px solid #d5e1e5; border-radius: 13px; background: #f8fbfc; padding: 1rem; }
+.editor-group legend { margin-left: -.35rem; padding: 0 .35rem; }
+.age-field { border: 1px solid #d5e1e5; border-radius: 13px; background: #f8fbfc; padding: 1rem; }
+.age-field legend { padding: 0 .35rem; }
+.pet-details-editor .editor-heading { margin-bottom: 1rem; }
+.pet-details-editor .editor-heading h2 { margin: 0 0 .35rem; }
+.pet-details-editor .editor-heading p:last-child { margin: 0; }
+
+/* Health sections and record actions use a consistent card hierarchy. */
+.health-panel { margin: .8rem 0; border: 1px solid #cddde2; border-radius: 16px; background: #fff; padding: clamp(1rem, 3vw, 1.4rem); }
+.health-panel__heading > div { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .8rem; }
+.health-panel__heading .section-count { margin: 0; }
+.health-record-list > li + li, .health-document-list > li + li { border-top: 0; }
+.health-record-entry, .health-document-entry { margin: .7rem 0; border: 1px solid #d5e1e5; border-radius: 13px; background: #f8fbfc; padding: 1rem; }
+.health-record-actions { gap: .55rem; }
+.health-record-actions summary.button, .health-document-entry summary.button { display: inline-flex; min-height: 44px; align-items: center; border: 1px solid #9bb9c3; border-radius: 9px; background: #fff; padding: .5rem .8rem; color: #12556e; font: inherit; font-size: .86rem; font-weight: 750; list-style: none; }
+.health-record-actions summary.button::-webkit-details-marker, .health-document-entry summary.button::-webkit-details-marker { display: none; }
+.health-delete-control > summary.button { border-color: #ddb6ba; color: #8d2630; }
+.health-delete-control > summary.button:hover { background: #fcebed; }
+.health-empty { margin-top: .45rem; border: 1px dashed #b8cdd4; border-radius: 12px; background: #f8fbfc; padding: 1rem; }
+.health-add-panel { margin-top: 1rem; }
+.health-record-privacy { border: 1px solid #cddde2; }
+
+/* Branded, actionable route fallback. */
+.not-found-page { display: grid; min-height: min(74svh, 780px); place-items: center; padding: 2rem 1rem; }
+.not-found-card { width: min(100%, 680px); border: 1px solid #cddde2; border-radius: 20px; background: #fff; padding: clamp(1.25rem, 5vw, 2.5rem); text-align: center; }
+.not-found-card > .brand { justify-content: center; }
+.not-found-card__illustration { display: flex; align-items: center; justify-content: center; gap: .5rem; margin: 1.8rem 0 .9rem; color: #176986; }
+.not-found-card__illustration .pet-detail--dog { width: 58px; height: 58px; }
+.not-found-card__illustration .pet-detail--sparkle { width: 25px; height: 25px; }
+.not-found-card__code { margin: 0 0 .35rem; color: #12556e; font-size: .8rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.not-found-card h1 { margin: 0 auto .6rem; font-size: clamp(1.8rem, 5vw, 2.5rem); }
+.not-found-card > p:not(.not-found-card__code) { max-width: 48ch; margin: 0 auto; color: #526a74; }
+.not-found-card__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .65rem; margin: 1.35rem 0 .5rem; }
+.not-found-card__actions .button { min-height: 48px; }
+.not-found-card__home { display: inline-flex; min-height: 44px; align-items: center; font-weight: 700; }
+@media (max-width: 760px) { .editor-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) {
+  .pet-card__areas { grid-template-columns: minmax(0, 1fr); }
+  .pet-card__area--public { grid-column: auto; }
+  .pet-detail-loss-state__actions { align-items: stretch; flex-direction: column; }
+  .pet-detail-loss-state__actions .button { width: 100%; }
+  .editor-nav { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .editor-nav__item { min-height: 62px; }
+  .editor-group, .age-field { padding: .85rem; }
+  .health-panel { padding: .95rem; }
+  .not-found-card__actions { flex-direction: column; }
+  .not-found-card__actions .button { width: 100%; }
 }
