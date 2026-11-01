@@ -31,16 +31,17 @@ export default async function PetPage({ params }: Props) {
     supabase.from('care_alerts').select('id,category,catalog_id,label,severity,instructions,qr_visible')
       .eq('pet_id', pet.id).order('created_at', { ascending: true }),
     supabase.from('lost_pet_reports').select('id,pet_id,status,lost_at,recovered_at,last_seen_location,last_seen_at,wearing,message,reward,recent_photo_path').eq('pet_id', pet.id).eq('status', 'active').maybeSingle(),
-    supabase.from('profiles').select('rescue_phone').eq('id', identity.id).maybeSingle(),
+    supabase.from('profiles').select('rescue_phone,whatsapp_phone').eq('id', identity.id).maybeSingle(),
   ]);
   const code = codeRecord?.code || '';
   const [photoUrl, recentLostPhotoUrl] = await Promise.all([
-    createPhotoUrl('pet-photos', pet.primary_photo_path),
-    createPhotoUrl('lost-pet-photos', report?.recent_photo_path || null),
+    createPhotoUrl('pet-photos', pet.primary_photo_path, supabase),
+    createPhotoUrl('lost-pet-photos', report?.recent_photo_path || null, supabase),
   ]);
   const rescuePhone = pet.contact_override_enabled ? pet.rescue_phone_override : profile?.rescue_phone;
+  const whatsappPhone = pet.contact_override_enabled ? pet.whatsapp_phone_override : profile?.whatsapp_phone;
 
-  return <PetEditor pet={pet} code={code} photoUrl={photoUrl} recentLostPhotoUrl={recentLostPhotoUrl} rescuePhone={rescuePhone || null} report={report as LostReportRow | null} alerts={(alerts || []) as CareAlertRecord[]} />;
+  return <PetEditor pet={pet} code={code} photoUrl={photoUrl} recentLostPhotoUrl={recentLostPhotoUrl} rescuePhone={rescuePhone || null} whatsappPhone={whatsappPhone || null} report={report as LostReportRow | null} alerts={(alerts || []) as CareAlertRecord[]} />;
 }
 
 function SetupRequired() {
