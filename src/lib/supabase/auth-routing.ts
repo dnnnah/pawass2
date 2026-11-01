@@ -5,3 +5,7 @@ export function getAuthRedirectPath(pathname: string, isAuthenticated: boolean):
   }
   return null;
 }
+
+export function getBrandHomePath(isAuthenticated: boolean): string {
+  return isAuthenticated ? '/mascotas' : '/';
+}
