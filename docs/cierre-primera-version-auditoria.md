@@ -103,3 +103,23 @@ No declarar cerrado el cierre de primera versión hasta completar las verificaci
 - Se compararon las seis migraciones remotas con las locales antes de aplicar `20261101050719_fotos_publicas_autorizadas.sql`. Comprobación con cliente anónimo: foto firmada y respuesta HTTP 200; documentos de salud rechazados por el predicado público.
 - El logo tiene como destino directo `/mascotas`, con protección de sesión. En desarrollo se retira el service worker de PawPass para evitar estilos antiguos en caché.
 - Verificación de esta revisión: 18 pruebas dirigidas aprobadas, lint, typecheck y build aprobados. Se comprobó la foto cargada en tablón, pérdida y QR; el logo volvió al listado desde el editor. Los cuatro PNG se generaron y se inspeccionó la composición de instrucciones/temperamento. No se editaron registros de mascotas durante la revisión.
+
+## Distribución aprobada del editor, QR y pérdida
+
+- Se trasladó el cartel a la página de pérdida y se mantuvo Editar alerta desde el editor. El listado privado, el tablón y la ficha pública ofrecen regreso rápido únicamente al dueño, mediante sesión y consultas limitadas a sus mascotas; el cierre sigue requiriendo confirmación.
+- El editor incorpora navbar con sección actual, QR abierto con PNG/SVG y compartir enlace, vista previa de datos guardados con explicación de publicación, y resúmenes visibles de carnet, cuidados y documentos privados. Las fotos públicas mantienen proporción natural.
+- Verificación: typecheck y build aprobados; 34 pruebas dirigidas de pérdida, cartel, rutas y política de caché aprobadas. Se inspeccionó el editor y la vista previa autenticada. El tablón en una sesión nueva sin autenticar no mostró controles de dueño. No se confirmó el regreso de ninguna mascota ni se modificaron sus registros.
+- La prueba de descarga real del QR quedó bloqueada: el navegador indicó rechazo del permiso de descarga desde el sitio local. No se intentó una descarga alternativa. Los controles y la generación están implementados, pero la recepción final del archivo requiere verificación por el usuario.
+- El override móvil solicitado al navegador no se aplicó (la vista permaneció en 1012 CSS px); no se declara completada la revisión móvil de 320 px.
+- En la página de pérdida se confirmó una única sección de cartel con los cuatro formatos generados y la casilla de regreso presente. La foto pública cargó con proporción visual 0.750003 frente a la proporción original 0.75, sin controles de dueño en la sesión anónima.
+- La confirmación rápida de la tarjeta se abrió y mostró la casilla inicialmente desmarcada; no se envió el cierre. Build final aprobado tras organizar los estilos por feature.
+
+## Ajuste de distribución solicitado durante la revisión
+
+- Se retiró la vista previa y se movió el QR al final de editar ficha y editar alerta. Ambas cabeceras muestran Ver ficha pública.
+- Pérdida muestra primero el formulario. El cartel se monta únicamente al abrir su sección plegable; después aparecen regreso y QR.
+- Ya está en casa usa un botón real con icono, confirmación y Cancelar. Las alertas de cuidado muestran lápiz de edición y ojo de visibilidad pública; el servidor comprueba sesión, dueño y pertenencia de la alerta y actualiza todas las vistas. Se impide usar el ojo mientras hay una edición abierta para no contradecir cambios pendientes.
+- El carnet aplica espaciado por sección y registro, elimina el margen negativo de las confirmaciones y coloca el lápiz junto a vacunas/desparasitaciones. El ojo tachado indica expediente privado; no lo publica. Agregar queda al final de cada sección.
+- Cinco pruebas nuevas cubren visibilidad inválida, falta de sesión, mascota ajena y publicación/ocultación por el dueño sin usar datos remotos.
+- Se inspeccionaron el botón real de regreso, el lápiz y ojo junto a cuidados, el lápiz de vacuna y los espacios del carnet. Se abrió la edición de cuidado y vacuna sin guardar. Se confirmó que no hay iframe en el editor, que el QR es su última sección y que la alerta ofrece Ver ficha pública.
+- Verificación final de esta distribución: 57 pruebas dirigidas aprobadas (pérdida/cartel/rutas/caché y cuidados/salud/visibilidad), lint, typecheck y build aprobados. La descarga de archivos sigue pendiente por el permiso rechazado anteriormente; no se reintentó.

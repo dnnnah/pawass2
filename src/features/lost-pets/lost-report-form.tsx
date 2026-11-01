@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState, useTransition } from 'react';
+import { useActionState, useId, useState, useTransition } from 'react';
 import { createLostReport, recoverPet, updateLostReport } from './actions';
 import type { LostReportRow } from './lost-report-state';
 import type { FormState } from '@/features/profile/actions';
@@ -76,5 +76,7 @@ export function RecoverPetForm({ report }: { report: Pick<LostReportRow, 'id'> }
 
 
 export function QuickRecovery({ reportId }: { reportId: string }) {
-  return <details className="quick-recovery"><summary>Ya está en casa</summary><div><p>Se cerrará la búsqueda pública y se mostrará el aviso de regreso durante 30 días.</p><RecoverPetForm report={{ id: reportId }} /></div></details>;
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+  return <div className="quick-recovery"><button className="button button--outline recovery-trigger" type="button" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(!open)}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 15l2 2 4-4" /></svg>Ya está en casa</button>{open && <div id={panelId}><p>Se cerrará la búsqueda pública y se mostrará el aviso de regreso durante 30 días.</p><RecoverPetForm report={{ id: reportId }} /><button className="button button--text" type="button" onClick={() => setOpen(false)}>Cancelar</button></div>}</div>;
 }

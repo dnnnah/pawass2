@@ -1,3 +1,8 @@
+import { RescueQrTools } from '@/features/pets/rescue-qr-tools';
+import { getRescueQrUrl } from '@/features/lost-pets/poster-domain';
+import { getPublicPetViewHref } from '@/features/pets/pet-card-domain';
+import { getSiteUrl } from '@/lib/supabase/env';
+import { LostPosterDisclosure } from '@/features/lost-pets/lost-poster-disclosure';
 import { LostPosterPanel } from '@/features/lost-pets/lost-poster-panel';
 import { createPhotoUrl } from '@/lib/supabase/photo-url';
 import type { CareAlertRecord } from '@/features/care-alerts/care-alert-manager';
@@ -48,9 +53,12 @@ export default async function LostReportPage({ params }: Props) {
           <span className="lost-report-page__state-dot" aria-hidden="true" />
           <div><p className="eyebrow">Estado actual</p><h1>{activeReport ? `${pet.name} está reportada como perdida` : `${pet.name} está en casa`}</h1><p>{activeReport ? 'La alerta está publicada y aparece en el tablón público. Cuando vuelva, confirma su regreso aquí.' : 'La alerta pública solo se activa cuando tú decides reportar que se perdió.'}</p></div>
         </header>
-        {activeReport && <section className="lost-report-page__recovery" id="confirmar-regreso" aria-labelledby="recovery-heading"><div><span className="eyebrow">¿Ya se reunió con su familia?</span><h2 id="recovery-heading">Confirma que ya está en casa</h2><p>Esto cerrará la alerta pública, retirará la foto reciente y mostrará el aviso de regreso en su QR durante 30 días.</p></div><RecoverPetForm report={activeReport} /></section>}
-        {activeReport && <LostPosterPanel pet={pet} code={code?.code || ''} photoUrl={photoUrl} phone={phone || null} whatsapp={whatsapp || null} report={activeReport} alerts={(alerts || []) as CareAlertRecord[]} />}
+        {code?.code && <Link className="button button--outline lost-page-view-link" href={getPublicPetViewHref(code.code, Boolean(activeReport))}>Ver ficha pública</Link>}
         <section className="lost-report-page__form" aria-labelledby="lost-form-heading"><header><span className="eyebrow">{activeReport ? 'Alerta pública activa' : 'Ayúdale a volver a casa'}</span><h2 id="lost-form-heading">{activeReport ? 'Editar datos del reporte' : 'Reportar que se perdió'}</h2><p>{activeReport ? 'Actualiza la última ubicación, el momento aproximado y los detalles visibles para quien pueda encontrarla.' : 'La publicación es pública. Revisa el aviso de privacidad y confirma antes de compartir los datos.'}</p></header><LostReportForm petId={pet.id} report={activeReport} /></section>
+        {activeReport && <LostPosterDisclosure><LostPosterPanel pet={pet} code={code?.code || ''} photoUrl={photoUrl} phone={phone || null} whatsapp={whatsapp || null} report={activeReport} alerts={(alerts || []) as CareAlertRecord[]} /></LostPosterDisclosure>}
+        {activeReport && <section className="lost-report-page__recovery" id="confirmar-regreso" aria-labelledby="recovery-heading"><div><span className="eyebrow">¿Ya se reunió con su familia?</span><h2 id="recovery-heading">Confirma que ya está en casa</h2><p>Esto cerrará la alerta pública, retirará la foto reciente y mostrará el aviso de regreso en su QR durante 30 días.</p></div><RecoverPetForm report={activeReport} /></section>}
+        {code?.code && <RescueQrTools url={getRescueQrUrl(code.code, getSiteUrl())} code={code.code} name={pet.name} />}
+
       </div>
     </main>
   );

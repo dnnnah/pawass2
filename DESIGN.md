@@ -41,6 +41,14 @@ typography:
     fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.92rem"
     fontWeight: 700
+  section:
+    fontSize: "1.5rem"
+  compactTitle:
+    fontSize: "1.35rem"
+  compactDisplay:
+    fontSize: "clamp(2rem, 4vw, 2.7rem)"
+  small:
+    fontSize: "0.85rem"
 rounded:
   field: "9px"
   button: "12px"
@@ -188,3 +196,9 @@ No canonizado: los rótulos superiores en mayúsculas y espaciado amplio que per
 ### Tarjetas de mascotas simplificadas
 
 Foto, nombre, especie y estado preceden a una sola acción sólida: Ver ficha pública. Una línea inferior ofrece Editar mascota y Reportar/Gestionar pérdida como enlaces. No anidar tarjetas ni mostrar todos los controles del editor en el listado. El QR permanente se abre en el editor; la recuperación se confirma en la página dedicada.
+
+### Editor, QR y estado de pérdida
+
+La gestión de pérdida tiene página propia para reporte, regreso y cartel. La tarjeta usa primario público y dos acciones de contorno separadas para ficha/alerta; el regreso rápido requiere confirmar. El editor usa una navbar horizontal fija bajo la cabecera, con iconos y sección actual. El QR aparece abierto al final de cada editor, sin vista previa incrustada; Ver ficha pública está en la cabecera. Salud y documentos usan resúmenes privados con acceso al carnet. El reporte se edita antes del cartel plegable y la recuperación. Ya está en casa usa botón con icono, no un disclosure textual. Cian apoya salud/fotografía y violeta documentos/cuidados. Texto de prioridad y privacidad acompaña siempre al color. Las fotos públicas usan ancho fluido y altura natural.
+
+Los registros de cuidados sitúan lápiz y ojo en la cabecera; vacunas muestran lápiz y estado privado. Los controles de agregar quedan debajo de sus listas. El carnet conserva una escala de espacio de 1rem / 1.2rem / 1.5rem y separa sección, registro, formulario y acciones sin márgenes negativos en móvil.

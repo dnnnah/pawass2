@@ -26,22 +26,17 @@ export default async function PetPage({ params }: Props) {
     .eq('id', id).eq('owner_id', identity.id).maybeSingle();
   if (!pet) notFound();
 
-  const [{ data: codeRecord }, { data: alerts }, { data: report }, { data: profile }] = await Promise.all([
+  const [{ data: codeRecord }, { data: alerts }, { data: report }, { data: records }, { data: documents }] = await Promise.all([
     supabase.from('public_code_reservations').select('code').eq('pet_id', pet.id).maybeSingle(),
     supabase.from('care_alerts').select('id,category,catalog_id,label,severity,instructions,qr_visible')
       .eq('pet_id', pet.id).order('created_at', { ascending: true }),
     supabase.from('lost_pet_reports').select('id,pet_id,status,lost_at,recovered_at,last_seen_location,last_seen_at,wearing,message,reward,recent_photo_path').eq('pet_id', pet.id).eq('status', 'active').maybeSingle(),
-    supabase.from('profiles').select('rescue_phone,whatsapp_phone').eq('id', identity.id).maybeSingle(),
+    supabase.from('pet_health_records').select('id,record_type,label,administered_on,next_dose_date').eq('pet_id', id).order('administered_on', { ascending: false }),
+    supabase.from('pet_health_documents').select('id,label,original_filename,document_date').eq('pet_id', id).order('created_at', { ascending: false }),
   ]);
   const code = codeRecord?.code || '';
-  const [photoUrl, recentLostPhotoUrl] = await Promise.all([
-    createPhotoUrl('pet-photos', pet.primary_photo_path, supabase),
-    createPhotoUrl('lost-pet-photos', report?.recent_photo_path || null, supabase),
-  ]);
-  const rescuePhone = pet.contact_override_enabled ? pet.rescue_phone_override : profile?.rescue_phone;
-  const whatsappPhone = pet.contact_override_enabled ? pet.whatsapp_phone_override : profile?.whatsapp_phone;
-
-  return <PetEditor pet={pet} code={code} photoUrl={photoUrl} recentLostPhotoUrl={recentLostPhotoUrl} rescuePhone={rescuePhone || null} whatsappPhone={whatsappPhone || null} report={report as LostReportRow | null} alerts={(alerts || []) as CareAlertRecord[]} />;
+  const photoUrl = await createPhotoUrl('pet-photos', pet.primary_photo_path, supabase);
+  return <PetEditor pet={pet} code={code} photoUrl={photoUrl} report={report as LostReportRow | null} alerts={(alerts || []) as CareAlertRecord[]} records={records || []} documents={documents || []} />;
 }
 
 function SetupRequired() {

@@ -1,0 +1,9 @@
+.qr-tools { border: 1px solid var(--line); border-radius: 16px; background: #f2f8fa; padding: 1.4rem; }
+.qr-tools h2 { margin: 0 0 1rem; }
+.qr-tools__code { width: fit-content; max-width: 100%; margin: 0 auto 1rem; background: #fff; }
+.qr-tools__code svg { display: block; max-width: 100%; height: auto; }
+.qr-tools > a { display: block; overflow-wrap: anywhere; font-size: .85rem; }
+.qr-tools p { color: var(--ink-soft); font-size: .92rem; }
+.qr-tools__actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.qr-tools__actions .button { flex: 1 1 140px; }
+.qr-tools { margin-top: 2rem; }

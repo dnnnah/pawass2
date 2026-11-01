@@ -222,3 +222,13 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 - El PNG prioriza «Si la ves» y el temperamento autorizado. Agrega otros cuidados autorizados según el espacio disponible, manteniendo una letra legible y remitiendo al QR para el resto.
 - El logo conduce a Mis mascotas; las rutas privadas envían al acceso cuando no hay sesión.
 - Las fotos públicas usan permisos limitados a la foto vigente autorizada; no necesitan una clave administrativa. El tablón y la ficha de pérdida usan la foto habitual cuando no se cargó una reciente.
+
+### Organización del editor y gestión de pérdida
+
+- La tarjeta distingue Ver ficha pública, Editar ficha y Reportar pérdida/Editar alerta. Si está perdida, ofrece Ya está en casa con confirmación explícita. En el tablón y la ficha de pérdida, solo su dueño ve edición y regreso; la acción conserva autorización de sesión y RLS.
+- La página privada de pérdida prioriza editar el reporte. Después aparecen el cartel PNG plegable (se genera solo al abrirlo), la confirmación de regreso y el QR permanente al final. Tanto el editor general como la alerta ofrecen Ver ficha pública.
+- El editor usa una navbar de Información, Foto, Cuidados, Salud, Documentos y Contactos, visible al desplazarse. Conserva Editar alerta cuando hay búsqueda activa.
+- El QR permanente aparece abierto al final del editor de ficha y del editor de alerta, con instrucciones para compartir/imprimir y descargas PNG/SVG. El editor no incluye una vista previa incrustada; Ver ficha pública permite revisar lo publicado. Carnet, documentos, microchip y RUAC permanecen privados.
+- Cuidados, carnet y documentos muestran conteos y registros básicos, con acceso a ver y gestionar más. Se usa color e iconografía junto a etiquetas; las fotos públicas conservan su proporción natural y se muestran completas.
+
+- Ya está en casa es un botón real con icono que abre la confirmación explícita y ofrece Cancelar. Cada alerta de cuidado muestra lápiz de edición y ojo que publica/oculta esa alerta y sus instrucciones; Agregar aparece al final. Los registros del carnet muestran lápiz y estado privado con ojo tachado, sin habilitar publicación del expediente.
