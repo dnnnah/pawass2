@@ -898,26 +898,8 @@ select option:checked { background: #e2f0f4; color: #12536b; }
   .health-form, .health-confirm-date, .health-suggestion, .health-record-privacy { border: 1px solid CanvasText; }
 }
 
-/* Dashboard action areas: current public view, private editor, and lost mode. */
-.pet-card__areas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-.pet-card__area { display: flex; min-width: 0; flex-direction: column; gap: .65rem; border: 1px solid #cfdee3; border-radius: 14px; background: #f8fbfc; padding: 1rem; }
-.pet-card__area--public { grid-column: 1 / -1; background: #f2f8fa; }
-.pet-card__area--loss-active { border-color: #dfa9ae; background: #fff8f8; }
-.pet-card__area-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .7rem; }
-.pet-card__area-heading h3 { margin: 0; font-size: 1.15rem; line-height: 1.25; }
-.pet-card__eyebrow, .pet-editor-kicker { margin: 0 0 .2rem; color: #526a74; font-size: .74rem; font-weight: 800; letter-spacing: .045em; text-transform: uppercase; }
-.pet-card__area > p { flex: 1 1 auto; margin: 0; color: #405e69; font-size: .88rem; line-height: 1.5; }
-.pet-card__area-badge { display: inline-flex; min-height: 30px; flex: 0 0 auto; align-items: center; border: 1px solid #c4d9e0; border-radius: 999px; background: #fff; padding: .2rem .55rem; color: #315d70; font-size: .74rem; font-weight: 800; }
-.pet-card__area-badge--lost { border-color: #dfa9ae; background: #fcebed; color: #77252d; }
-.pet-card__area-actions { display: grid; gap: .5rem; margin-top: auto; }
-.pet-card__area .button { width: 100%; min-height: 46px; }
-.pet-card__area .pet-card__poster-link { margin: 0; }
 .pet-detail-loss-state__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
 .pet-detail-loss-state__actions .button { min-height: 44px; }
-.pet-card__qr { margin-top: .1rem; text-align: left; }
-.pet-card__qr summary { margin: 0; text-decoration: none; }
-.pet-card__qr-preview { padding-top: .7rem; }
-.pet-card__qr-preview a { justify-content: center; text-align: center; }
 
 /* Clear jump targets and field groups in the pet information editor. */
 .editor-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; margin: 1.25rem 0 1.5rem; border: 0; }
@@ -967,8 +949,6 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 .not-found-card__home { display: inline-flex; min-height: 44px; align-items: center; font-weight: 700; }
 @media (max-width: 760px) { .editor-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 620px) {
-  .pet-card__areas { grid-template-columns: minmax(0, 1fr); }
-  .pet-card__area--public { grid-column: auto; }
   .pet-detail-loss-state__actions { align-items: stretch; flex-direction: column; }
   .pet-detail-loss-state__actions .button { width: 100%; }
   .editor-nav { grid-template-columns: minmax(0, 1fr); gap: .5rem; }

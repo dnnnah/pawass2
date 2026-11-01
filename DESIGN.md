@@ -184,3 +184,7 @@ El panel “Mis mascotas” saluda con el nombre del tutor cuando está disponib
 - Don't usar decoración como sustituto de etiquetas o estados textuales.
 
 No canonizado: los rótulos superiores en mayúsculas y espaciado amplio que persisten en `.section-label`, y el rojo heredado en eliminación de cuenta/mascota, son desviaciones existentes; no se convierten en reglas para nuevas superficies ni se reparan en esta documentación.
+
+### Tarjetas de mascotas simplificadas
+
+Foto, nombre, especie y estado preceden a una sola acción sólida: Ver ficha pública. Una línea inferior ofrece Editar mascota y Reportar/Gestionar pérdida como enlaces. No anidar tarjetas ni mostrar todos los controles del editor en el listado. El QR permanente se abre en el editor; la recuperación se confirma en la página dedicada.

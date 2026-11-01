@@ -179,7 +179,7 @@ Los nombres **Pawshot** y **Pawsnap** son candidatos para la acción o sección 
 ## 13. Dirección de interfaz aprobada
 
 - La pantalla principal privada muestra primero las mascotas del tutor. Cada mascota presenta una acción de **“Reportar perdida”** claramente visible. El carnet de salud y los documentos se consultan desde la ficha de esa mascota.
-- Cada tarjeta de mascota separa tres áreas con encabezados y acciones propias: **Ficha pública**, **Editor de mascota** y **Pérdida**. La vista pública actual abre la ficha QR habitual cuando no hay alerta y la ficha pública de búsqueda mientras la alerta esté activa. El QR físico conserva `/p/<código>` para mantener su dirección estable; esa ficha muestra el estado de pérdida y el enlace a la búsqueda.
+- Cada tarjeta de mascota muestra foto, nombre y estado, una acción principal **Ver ficha pública** y dos accesos discretos: **Editar mascota** y **Pérdida**. Los detalles, QR permanente, carnet y acciones de recuperación viven dentro de sus secciones, sin tarjetas anidadas. La vista pública actual abre la ficha QR habitual cuando no hay alerta y la ficha pública de búsqueda mientras la alerta esté activa. El QR físico conserva `/p/<código>` para mantener su dirección estable; esa ficha muestra el estado de pérdida y el enlace a la búsqueda.
 - El área del editor ofrece dos acciones distintas: editar información/foto/contactos y abrir el carnet de salud. El área de pérdida muestra el estado actual y gestiona reporte, regreso y cartel. La vista pública de pérdida no se duplica como otra acción bajo la tarjeta.
 - La ficha privada de mascota presenta secciones de información con grupos de campos delimitados; la navegación indica qué se edita en cada área. En el carnet, vacunas y cada registro separan datos de aplicación, estado y acciones de editar/eliminar; los conteos y los botones de agregar se distinguen por sección.
 - Las rutas inexistentes muestran una página 404 propia con navegación de regreso a Mis mascotas, al tablón de pérdidas o al inicio.
@@ -216,3 +216,9 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 - La ficha QR `/p/PC-XXXXXX` lleva `noindex` tanto en estado normal como durante una pérdida; la ruta pública separada de pérdida y el tablón son indexables solo mientras la alerta está activa. La vista de recuperación lleva `noindex`.
 - La política de indexación se aplica con directivas de página que los rastreadores puedan leer. `robots.txt` no debe impedir que un rastreador vea el `noindex` de una ficha pública. El SEO no debe ampliar por accidente la exposición de datos de salud o información privada.
 - Se revisarán indexación, rendimiento y resultados de búsqueda en cada fase que añada páginas públicas.
+
+### Ajustes de rescate y cartel
+
+- El PNG prioriza «Si la ves» y el temperamento autorizado. Agrega otros cuidados autorizados según el espacio disponible, manteniendo una letra legible y remitiendo al QR para el resto.
+- El logo conduce a Mis mascotas; las rutas privadas envían al acceso cuando no hay sesión.
+- Las fotos públicas usan permisos limitados a la foto vigente autorizada; no necesitan una clave administrativa. El tablón y la ficha de pérdida usan la foto habitual cuando no se cargó una reciente.

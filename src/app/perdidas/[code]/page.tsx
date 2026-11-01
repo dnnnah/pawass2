@@ -43,6 +43,9 @@ export default async function LostPetPage({ params }: Props) {
   const pet = (data?.[0] as LostPet | undefined) || null;
   if (!pet) notFound();
   const signedIn = Boolean(authData?.claims?.sub);
-  const photoUrl = await createPhotoUrl('lost-pet-photos', pet.photo_path);
+  const { data: photos } = pet.photo_path ? { data: null } : await supabase.rpc('get_public_pet_photo', { p_code: code });
+  const photoUrl = pet.photo_path
+    ? await createPhotoUrl('lost-pet-photos', pet.photo_path, supabase)
+    : await createPhotoUrl('pet-photos', photos?.[0]?.photo_path, supabase);
   return <PublicLostPetDetail pet={pet} photoUrl={photoUrl} signedIn={signedIn} />;
 }

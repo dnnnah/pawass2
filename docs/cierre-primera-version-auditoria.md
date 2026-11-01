@@ -94,3 +94,12 @@ Los cambios anteriores no requieren nuevas decisiones de alcance: detallan la ex
 ## Puerta de salida
 
 No declarar cerrado el cierre de primera versión hasta completar las verificaciones pendientes con un entorno de pruebas seguro, revisar la instalación/offline en producción y describir toda dependencia externa de producción que no esté configurada.
+
+## Revisión posterior: simplificación y fotografías
+
+- Se sustituyeron las tarjetas anidadas por una única acción pública y enlaces de edición y pérdida. El QR permanente se consulta dentro del editor.
+- El PNG prioriza indicaciones de encuentro y temperamento público, y añade cuidados según el espacio sin disminuir el cuerpo de texto.
+- Causa de fotos ausentes: las vistas públicas requerían una clave administrativa ausente; además, no había respaldo a la foto habitual cuando faltaba la reciente. Se usa el cliente público y una política acotada a fotos vigentes autorizadas.
+- Se compararon las seis migraciones remotas con las locales antes de aplicar `20261101050719_fotos_publicas_autorizadas.sql`. Comprobación con cliente anónimo: foto firmada y respuesta HTTP 200; documentos de salud rechazados por el predicado público.
+- El logo tiene como destino directo `/mascotas`, con protección de sesión. En desarrollo se retira el service worker de PawPass para evitar estilos antiguos en caché.
+- Verificación de esta revisión: 18 pruebas dirigidas aprobadas, lint, typecheck y build aprobados. Se comprobó la foto cargada en tablón, pérdida y QR; el logo volvió al listado desde el editor. Los cuatro PNG se generaron y se inspeccionó la composición de instrucciones/temperamento. No se editaron registros de mascotas durante la revisión.

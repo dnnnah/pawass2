@@ -1,5 +1,5 @@
-const SHELL_CACHE = 'pawpass-shell-v1';
-const STATIC_CACHE = 'pawpass-static-v1';
+const SHELL_CACHE = 'pawpass-shell-v2';
+const STATIC_CACHE = 'pawpass-static-v2';
 const OFFLINE_PAGE = '/offline.html';
 const PUBLIC_ASSETS = new Set([
   '/paw-mark.svg',
@@ -36,6 +36,9 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_PAGE)));
     return;
   }
+
+  // Development chunks keep stable names across edits; never cache them.
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '[::1]') return;
 
   const isNextStatic = url.pathname.startsWith('/_next/static/');
   if (!isNextStatic && !PUBLIC_ASSETS.has(url.pathname)) return;

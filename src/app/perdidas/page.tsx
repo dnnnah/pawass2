@@ -29,10 +29,16 @@ export default async function LostPetsPage({ searchParams }: Props) {
   const identity = getIdentityFromClaims(authData?.claims);
   const { data } = supabase ? await supabase.rpc('get_public_lost_pets', { p_species: species || null, p_query: null }) : { data: [] };
   const pets = (data || []) as PublicLostPet[];
-  const photoUrls = await createPhotoUrls('lost-pet-photos', pets.map((pet) => pet.photo_path));
+  const photoUrls = await createPhotoUrls('lost-pet-photos', pets.map((pet) => pet.photo_path), supabase || undefined);
+  const fallbackPhotos = await Promise.all(pets.filter((pet) => !pet.photo_path).map(async (pet) => {
+    const { data } = await supabase!.rpc('get_public_pet_photo', { p_code: pet.public_code });
+    return [pet.public_code, data?.[0]?.photo_path || null] as const;
+  }));
+  const fallbackPaths = new Map(fallbackPhotos);
+  const fallbackUrls = await createPhotoUrls('pet-photos', fallbackPhotos.map(([, path]) => path), supabase || undefined);
   const petsWithUrls = pets.map((pet) => ({
     ...pet,
-    photo_url: pet.photo_path ? photoUrls.get(pet.photo_path) || null : null,
+    photo_url: pet.photo_path ? photoUrls.get(pet.photo_path) || null : fallbackUrls.get(fallbackPaths.get(pet.public_code) || '') || null,
   }));
   return (
     <main className="account-shell public-lost-shell">

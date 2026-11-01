@@ -1,3 +1,4 @@
+import { QRCodeSVG } from 'qrcode.react';
 import { PetNote, PetDetail } from '@/features/brand/pet-note';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,7 +29,7 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
   const posterReady = isPosterReady({ active: Boolean(report), photoUrl: posterPhotoUrl, lastSeenLocation: report?.last_seen_location || null });
   const posterAlerts: PosterAlert[] = alerts
     .filter((alert) => alert.qr_visible)
-    .map(({ label, severity, instructions }) => ({ label, severity, instructions }));
+    .map(({ category, label, severity, instructions }) => ({ category, label, severity, instructions }));
   const publicViewHref = code ? getPublicPetViewHref(code, report?.status === 'active') : '';
   return (
     <main className="account-shell">
@@ -91,7 +92,7 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
           <PetContactEditor petId={pet.id} enabled={pet.contact_override_enabled} phone={pet.rescue_phone_override} whatsapp={pet.whatsapp_phone_override} />
         </section>
         <DeletePetForm petId={pet.id} publicCode={code} />
-        </div><aside className="editor-help"><PetDetail kind="dog" /><h2>Su ficha, lista para ayudar</h2><p>Una fotografía clara y un contacto actualizado ayudan a que quien encuentre a {pet.name} sepa qué hacer.</p><h3>Tú decides qué se comparte</h3><p>Los datos privados de cuidado permanecen en tu cuenta. Solo las alertas que autorices aparecerán en el QR.</p>{publicViewHref && <Link className="button button--outline button--wide" href={publicViewHref}>Revisar ficha pública actual</Link>}</aside></div>
+        </div><aside className="editor-help"><PetDetail kind="dog" /><h2>Su ficha, lista para ayudar</h2><p>Una fotografía clara y un contacto actualizado ayudan a que quien encuentre a {pet.name} sepa qué hacer.</p><details className="editor-qr"><summary>Ver código QR permanente</summary><QRCodeSVG value={getRescueQrUrl(code, getSiteUrl())} size={160} title={`Código QR de ${pet.name}`} /><p>La dirección se conserva aunque cambie su estado.</p></details><h3>Tú decides qué se comparte</h3><p>Los datos privados de cuidado permanecen en tu cuenta. Solo las alertas que autorices aparecerán en el QR.</p>{publicViewHref && <Link className="button button--outline button--wide" href={publicViewHref}>Revisar ficha pública actual</Link>}</aside></div>
         <PetNote name={pet.name} />
       </div>
     </main>

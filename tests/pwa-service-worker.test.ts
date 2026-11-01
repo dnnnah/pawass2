@@ -4,16 +4,16 @@ import { describe, expect, it, vi } from 'vitest';
 
 const workerSource = readFileSync('public/service-worker.js', 'utf8');
 
-function createWorker(fetchImplementation: typeof fetch) {
+function createWorker(fetchImplementation: typeof fetch, origin = 'https://pawpass.test') {
   const listeners = new Map<string, (event: Record<string, unknown>) => void>();
   const stored = new Map<string, Response>();
   const requestUrl = (request: RequestInfo | URL) => {
     const path = typeof request === 'object' && 'url' in request ? request.url : String(request);
-    return new URL(path, 'https://pawpass.test').href;
+    return new URL(path, origin).href;
   };
   const cache = {
     addAll: vi.fn(async (paths: string[]) => {
-      paths.forEach((path) => stored.set(new URL(path, 'https://pawpass.test').href, new Response('<h1>Sin conexión</h1>')));
+      paths.forEach((path) => stored.set(new URL(path, origin).href, new Response('<h1>Sin conexión</h1>')));
     }),
     match: async (request: RequestInfo | URL) => stored.get(requestUrl(request))?.clone(),
     put: async (request: RequestInfo | URL, response: Response) => {
@@ -27,7 +27,7 @@ function createWorker(fetchImplementation: typeof fetch) {
     delete: vi.fn(async () => true),
   };
   const self = {
-    location: { origin: 'https://pawpass.test' },
+    location: { origin },
     addEventListener: (name: string, callback: (event: Record<string, unknown>) => void) => listeners.set(name, callback),
     skipWaiting: vi.fn(async () => undefined),
     clients: { claim: vi.fn(async () => undefined) },
@@ -63,6 +63,17 @@ describe('service worker de PawPass', () => {
 
     expect(await response?.text()).toContain('Sin conexión');
     expect([...stored.keys()]).toEqual(['https://pawpass.test/offline.html']);
+  });
+
+  it('deja los recursos locales a la red para no servir estilos antiguos', () => {
+    const { listeners, stored } = createWorker(vi.fn() as unknown as typeof fetch, 'http://localhost:3000');
+    const respondWith = vi.fn();
+    listeners.get('fetch')?.({
+      request: { method: 'GET', mode: 'same-origin', url: 'http://localhost:3000/_next/static/dev.css' },
+      respondWith,
+    });
+    expect(respondWith).not.toHaveBeenCalled();
+    expect(stored.size).toBe(0);
   });
 
   it('cachea recursos estáticos del mismo origen sin almacenar archivos firmados', async () => {
