@@ -3,10 +3,19 @@
 import { QRCodeSVG } from 'qrcode.react';
 import NextImage from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getPosterFormats, type PosterFormatId } from './poster-domain';
+import { canExportPoster, getPosterContactInfo, getPosterFormats, type PosterFormatId } from './poster-domain';
 import './lost-pet-poster.css';
 
 export type PosterAlert = { label: string; severity: 'critical' | 'precaution' | 'informative'; instructions: string };
+
+function getPriorityCareAlerts(alerts: PosterAlert[]): PosterAlert[] {
+  const priority: Record<PosterAlert['severity'], number> = { critical: 0, precaution: 1, informative: 2 };
+  return alerts
+    .map((alert, index) => ({ alert, index }))
+    .sort((first, second) => priority[first.alert.severity] - priority[second.alert.severity] || first.index - second.index)
+    .slice(0, 2)
+    .map(({ alert }) => alert);
+}
 
 export type LostPosterData = {
   name: string;
@@ -14,11 +23,12 @@ export type LostPosterData = {
   code: string;
   photoUrl: string;
   phone: string;
+  whatsappPhone: string;
   qrUrl: string;
   lastSeenLocation: string;
   lastSeenAt: string | null;
-  description: string | null;
   wearing: string | null;
+  message: string | null;
   reward: string | null;
   alerts: PosterAlert[];
 };
@@ -67,15 +77,35 @@ function drawPaw(context: CanvasRenderingContext2D, x: number, y: number, size: 
   context.restore();
 }
 
+function drawAlertMark(context: CanvasRenderingContext2D, x: number, y: number, size: number, color: string) {
+  context.save();
+  context.fillStyle = color;
+  context.beginPath();
+  context.moveTo(x + size / 2, y);
+  context.lineTo(x + size, y + size * 0.9);
+  context.lineTo(x, y + size * 0.9);
+  context.closePath();
+  context.fill();
+  context.fillStyle = '#ffffff';
+  context.textAlign = 'center';
+  context.font = `850 ${size * 0.58}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText('!', x + size / 2, y + size * 0.72);
+  context.restore();
+}
+
+function fitEllipsis(context: CanvasRenderingContext2D, text: string, maxWidth: number): string {
+  let fitted = text.trimEnd();
+  while (fitted && context.measureText(`${fitted}…`).width > maxWidth) fitted = fitted.slice(0, -1).trimEnd();
+  return fitted ? `${fitted}…` : '…';
+}
+
 function drawPoster(context: CanvasRenderingContext2D, width: number, height: number, photo: HTMLImageElement, qr: HTMLImageElement, pet: LostPosterData) {
-  const scale = width / 1080;
+  const scale = Math.min(width / 768, height / 1365);
   const px = (value: number) => value * scale;
-  const margin = px(68);
-  const headerHeight = height * 0.145;
-  const photoTop = height * 0.16;
-  const photoHeight = height * 0.22;
-  const detailsStart = height * 0.4;
-  const footerTop = height * 0.84;
+  const margin = width * 0.064;
+  const headerHeight = height * 0.176;
+  const rewardTop = height * 0.725;
+  const footerTop = height * 0.825;
   context.fillStyle = '#ffffff';
   context.fillRect(0, 0, width, height);
 
@@ -84,75 +114,203 @@ function drawPoster(context: CanvasRenderingContext2D, width: number, height: nu
   context.fillStyle = '#ffffff';
   context.textAlign = 'left';
   context.textBaseline = 'alphabetic';
-  context.font = `750 ${px(42)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-  context.fillText('pawpass', margin, px(75));
-  drawPaw(context, margin + px(145), px(30), px(54));
-  context.textAlign = 'right';
-  context.font = `800 ${px(36)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-  context.fillText('SE BUSCA', width - margin, px(76));
-  context.textAlign = 'center';
-  context.font = `850 ${px(75)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-  context.fillText(pet.name.toLocaleUpperCase('es-MX'), width / 2, height * 0.122, width - margin * 2);
+  context.font = `750 ${px(30)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText('pawpass', margin, px(58));
+  drawPaw(context, margin + context.measureText('pawpass').width + px(10), px(22), px(38));
 
-  const photoFrame = { x: margin, y: photoTop, width: width - margin * 2, height: photoHeight };
-  context.fillStyle = '#f5fafc';
-  context.fillRect(photoFrame.x, photoFrame.y, photoFrame.width, photoFrame.height);
-  const fit = Math.min(photoFrame.width / photo.naturalWidth, photoFrame.height / photo.naturalHeight);
+  const badgeWidth = width * 0.214;
+  const badgeHeight = px(36);
+  const badgeX = width - margin - badgeWidth;
+  const badgeY = px(24);
+  context.fillStyle = '#ffffff';
+  context.beginPath();
+  context.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, badgeHeight / 2);
+  context.fill();
+  drawAlertMark(context, badgeX + px(10), badgeY + px(8), px(21), '#b6323c');
+  context.textAlign = 'right';
+  context.fillStyle = '#70232a';
+  context.font = `850 ${px(15)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText('ALERTA ACTIVA', width - margin - px(11), badgeY + px(24));
+  context.textAlign = 'center';
+  context.fillStyle = '#ffffff';
+  context.font = `900 ${px(68)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText('SE BUSCA', width / 2, height * 0.102, width - margin * 2);
+  context.font = `800 ${px(68)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText(pet.name.toLocaleUpperCase('es-MX'), width / 2, height * 0.155, width - margin * 2);
+
+  const photoFrame = { x: width * 0.064, y: height * 0.21, width: width * 0.464, height: height * 0.48 };
+  const detailsX = width * 0.57;
+  const detailsWidth = width * 0.37;
+  const fit = Math.max(photoFrame.width / photo.naturalWidth, photoFrame.height / photo.naturalHeight);
   const drawnWidth = photo.naturalWidth * fit;
   const drawnHeight = photo.naturalHeight * fit;
+  context.save();
+  context.beginPath();
+  context.roundRect(photoFrame.x, photoFrame.y, photoFrame.width, photoFrame.height, px(18));
+  context.clip();
   context.drawImage(photo, photoFrame.x + (photoFrame.width - drawnWidth) / 2, photoFrame.y + (photoFrame.height - drawnHeight) / 2, drawnWidth, drawnHeight);
-
-  const contentWidth = width - margin * 2;
-  let y = detailsStart;
-  const footerLimit = footerTop - px(28);
-  const labelSize = px(21);
-  const bodySize = px(27);
-  const lineHeight = px(34);
-  const sectionGap = px(14);
-  function section(label: string, value: string | null, options: { emphasize?: boolean } = {}) {
-    if (!value?.trim() || y >= footerLimit) return;
+  context.restore();
+  const labelSize = px(18);
+  const bodySize = px(30);
+  const lineHeight = px(30);
+  const labelGap = px(31);
+  function detail(label: string, value: string, y: number, nextSectionY: number, emphasize = false) {
+    if (!value.trim()) return;
     context.textAlign = 'left';
-    context.fillStyle = '#506b77';
-    context.font = `750 ${labelSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-    context.fillText(label.toLocaleUpperCase('es-MX'), margin, y);
-    y += px(30);
-    context.fillStyle = options.emphasize ? '#b6323c' : '#173b4b';
-    context.font = `${options.emphasize ? 800 : 650} ${bodySize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-    const lines = wrapText(context, value, contentWidth);
-    for (const line of lines) {
-      if (y + lineHeight > footerLimit) break;
-      context.fillText(line, margin, y, contentWidth);
-      y += lineHeight;
+    context.fillStyle = '#173b4b';
+    context.font = `800 ${labelSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    context.fillText(label.toLocaleUpperCase('es-MX'), detailsX, y, detailsWidth);
+    context.fillStyle = emphasize ? '#173b4b' : '#101b24';
+    context.font = `${emphasize ? 800 : 650} ${bodySize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    const lines = wrapText(context, value, detailsWidth);
+    const maxLines = Math.max(1, Math.floor((nextSectionY - y - labelGap) / lineHeight));
+    const shownLines = lines.slice(0, maxLines);
+    if (shownLines.length < lines.length) shownLines[shownLines.length - 1] = fitEllipsis(context, shownLines[shownLines.length - 1], detailsWidth);
+    shownLines.forEach((line, index) => context.fillText(line, detailsX, y + labelGap + index * lineHeight, detailsWidth));
+  }
+
+  const locationY = height * 0.216;
+  const dateY = height * 0.3;
+  const wearingY = height * 0.385;
+  const careY = height * 0.49;
+  detail('Última zona vista', pet.lastSeenLocation, locationY, dateY - px(5), true);
+  if (pet.lastSeenAt) detail('Visto por última vez', new Date(pet.lastSeenAt).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' }), dateY, wearingY - px(5));
+  detail('Qué llevaba puesto', pet.wearing || '', wearingY, careY - px(10));
+
+  const posterMessage = limitText(pet.message, 120);
+  const noteFontSize = px(20);
+  const noteLineHeight = px(23);
+  const noteTextX = detailsX + px(17);
+  const noteTextWidth = detailsWidth - px(29);
+  context.font = `650 ${noteFontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  const noteLines = posterMessage ? wrapText(context, posterMessage, noteTextWidth) : [];
+  const noteCardHeight = noteLines.length ? px(52) + noteLines.length * noteLineHeight : 0;
+
+  const priorityAlerts = getPriorityCareAlerts(pet.alerts);
+  let careCardHeight = 0;
+  if (priorityAlerts.length) {
+    const alertRows = priorityAlerts.map((alert) => {
+      const level = alert.severity === 'critical' ? 'Urgente' : alert.severity === 'precaution' ? 'Precaución' : 'Cuidado';
+      return `${level}: ${alert.label}${alert.instructions ? ` · ${alert.instructions}` : ''}`;
+    });
+    const cardX = detailsX;
+    const cardY = careY;
+    const cardWidth = detailsWidth;
+    const textX = cardX + px(34);
+    const textWidth = cardWidth - px(46);
+    const rowGap = px(4);
+    const noteGap = noteCardHeight ? px(8) : 0;
+    const cardBottomLimit = rewardTop - px(14) - noteCardHeight - noteGap;
+    function layoutCareRows(fontSize: number) {
+      context.font = `700 ${fontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+      const rows = alertRows.map((row) => wrapText(context, row, textWidth));
+      const bodyLineHeight = fontSize * 1.08;
+      const bodyHeight = rows.reduce((total, lines) => total + lines.length * bodyLineHeight, 0) + Math.max(0, rows.length - 1) * rowGap;
+      return { rows, bodyLineHeight, cardHeight: px(54) + bodyHeight };
     }
-    y += sectionGap;
+    let alertBodySize = px(23);
+    let careLayout = layoutCareRows(alertBodySize);
+    while (alertBodySize > px(14) && cardY + careLayout.cardHeight > cardBottomLimit) {
+      alertBodySize = Math.max(px(14), alertBodySize - px(1));
+      careLayout = layoutCareRows(alertBodySize);
+    }
+    const { rows, bodyLineHeight, cardHeight } = careLayout;
+    careCardHeight = cardHeight;
+    context.fillStyle = '#fcebed';
+    context.beginPath();
+    context.roundRect(cardX, cardY, cardWidth, cardHeight, px(14));
+    context.fill();
+    drawAlertMark(context, cardX + px(11), cardY + px(39), px(20), '#b6323c');
+    context.textAlign = 'center';
+    context.fillStyle = '#173b4b';
+    context.font = `800 ${px(16)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    context.fillText('ALERTAS DE CUIDADO', cardX + cardWidth / 2, cardY + px(25), cardWidth - px(22));
+    context.textAlign = 'left';
+    context.fillStyle = '#101b24';
+    context.font = `700 ${alertBodySize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    let lineY = cardY + px(51);
+    rows.forEach((lines) => {
+      lines.forEach((line) => {
+        context.fillText(line, textX, lineY, textWidth);
+        lineY += bodyLineHeight;
+      });
+      lineY += rowGap;
+    });
   }
-  section('Última zona vista', pet.lastSeenLocation, { emphasize: true });
-  if (pet.lastSeenAt) section('Visto por última vez', new Date(pet.lastSeenAt).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' }));
-  section('Descripción', limitText(pet.description, 200));
-  section('Qué llevaba puesto', pet.wearing);
-  if (pet.alerts.length) {
-    const alertText = pet.alerts.map((alert) => `${alert.severity === 'critical' ? 'Urgente' : alert.severity === 'precaution' ? 'Precaución' : 'Cuidado'}: ${alert.label}`).join(' · ');
-    section('Alertas de cuidado autorizadas', alertText);
+
+  if (noteLines.length) {
+    const noteX = detailsX;
+    const noteY = careY + (careCardHeight ? careCardHeight + px(8) : 0);
+    context.fillStyle = '#e2f0f4';
+    context.beginPath();
+    context.roundRect(noteX, noteY, detailsWidth, noteCardHeight, px(12));
+    context.fill();
+    context.fillStyle = '#176986';
+    context.beginPath();
+    context.roundRect(noteX + px(8), noteY + px(10), px(3), noteCardHeight - px(20), px(2));
+    context.fill();
+    context.textAlign = 'left';
+    context.fillStyle = '#12536b';
+    context.font = `800 ${px(15)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    context.fillText('NOTA PARA QUIEN LA ENCUENTRE', noteTextX, noteY + px(22), noteTextWidth);
+    context.fillStyle = '#173b4b';
+    context.font = `650 ${noteFontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    noteLines.forEach((line, index) => context.fillText(line, noteTextX, noteY + px(45) + index * noteLineHeight, noteTextWidth));
   }
-  section('Recompensa informativa', pet.reward ? pet.reward : null);
+
+  if (pet.reward?.trim()) {
+    const rewardHeight = height * 0.082;
+    const rewardX = margin;
+    const rewardWidth = width - margin * 2;
+    context.fillStyle = '#176986';
+    context.beginPath();
+    context.roundRect(rewardX, rewardTop, rewardWidth, rewardHeight, px(14));
+    context.fill();
+    context.textAlign = 'center';
+    context.fillStyle = '#ffffff';
+    const groupedReward = pet.reward.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    context.font = `900 ${px(37)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    context.fillText(`RECOMPENSA: $${groupedReward}`, width / 2, rewardTop + px(55), rewardWidth - px(42));
+    context.font = `700 ${px(17)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    context.fillText('GRACIAS POR AYUDAR A ENCONTRARLA', width / 2, rewardTop + px(80), rewardWidth - px(34));
+  }
 
   context.fillStyle = '#12536b';
   context.fillRect(0, footerTop, width, height - footerTop);
-  const qrSize = Math.min(px(222), height - footerTop - px(48));
+  const qrSize = Math.min(width * 0.138, height - footerTop - px(70));
+  const qrCardWidth = qrSize + px(42);
+  const qrCardHeight = qrSize + px(60);
+  const qrCardX = width - margin - qrCardWidth;
+  const qrCardY = footerTop + px(28);
   context.fillStyle = '#ffffff';
-  context.fillRect(width - margin - qrSize - px(18), footerTop + px(20), qrSize + px(36), qrSize + px(36));
-  context.drawImage(qr, width - margin - qrSize, footerTop + px(38), qrSize, qrSize);
+  context.beginPath();
+  context.roundRect(qrCardX, qrCardY, qrCardWidth, qrCardHeight, px(12));
+  context.fill();
+  const qrX = qrCardX + px(21);
+  const qrY = qrCardY + px(17);
+  context.drawImage(qr, qrX, qrY, qrSize, qrSize);
+  context.textAlign = 'center';
+  context.fillStyle = '#173b4b';
+  context.font = `750 ${px(17)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText('Ficha QR vigente', qrCardX + qrCardWidth / 2, qrY + qrSize + px(25));
+
+  const contactWidth = qrCardX - margin - px(32);
+  const contacts = getPosterContactInfo(pet.phone, pet.whatsappPhone);
   context.textAlign = 'left';
   context.fillStyle = '#ffffff';
-  context.font = `800 ${px(27)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-  context.fillText('LLAMA SI LA VES', margin, footerTop + px(55));
-  context.font = `850 ${px(54)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-  const phoneLines = wrapText(context, pet.phone, width - margin * 2 - qrSize - px(66));
-  phoneLines.slice(0, 2).forEach((line, index) => context.fillText(line, margin, footerTop + px(120 + index * 62)));
-  context.font = `650 ${px(21)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-  context.fillText(`Código ${pet.code}`, margin, height - px(52));
-  context.textAlign = 'right';
-  context.fillText('Ficha QR vigente', width - margin - qrSize - px(22), height - px(52));
+  context.font = `800 ${px(20)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText('¡LLAMA SI LA VES!', margin, footerTop + px(54));
+  context.font = `850 ${px(30)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  const phoneLines = wrapText(context, contacts.callNumber, contactWidth);
+  phoneLines.slice(0, 2).forEach((line, index) => context.fillText(line, margin, footerTop + px(91 + index * 36)));
+  context.font = `750 ${px(16)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  const whatsappLabel = contacts.usesSameNumber
+    ? 'O MANDA UN WHATSAPP AL MISMO NÚMERO'
+    : `O MANDA UN WHATSAPP AL ${contacts.whatsappNumber}`;
+  const whatsappLines = wrapText(context, whatsappLabel, contactWidth);
+  whatsappLines.slice(0, 2).forEach((line, index) => context.fillText(line, margin, footerTop + px(130 + index * 24)));
+  context.font = `700 ${px(14)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+  context.fillText(`Código: ${pet.code}`, margin, height - px(14));
 }
 
 function dataUrlFromSvg(svg: SVGSVGElement): string {
@@ -193,14 +351,22 @@ export function LostPetPoster({ pet }: { pet: LostPosterData }) {
   const formats = useMemo(() => getPosterFormats(), []);
   const [formatId, setFormatId] = useState<PosterFormatId>('story');
   const [images, setImages] = useState<PosterImage[]>([]);
-  const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const qrRef = useRef<HTMLDivElement>(null);
   const activeImage = images.find((image) => image.id === formatId);
+  const canExport = canExportPoster({ hasImage: Boolean(activeImage), busy });
   const altText = useMemo(() => {
-    const care = pet.alerts.map((alert) => `${alert.label}${alert.instructions ? `: ${alert.instructions}` : ''}`).join('; ');
-    return `Cartel Se busca: ${pet.name}, ${pet.species}. Código ${pet.code}. Última zona vista: ${pet.lastSeenLocation}.${pet.lastSeenAt ? ` Visto por última vez: ${new Date(pet.lastSeenAt).toLocaleString('es-MX')}.` : ''}${pet.description ? ` ${pet.description}` : ''}${pet.wearing ? ` Llevaba puesto: ${pet.wearing}.` : ''}${care ? ` Alertas de cuidado autorizadas: ${care}.` : ''}${pet.reward ? ` Recompensa informativa: ${pet.reward}.` : ''} Llama al ${pet.phone}. Código QR a ${pet.qrUrl}.`;
+    const posterMessage = limitText(pet.message, 120);
+    const care = getPriorityCareAlerts(pet.alerts).map((alert) => {
+      const level = alert.severity === 'critical' ? 'Urgente' : alert.severity === 'precaution' ? 'Precaución' : 'Cuidado';
+      return `${level}: ${alert.label}${alert.instructions ? ` · ${alert.instructions}` : ''}`;
+    }).join('; ');
+    const contacts = getPosterContactInfo(pet.phone, pet.whatsappPhone);
+    const whatsappDescription = contacts.usesSameNumber
+      ? 'También puedes mandar un WhatsApp al mismo número.'
+      : `Manda un WhatsApp al ${contacts.whatsappNumber}.`;
+    return `Cartel Se busca: ${pet.name}, ${pet.species}. Código ${pet.code}. Última zona vista: ${pet.lastSeenLocation}.${pet.lastSeenAt ? ` Visto por última vez: ${new Date(pet.lastSeenAt).toLocaleString('es-MX')}.` : ''}${pet.wearing ? ` Llevaba puesto: ${pet.wearing}.` : ''}${posterMessage ? ` Nota para quien la encuentre: ${posterMessage}.` : ''}${care ? ` Alertas de cuidado autorizadas: ${care}.` : ''}${pet.reward ? ` Recompensa informativa: ${pet.reward}.` : ''} Llama al ${contacts.callNumber}. ${whatsappDescription} Código QR a ${pet.qrUrl}.`;
   }, [pet]);
 
   useEffect(() => {
@@ -238,7 +404,7 @@ export function LostPetPoster({ pet }: { pet: LostPosterData }) {
   }, [formats, pet]);
 
   async function exportPoster(action: 'download' | 'share' | 'print') {
-    if (!consent || !activeImage) return;
+    if (!activeImage || busy) return;
     setMessage('');
     const filename = `pawpass-se-busca-${pet.code.toLowerCase()}-${activeImage.id}.png`;
     try {
@@ -277,25 +443,24 @@ export function LostPetPoster({ pet }: { pet: LostPosterData }) {
   }
 
   return (
-    <section id="cartel-se-busca" className="poster-studio" aria-labelledby="poster-heading">
+    <section className="poster-studio" aria-labelledby="poster-heading">
       <header className="poster-studio__header"><div><h2 id="poster-heading">Cartel de búsqueda</h2><p>Prepara una imagen clara para compartir o imprimir. El QR abre la ficha vigente de {pet.name}.</p></div></header>
-      <div className="poster-studio__privacy" role="note">
+      <div className="poster-studio__privacy" id="poster-phone-notice" role="note">
         <strong>El teléfono aparecerá escrito en el cartel.</strong>
         <p>Al descargar, compartir o imprimir, ese número quedará visible para cualquiera que reciba la imagen o vea el papel en la calle.</p>
-        <label className="consent-check"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} /><span>Acepto hacer público el teléfono <bdi>{pet.phone}</bdi> en este cartel.</span></label>
+        <p>Cuando la vista previa esté lista, elige <strong>Descargar PNG</strong> para guardar la imagen.</p>
       </div>
       <div className="poster-studio__controls">
         <label className="field" htmlFor="poster-format"><span>Formato del cartel</span><select id="poster-format" value={formatId} onChange={(event) => setFormatId(event.target.value as PosterFormatId)}>{formats.map((format) => <option key={format.id} value={format.id}>{format.label} · {format.ratio}</option>)}</select></label>
         <div className="poster-studio__actions" aria-label="Acciones del cartel">
-          <button className="button button--primary" type="button" onClick={() => void exportPoster('download')} disabled={!consent || !activeImage || busy}>Descargar PNG</button>
-          <button className="button button--outline" type="button" onClick={() => void exportPoster('share')} disabled={!consent || !activeImage || busy}>Compartir</button>
-          {formatId === 'a4' || formatId === 'letter' ? <button className="button button--outline" type="button" onClick={() => void exportPoster('print')} disabled={!consent || !activeImage || busy}>Imprimir {formatId === 'a4' ? 'A4' : 'carta'}</button> : null}
+          <button className="button button--primary" type="button" onClick={() => void exportPoster('download')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Descargar PNG</button>
+          <button className="button button--outline" type="button" onClick={() => void exportPoster('share')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Compartir</button>
+          {formatId === 'a4' || formatId === 'letter' ? <button className="button button--outline" type="button" onClick={() => void exportPoster('print')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Imprimir {formatId === 'a4' ? 'A4' : 'carta'}</button> : null}
         </div>
       </div>
-      <p className="poster-studio__status" role="status" aria-live="polite">{message}</p>
+      <p id="poster-studio-status" className="poster-studio__status" role="status" aria-live="polite">{message}</p>
       <figure className="poster-studio__preview">
         {activeImage ? <NextImage src={activeImage.url} alt={altText} width={activeImage.width} height={activeImage.height} unoptimized /> : <div className="poster-studio__loading" aria-hidden="true">{busy ? 'Preparando vista previa…' : 'La vista previa no está disponible.'}</div>}
-        <figcaption>Descripción del cartel: {altText}</figcaption>
       </figure>
       <p className="poster-studio__share-help">Si tu dispositivo no permite adjuntar la imagen, descarga el PNG. Después ábrelo en Fotos o Archivos y elige Compartir.</p>
       <div className="poster-studio__qr-source" ref={qrRef} aria-hidden="true"><QRCodeSVG value={pet.qrUrl} size={320} level="H" marginSize={4} /></div>

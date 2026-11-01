@@ -20,8 +20,8 @@ type EditorPet = PetDetailsValues & {
   rescue_phone_override: string | null; whatsapp_phone_override: string | null;
 };
 
-export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone, report, alerts }: {
-  pet: EditorPet; code: string; photoUrl: string | null; recentLostPhotoUrl: string | null; rescuePhone: string | null;
+export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone, whatsappPhone, report, alerts }: {
+  pet: EditorPet; code: string; photoUrl: string | null; recentLostPhotoUrl: string | null; rescuePhone: string | null; whatsappPhone?: string | null;
   report: LostReportRow | null; alerts: CareAlertRecord[];
 }) {
   const posterPhotoUrl = recentLostPhotoUrl || photoUrl;
@@ -41,33 +41,35 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
             <h1 id="pet-name">{pet.name}</h1>
             <p>{pet.species === 'perro' ? 'Perro' : 'Gato'}{code && <> · Código <bdi>{code}</bdi></>}</p>
             {code && <a className="text-button" href={`/p/${code}`} target="_blank" rel="noreferrer">Abrir ficha QR</a>}
+            {report && <a className="button button--primary pet-detail-poster-link" href="#cartel-se-busca"><PosterDownloadIcon />Crear cartel y descargar imagen</a>}
           </div>
           <LostReportForm petId={pet.id} report={report} />
         </section>
-        {report && <section className="pet-poster-section" aria-labelledby="poster-heading">
+        {report && <div id="cartel-se-busca" className="pet-poster-section">
           {posterReady && code && rescuePhone ? <LostPetPoster pet={{
             name: pet.name,
             species: pet.species,
             code,
             photoUrl: posterPhotoUrl!,
             phone: rescuePhone,
+            whatsappPhone: whatsappPhone || rescuePhone,
             qrUrl: getRescueQrUrl(code, getSiteUrl()),
             lastSeenLocation: report.last_seen_location!,
             lastSeenAt: report.last_seen_at,
-            description: [report.message, [pet.breed, pet.color].filter(Boolean).join(' · ')].filter(Boolean).join(' '),
             wearing: report.wearing,
+            message: report.message,
             reward: report.reward,
             alerts: posterAlerts,
           }} /> : <div className="poster-unavailable">
             <h2 id="poster-heading">Cartel de búsqueda</h2>
-            <p>Completa estos datos en la alerta para preparar el cartel:</p>
+            <p>Completa estos datos para habilitar la descarga del cartel:</p>
             <ul>
               {!posterPhotoUrl && <li>Agrega una foto de {pet.name}.</li>}
               {!report.last_seen_location?.trim() && <li>Indica la última zona vista.</li>}
               {!rescuePhone && <li>Actualiza el teléfono de llamadas en Mi cuenta o en Contacto de rescate.</li>}
             </ul>
           </div>}
-        </section>}
+        </div>}
         <nav className="editor-nav" aria-label="Secciones de la ficha">
           <a href="#identidad">Identidad y detalles</a><a href="#fotografia">Fotografía</a><a href="#cuidados">Alertas de cuidado</a>{report && <a href="#cartel-se-busca">Cartel de búsqueda</a>}<Link href={`/mascotas/${pet.id}/carnet`}>Carnet de salud</Link><a href="#contactos">Contacto de rescate</a>
         </nav>
@@ -88,4 +90,8 @@ export function PetEditor({ pet, code, photoUrl, recentLostPhotoUrl, rescuePhone
       </div>
     </main>
   );
+}
+
+function PosterDownloadIcon() {
+  return <svg className="pet-detail-poster-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" /></svg>;
 }
