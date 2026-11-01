@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { normalizeLostReport } from './domain';
+import { getLostReportRevalidationPaths, normalizeLostReport, toLostReportDatabaseFields } from './domain';
 import { createClient } from '@/lib/supabase/server';
 import type { FormState } from '@/features/profile/actions';
 
@@ -23,6 +23,10 @@ function getReport(formData: FormData) {
   });
 }
 
+function revalidateLostReportViews(petId: string, publicCode: string | null) {
+  for (const path of getLostReportRevalidationPaths(petId, publicCode)) revalidatePath(path);
+}
+
 export async function createLostReport(_previous: FormState, formData: FormData): Promise<FormState> {
   const petId = String(formData.get('petId') || '');
   const consent = formData.get('publicConsent') === 'on';
@@ -37,18 +41,13 @@ export async function createLostReport(_previous: FormState, formData: FormData)
   if (!pet) return { ok: false, message: 'No encontramos esta mascota.' };
   const uploaded = await uploadRecentPhoto(supabase, user.id, petId, formData.get('recentPhoto'));
   if (uploaded.error) return { ok: false, message: uploaded.error };
-  const { error } = await supabase.from('lost_pet_reports').insert({ pet_id: petId, ...validation.value, recent_photo_path: uploaded.path });
+  const { error } = await supabase.from('lost_pet_reports').insert({ pet_id: petId, ...toLostReportDatabaseFields(validation.value), recent_photo_path: uploaded.path });
   if (error) {
     if (uploaded.path) await supabase.storage.from('lost-pet-photos').remove([uploaded.path]);
     return { ok: false, message: 'No se pudo publicar la alerta. Comprueba que no haya otra activa e inténtalo de nuevo.' };
   }
   const { data: code } = await supabase.from('public_code_reservations').select('code').eq('pet_id', petId).maybeSingle();
-  revalidatePath('/mascotas');
-  revalidatePath('/perdidas');
-  if (code?.code) {
-    revalidatePath(`/perdidas/${code.code}`);
-    revalidatePath(`/p/${code.code}`);
-  }
+  revalidateLostReportViews(petId, code?.code || null);
   return { ok: true, message: 'La alerta ya está publicada en Mascotas perdidas.' };
 }
 
@@ -67,7 +66,7 @@ export async function updateLostReport(_previous: FormState, formData: FormData)
   if (uploaded.error) return { ok: false, message: uploaded.error };
   const nextPhotoPath = uploaded.path || existing.recent_photo_path;
   const { data: report, error } = await supabase.from('lost_pet_reports')
-    .update({ ...validation.value, recent_photo_path: nextPhotoPath, updated_at: new Date().toISOString() })
+    .update({ ...toLostReportDatabaseFields(validation.value), recent_photo_path: nextPhotoPath, updated_at: new Date().toISOString() })
     .eq('id', reportId).eq('status', 'active').select('pet_id').maybeSingle();
   if (error || !report) {
     if (uploaded.path) await supabase.storage.from('lost-pet-photos').remove([uploaded.path]);
@@ -82,9 +81,7 @@ export async function updateLostReport(_previous: FormState, formData: FormData)
     }
   }
   const { data: code } = await supabase.from('public_code_reservations').select('code').eq('pet_id', report.pet_id).maybeSingle();
-  revalidatePath('/mascotas');
-  revalidatePath('/perdidas');
-  if (code?.code) revalidatePath(`/perdidas/${code.code}`);
+  revalidateLostReportViews(report.pet_id, code?.code || null);
   return { ok: true, message: 'Actualizamos los detalles de la alerta.' };
 }
 
@@ -108,11 +105,6 @@ export async function recoverPet(_previous: FormState, formData: FormData): Prom
     .eq('id', reportId).eq('status', 'active').select('pet_id').maybeSingle();
   if (error || !report) return { ok: false, message: 'No se pudo cerrar la alerta. Actualiza la página e inténtalo de nuevo.' };
   const { data: code } = await supabase.from('public_code_reservations').select('code').eq('pet_id', report.pet_id).maybeSingle();
-  revalidatePath('/mascotas');
-  revalidatePath('/perdidas');
-  if (code?.code) {
-    revalidatePath(`/perdidas/${code.code}`);
-    revalidatePath(`/p/${code.code}`);
-  }
+  revalidateLostReportViews(report.pet_id, code?.code || null);
   return { ok: true, message: 'Cerramos la alerta. El QR mostrará “Ya está en casa” durante 30 días.' };
 }

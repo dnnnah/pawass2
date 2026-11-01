@@ -30,6 +30,10 @@ export type PetDetails = {
   sterilized: boolean | null;
 };
 
+export function getPetRevalidationPaths(petId: string) {
+  return ['/mascotas', `/mascotas/${petId}`];
+}
+
 export function normalizePetDetailsInput(input: PetDetailsInput):
   | { ok: true; value: PetDetails }
   | { ok: false; error: string } {
