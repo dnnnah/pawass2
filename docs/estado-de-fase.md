@@ -30,4 +30,4 @@ Actualizado el 31 de octubre de 2026.
 - [x] No se requieren migraciones de base de datos.
 - [x] Captura de revisión 4:5 con datos de la cuenta local de prueba: [`docs/ux-review/2026-10-31/cartel-busqueda-4x5.png`](ux-review/2026-10-31/cartel-busqueda-4x5.png).
 - [ ] Repetir pruebas, typecheck, lint y build después de los ajustes visuales y funcionales del 31 de octubre; las 49 pruebas y el build indicados en la captura anterior corresponden a una revisión previa.
-- [ ] Abrir el PR en español con GitHub CLI y dejarlo abierto para revisión del autor.
+- [x] PR #7 abierto en español con GitHub CLI para revisión del autor.
