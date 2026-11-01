@@ -1,32 +1,33 @@
 # Estado de fases — PawPass V2
 
-Actualizado el 29 de octubre de 2026.
+Actualizado el 31 de octubre de 2026.
 
 | Fase | Alcance | Estado |
 |---|---|---|
 | 1 y 2 | Cuenta, mascotas y alertas de cuidado | Implementadas en `main`. |
 | 3 | Pérdida, tablón público y recuperación | Implementada según el estado de GitHub. |
 | 4 | Carnet de salud privado por mascota | PR #6 integrado en `main`. |
-| 5 | Cartel de búsqueda | Implementación lista para revisión en `feat/cartel-busqueda`; sin migraciones de base de datos. |
+| 5 | Cartel de búsqueda | Lista para revisión en PR desde `feat/cartel-busqueda`; sin migraciones de base de datos. |
 | Cierre de primera versión | Accesibilidad, SEO, PWA y flujos completos | Siguiente fase, posterior a la revisión de fase 5. |
 | Posterior | Pawgram | Fuera de la primera versión. |
 
 ## Fase 5 — Cartel de “Se busca”
 
-- Se habilita dentro de la ficha privada solo durante una pérdida activa, cuando hay una foto disponible, última zona vista y teléfono de rescate.
-- La foto reciente de la alerta tiene prioridad; si no existe, se usa la foto principal de la mascota. Las alertas incluidas son únicamente las marcadas para el QR.
-- Genera PNG de 1080 × 1920 (9:16), 1440 × 1800 (4:5), 1275 × 1800 (A4) y 1275 × 1650 (carta), con foto completa, datos de búsqueda, teléfono escrito y QR a `/p/<código>`.
-- El tutor confirma que acepta publicar el teléfono antes de descargar, compartir o imprimir. La descarga funciona siempre; compartir usa Web Share cuando el dispositivo puede adjuntar el PNG y, en caso contrario, indica cómo compartirlo desde Archivos o Fotos.
-- La ficha `/p/<código>` sigue siendo el destino del QR y muestra el estado vigente, incluido “Ya está en casa” durante el periodo de recuperación definido en la spec.
-- El cartel tiene descripción textual equivalente, controles con nombre accesible, estados anunciados y composición adaptable. Se conserva el azul mineral habitual y el rojo para urgencia.
+- El generador aparece en la ficha privada mientras la alerta de pérdida está activa y haya foto, última zona vista y teléfono de llamadas. La foto reciente de la alerta tiene prioridad; si no existe, se usa la foto principal.
+- El PNG ofrece 1080 × 1920 (9:16), 1440 × 1800 (4:5), 1275 × 1800 (A4) y 1275 × 1650 (carta). La foto ocupa una columna propia con recorte centrado; la otra reúne ubicación, hora, señas, hasta dos alertas de cuidado autorizadas y una nota para quien la encuentre. La recompensa y los contactos cierran el cartel junto al QR.
+- Las alertas priorizan primero las críticas, luego las precauciones y al final las informativas, manteniendo el orden original dentro de cada prioridad. La nota admite hasta 120 caracteres. El número de llamada muestra la lada nacional cuando aplica; WhatsApp hereda el teléfono de la cuenta salvo que el tutor haya configurado otro.
+- La ficha `/p/<código>` sigue siendo el destino del QR y muestra el estado vigente, incluido “Ya está en casa” durante el periodo de recuperación definido en la spec. El cartel advierte que el teléfono quedará visible en la imagen antes de exportarla.
+- La descarga se habilita cuando la vista previa está lista. Compartir usa Web Share cuando el dispositivo admite adjuntar el PNG y, en caso contrario, indica cómo compartirlo desde Archivos o Fotos.
+- El acceso al generador aparece en la tarjeta de una mascota perdida y en su ficha privada. La marca PawPass lleva a “Mis mascotas” para usuarios con sesión. Los cambios de alertas y contactos revalidan las fichas que muestran esos datos; las fotos privadas se firman con el cliente de Supabase de la petición.
+- La ficha pública de pérdida comparte el encabezado de navegación y la presentación de la línea visual de la app. No se agregan migraciones ni cambios de esquema.
+- El cartel mantiene descripción textual equivalente, controles accesibles y estados anunciados. Se conserva el azul mineral habitual y se reserva el rojo para la alerta activa y cuidados prioritarios.
 - No incluye PDF, vista imprimible del carnet ni Pawgram.
 
 ## Verificación de fase 5
 
-- [x] Pruebas de dominio para elegibilidad, proporciones y ruta del QR.
-- [x] Revisión visual en móvil y escritorio con datos ficticios.
-- [x] Descargar y comprobar los cuatro tamaños PNG.
-- [x] Decodificar el QR del PNG y verificar que abre la ruta de rescate.
-- [x] Guardar una captura 4:5 de verificación con mascota, ubicación y teléfono ficticios en [`docs/ux-review/2026-10-29/cartel-4x5-prueba.png`](ux-review/2026-10-29/cartel-4x5-prueba.png).
-- [x] `npm test` (49 pruebas), `npm run typecheck`, `npm run lint` y `npm run build` en una copia aislada del repo para proteger `next-env.d.ts`.
-- [ ] Crear PR en español con GitHub CLI; dejarlo abierto para revisión del autor.
+- [x] La vista previa del cartel 4:5 y la acción de descarga se revisaron en la cuenta local de prueba el 31 de octubre; el estado anunció “Descarga iniciada”.
+- [x] `git diff --check` pasó el 31 de octubre.
+- [x] No se requieren migraciones de base de datos.
+- [x] Captura de revisión 4:5 con datos de la cuenta local de prueba: [`docs/ux-review/2026-10-31/cartel-busqueda-4x5.png`](ux-review/2026-10-31/cartel-busqueda-4x5.png).
+- [ ] Repetir pruebas, typecheck, lint y build después de los ajustes visuales y funcionales del 31 de octubre; las 49 pruebas y el build indicados en la captura anterior corresponden a una revisión previa.
+- [ ] Abrir el PR en español con GitHub CLI y dejarlo abierto para revisión del autor.
