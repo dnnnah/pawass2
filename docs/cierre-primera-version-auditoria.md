@@ -83,6 +83,7 @@ Los cambios anteriores no requieren nuevas decisiones de alcance: detallan la ex
 - La inspección del tablón reveló overflow de un motivo decorativo; después del ajuste no hay overflow horizontal incluso a 244 CSS px (el navegador integrado de esta sesión no aplicó el override solicitado de 320 px).
 - GET local confirmó `Cache-Control: no-store` en `/cuenta`, `/mascotas`, `/p/<código>` y `/perdidas/<código>`. `robots.txt` responde `Allow: /`; `manifest.webmanifest` ofrece `standalone` e iconos 192/512; `/service-worker.js` responde `no-store` y `Service-Worker-Allowed: /`.
 - `npm test`: 78 pruebas en 13 archivos; `npm run typecheck`, `npm run lint` y `npm run build`: aprobados después de implementar PWA, privacidad, SEO y los cambios funcionales.
+- Los cambios quedaron en el PR [#8](https://github.com/dnnnah/pawass2/pull/8), abierto desde `feat/cierre-primera-version` para revisión; no se ha integrado.
 - No se probaron accesos ni escrituras autenticadas contra el Supabase remoto configurado: no hay cuenta de prueba local disponible y crear alertas públicas o subir/borrar archivos modificaría datos externos. No se modificaron datos remotos ni se solicitaron permisos de ubicación.
 - Pendiente antes de declarar conformidad WCAG 2.2 AA: medición cuantitativa de contraste, teclado y VoiceOver en cada flujo autenticado, zoom al 200 %, instalación/offline en navegador de producción y recorrido autenticado con datos desechables en un proyecto local de Supabase. La limitación de entorno queda documentada y no se declara como prueba completada.
 
