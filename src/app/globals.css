@@ -960,11 +960,28 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 }
 
 .quick-recovery { margin-top: .8rem; color: var(--blue-deep); }
-.quick-recovery > summary { width: fit-content; min-height: 44px; display: flex; align-items: center; gap: .45rem; cursor: pointer; font-weight: 750; text-decoration: underline; text-underline-offset: .2em; }
-.quick-recovery > summary::before { content: ''; width: .55rem; height: .55rem; border: 2px solid currentColor; border-radius: 50%; }
 .quick-recovery > div { margin-top: .4rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 1rem; }
 .quick-recovery p { margin: 0 0 .8rem; color: var(--ink-soft); font-size: .9rem; }
 .lost-card-owner { margin-top: 1rem; border-top: 1px solid var(--line); padding-top: .8rem; }
 .lost-card-owner > span { display: block; color: var(--ink-soft); font-size: .8rem; margin-bottom: .5rem; }
 .rescue-photo--image { height: auto; min-height: 0; }
 .rescue-photo--image img { display: block; width: 100%; height: auto; object-fit: contain; object-position: center; }
+
+.quick-recovery .recovery-trigger { width: 100%; border-color: #90b3c2; background: var(--blue-light); color: var(--blue-deep); text-decoration: none; }
+.recovery-trigger svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.poster-disclosure { margin: 1.5rem 0; border: 1px solid var(--line); border-radius: 14px; background: #f5fafc; padding: 1rem; }
+.poster-disclosure > summary { min-height: 48px; cursor: pointer; color: var(--blue-deep); font-size: 1.1rem; font-weight: 750; }
+.lost-page-view-link { margin-bottom: 1.2rem; }
+
+.care-alert-item__heading > .record-heading-actions { flex: 0 0 auto; }
+.care-alert-item__heading { align-items: start; gap: 1rem; }
+.care-alert-item__heading .severity-badge { display: inline-flex; margin-top: .5rem; }
+.care-alert-item__delete { margin-top: .5rem; }
+.care-add-alert { border-top: 1px solid var(--line); margin-top: 1.2rem; padding-top: 1rem; }
+.record-heading-actions form { margin: 0; }
+.record-heading-actions .form-message { max-width: 30ch; font-size: .85rem; }
+.editor-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; }
+.care-alert-item__heading > div:first-child { min-width: 0; overflow-wrap: anywhere; }
+
+.poster-disclosure > summary { list-style: none; width: fit-content; }
+.poster-disclosure > summary::-webkit-details-marker { display: none; }
