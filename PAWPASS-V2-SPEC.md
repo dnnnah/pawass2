@@ -40,7 +40,7 @@ Las claves secretas de Supabase permanecen en el servidor. Los datos privados se
 ## 2. Cuenta y contactos de rescate
 
 - El tutor puede autenticarse con correo y contraseña o con Google.
-- En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces y valida que coincidan antes de enviarla a Supabase.
+- En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces, muestra el requisito de 8 a 72 caracteres y avisa en vivo si coinciden. La creación permanece deshabilitada mientras falten esos requisitos y se vuelven a validar antes de enviar a Supabase.
 - Los correos de confirmación y recuperación de contraseña deben funcionar en producción mediante un servicio de envío configurado para la aplicación.
 - Después de autenticarse, completa su perfil antes de crear mascotas. El nombre es obligatorio; los dos campos de apellido son opcionales.
 - El teléfono para llamadas y WhatsApp usan el mismo número por defecto. El tutor puede separarlos expresamente si quiere. Cada número guardado incluye lada internacional. En los formularios se elige el país/lada por separado y se introducen solo dígitos; fuera de edición, el número nacional de diez dígitos se presenta como `55 1234 5678`.
@@ -78,7 +78,7 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 - Muestra nombre, especie, foto principal si existe, botones de llamada y WhatsApp y las alertas críticas o instrucciones de manejo que el tutor haya elegido publicar.
 - No muestra nombre ni apellidos del tutor, historial clínico completo ni documentos privados.
 - El contacto disponible se resuelve con la excepción de la mascota, si existe; en caso contrario, con los datos vigentes de la cuenta.
-- El botón de WhatsApp abre una conversación con un mensaje prellenado que identifica a la mascota y su código. Quien la encuentre puede elegir incluir su ubicación actual como enlace de mapa; se solicita su permiso antes de obtenerla.
+- El botón de WhatsApp abre una conversación con un mensaje prellenado que identifica a la mascota y su código. La aplicación no solicita ni añade la ubicación actual del dispositivo.
 - La ficha QR sigue disponible aunque la mascota no tenga una alerta de pérdida ni un futuro perfil comunitario.
 
 ## 5. Alertas de cuidado y salud privada
@@ -157,7 +157,7 @@ Los nombres **Pawshot** y **Pawsnap** son candidatos para la acción o sección 
 - Sin carnet físico imprimible ni exportación PDF del carnet.
 - Sin refugios, adopciones ni transferencias de titularidad.
 - Sin chat interno, comentarios ni pagos.
-- Sin rastreo GPS en tiempo real. La ubicación de quien encuentra a la mascota solo se incluye si esa persona decide enviarla por WhatsApp.
+- Sin rastreo GPS en tiempo real. La aplicación no obtiene la ubicación de quien encuentra a la mascota.
 - Sin edición de datos sin conexión.
 
 ## 11. Criterios de aceptación de la primera versión
@@ -184,7 +184,7 @@ Los nombres **Pawshot** y **Pawsnap** son candidatos para la acción o sección 
 - La ficha privada de mascota presenta secciones de información con grupos de campos delimitados; la navegación indica qué se edita en cada área. En el carnet, vacunas y cada registro separan datos de aplicación, estado y acciones de editar/eliminar; los conteos y los botones de agregar se distinguen por sección.
 - Las rutas inexistentes muestran una página 404 propia con navegación de regreso a Mis mascotas, al tablón de pérdidas o al inicio.
 - La navegación principal usa un menú hamburguesa en todas las anchuras y contiene **Mis mascotas**, **Mascotas perdidas** y **Mi cuenta**. Salud y documentos se consultan dentro de cada mascota.
-- La ficha pública del QR muestra primero la foto y el nombre de la mascota, seguidos primero de WhatsApp como acción sólida, después de llamada como acción de contorno y de ubicación como apoyo textual. Las alertas de cuidado elegidas aparecen a continuación, con jerarquía según su importancia.
+- La ficha pública del QR muestra primero la foto y el nombre de la mascota, seguidos primero de WhatsApp como acción sólida, después de llamada como acción de contorno. Las alertas de cuidado elegidas aparecen a continuación, con jerarquía según su importancia.
 - Cuando hay una alerta de pérdida activa, la parte superior de la ficha QR muestra una franja clara de **“Mascota perdida”** y mantiene foto, nombre y botones de contacto en las primeras posiciones.
 - La estructura visual prioriza fotografías de las mascotas, fichas sencillas y cercanía. El fondo es blanco, con superficies y detalles azules en las fichas y texto azul oscuro de alto contraste. La tipografía es Nunito Sans Variable autoalojada; el carácter combina 75% profesional y 25% juguetón, con figuras de huellas, corazones, estrellas, collares, perros y gatos y acentos decorativos cian, cobalto y violeta.
 - El logo muestra la palabra **“pawpass” junto a una huellita**. La huellita y la identidad habitual usan azul, no rojo.
@@ -235,3 +235,5 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 
 - La jerarquía de estados incluye color, etiqueta y símbolo: informativa violeta, precaución azul, urgente/vencida rojo, al día azul mineral y datos desconocidos gris. Vacunas y próximas fechas usan la misma semántica; no se deduce estado si falta la fecha.
 - La navbar del editor se ajusta a la altura real de la cabecera. Las acciones del QR se separan de las instrucciones y se apilan en pantallas estrechas, sin desbordar el documento.
+
+- Ver ficha pública dentro del editor pertenece al área privada del dueño. El tablón y el QR permiten a cualquier visitante consultar la ficha pública y contactar. Editar alerta y Ya está en casa requieren la sesión del dueño, tanto en interfaz como mediante las políticas de datos.

@@ -182,7 +182,7 @@ AppHeader muestra la marca y un botón “Menú” con icono SVG, nombre accesib
 
 ### Contacto de rescate
 
-WhatsApp mantiene azul de marca y precede a la llamada de contorno, cuando exista; la llamada durante una pérdida usa contorno rojo y ubicación ocupa el nivel de texto. Los avisos de pérdida o cuidado crítico usan rojo sin cambiar la identidad habitual de WhatsApp.
+WhatsApp mantiene azul de marca y precede a la llamada de contorno, cuando exista; la llamada durante una pérdida usa contorno rojo. Los avisos de pérdida o cuidado crítico usan rojo sin cambiar la identidad habitual de WhatsApp.
 
 ### PetTrail, mensajes y pie global
 
@@ -198,7 +198,7 @@ El panel “Mis mascotas” saluda con el nombre del tutor cuando está disponib
 
 - Do conservar la huella después de “pawpass”.
 - Do ofrecer foco visible, etiquetas claras y controles táctiles accesibles conforme a WCAG 2.2 AA.
-- Do mantener WhatsApp primero, llamada secundaria cuando esté disponible y ubicación como acción terciaria.
+- Do mantener WhatsApp primero y llamada secundaria cuando esté disponible, sin control de ubicación actual.
 - Do utilizar mensajes personalizados y figuras visibles sin ocultar información.
 
 ### Don't:
@@ -224,3 +224,5 @@ Los registros de cuidados sitúan lápiz y ojo en la cabecera; vacunas muestran 
 Informativa usa violeta y círculo de información; Precaución usa azul y escudo, o reloj en una dosis próxima. Urgente/Vencida usa rojo y triángulo. Al día usa azul mineral y calendario con marca; sin información/fecha usa gris y pregunta/calendario. Las próximas fechas siguen el tono de su estado. Los colores de texto/fondo superan 4.5:1; el significado siempre está escrito.
 
 La navbar mide la altura real de la cabecera para quedar pegada a ella al desplazarse, sin márgenes laterales negativos en móvil. El texto y el primer botón del QR se separan 45 px, con una línea de división. Los botones se apilan por debajo de 420 px.
+
+En registro, cada contraseña conserva su control de mostrar/ocultar. La longitud y la coincidencia se acompañan con texto e iconos neutros/azules y avisos accesibles en vivo. Crear cuenta se habilita únicamente con longitud válida y coincidencia.

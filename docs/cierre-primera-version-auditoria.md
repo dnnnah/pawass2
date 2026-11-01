@@ -139,3 +139,12 @@ El escalado del navegador requería compensar el ancho solicitado; se verificaro
 Las etiquetas compartidas de cuidado y dosis muestran iconos y tonos por estado, también en fichas públicas. Se confirmaron los estilos calculados de Precaución, Informativa, Vencida y Sin próxima fecha, con SVG presente. Contrastes texto/fondo: informativa 7.30:1, precaución 7.89:1, urgente/vencida 7.44:1, al día 7.68:1 y desconocido 5.92:1. Las fechas pendientes o vencidas adoptan su tono.
 
 18 pruebas de salud/cuidados, lint, typecheck y build aprobados. Esta revisión no cambió registros remotos ni intentó descargas. La comprobación responsive de estos recorridos sustituye la limitación anterior del override de 320 px; no equivale por sí sola a conformidad WCAG completa.
+
+## Contacto sin geolocalización y validación de registro
+
+- Se retiraron el botón Incluir mi ubicación actual y el acceso a geolocalización de las acciones compartidas de rescate. WhatsApp y llamada siguen disponibles al público.
+- El registro muestra el requisito de 8 a 72 caracteres y la coincidencia en vivo, asociados a los campos mediante aria-describedby. La confirmación diferente se marca inválida y Crear cuenta permanece deshabilitado hasta completar los requisitos. La validación de envío comparte los límites con los campos.
+- 20 pruebas de registro, contacto, dominio y rutas aprobadas; typecheck y lint aprobados. En navegador se verificaron aviso de discrepancia/botón deshabilitado y coincidencia/botón habilitado usando texto ficticio, sin enviar el registro. Se vaciaron los campos después de la comprobación.
+- La sesión anónima mostró WhatsApp y ningún control de editar alerta, Ya está en casa o ubicación. Se revisaron las políticas de lost_pet_reports: leer y actualizar requieren que la mascota pertenezca al usuario autenticado. Consultar la ficha pública permanece abierto a quien escanea el QR o entra al tablón.
+- Para la prueba interactiva se usó un subdominio local permitido por Next.js; la vista IPv6 servía HTML pero no reaccionaba al cambio de modo. No se amplió allowedDevOrigins ni se modificaron sesiones existentes.
+- Build de producción aprobado al finalizar; no se creó una cuenta ni se enviaron formularios de autenticación durante la revisión.

@@ -10,6 +10,9 @@ export function PasswordField({
   minLength,
   maxLength = 72,
   disabled = false,
+  onChange,
+  describedBy,
+  invalid,
 }: {
   name: string;
   label: string;
@@ -18,6 +21,9 @@ export function PasswordField({
   minLength?: number;
   maxLength?: number;
   disabled?: boolean;
+  onChange?: (value: string) => void;
+  describedBy?: string;
+  invalid?: boolean;
 }) {
   const id = useId();
   const [visible, setVisible] = useState(false);
@@ -25,7 +31,7 @@ export function PasswordField({
     <label className="field" htmlFor={id}>
       <span>{label}</span>
       <span className="password-input">
-        <input id={id} name={name} type={visible ? 'text' : 'password'} autoComplete={autoComplete} required={required} minLength={minLength} maxLength={maxLength} disabled={disabled} />
+        <input id={id} name={name} type={visible ? 'text' : 'password'} autoComplete={autoComplete} required={required} minLength={minLength} maxLength={maxLength} disabled={disabled} aria-describedby={describedBy} aria-invalid={invalid || undefined} onChange={event => onChange?.(event.target.value)} />
         <button
           className="password-toggle"
           type="button"
