@@ -1,3 +1,5 @@
+import { EditorIcon } from './editor-icon';
+import { QuickRecovery } from '@/features/lost-pets/lost-report-form';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
@@ -26,9 +28,10 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
         <div className="pet-card__navigation">
           <Link className="button button--primary" href={currentPublicView}>Ver ficha pública</Link>
           <nav aria-label={`Gestionar a ${pet.name}`}>
-            <Link href={`/mascotas/${pet.id}`}>Editar mascota</Link>
-            <Link href={`/mascotas/${pet.id}/perdida`}>{isLost ? 'Gestionar pérdida' : 'Reportar pérdida'}</Link>
+            <Link className="button button--outline" href={`/mascotas/${pet.id}`}><EditorIcon kind="info" />Editar ficha</Link>
+            <Link className={`button button--outline ${isLost ? 'pet-card__loss-link' : ''}`} href={`/mascotas/${pet.id}/perdida`}><EditorIcon kind="care" />{isLost ? 'Editar alerta' : 'Reportar pérdida'}</Link>
           </nav>
+          {isLost && report && <QuickRecovery reportId={report.id} />}
         </div>
       </div>
     </article>

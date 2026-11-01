@@ -62,7 +62,7 @@ function localTimePart(value: string): string {
   return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 }
 
-export function RecoverPetForm({ report }: { report: LostReportRow }) {
+export function RecoverPetForm({ report }: { report: Pick<LostReportRow, 'id'> }) {
   const [state, action, pending] = useActionState(recoverPet, initialState);
   return (
     <form action={action} className="recovery-form">
@@ -74,3 +74,7 @@ export function RecoverPetForm({ report }: { report: LostReportRow }) {
   );
 }
 
+
+export function QuickRecovery({ reportId }: { reportId: string }) {
+  return <details className="quick-recovery"><summary>Ya está en casa</summary><div><p>Se cerrará la búsqueda pública y se mostrará el aviso de regreso durante 30 días.</p><RecoverPetForm report={{ id: reportId }} /></div></details>;
+}

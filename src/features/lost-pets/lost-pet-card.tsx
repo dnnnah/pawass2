@@ -1,8 +1,10 @@
+import { QuickRecovery } from './lost-report-form';
+import type { OwnedReport } from './owned-reports';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { PublicLostPet } from './lost-report-state';
 
-export function LostPetCard({ pet }: { pet: PublicLostPet }) {
+export function LostPetCard({ pet, ownedReport }: { pet: PublicLostPet; ownedReport?: OwnedReport }) {
   return (
     <article className="lost-pet-card">
       <div className="lost-pet-card__photo" role={pet.photo_url ? undefined : 'img'} aria-label={pet.photo_url ? undefined : `Sin fotografía de ${pet.pet_name}`}>{pet.photo_url ? <Image src={pet.photo_url} alt={`Foto reciente de ${pet.pet_name}`} width={360} height={240} unoptimized /> : <PawIcon />}</div>
@@ -14,6 +16,7 @@ export function LostPetCard({ pet }: { pet: PublicLostPet }) {
         <div className="lost-pet-card__actions">
           <Link className="button button--primary button--wide" href={`/perdidas/${pet.public_code}`}>Ver ficha y contactar</Link>
         </div>
+        {ownedReport && <div className="lost-card-owner"><span>Tu mascota</span><Link href={`/mascotas/${ownedReport.petId}/perdida`}>Editar alerta y cartel</Link><QuickRecovery reportId={ownedReport.reportId} /></div>}
       </div>
     </article>
   );

@@ -22,8 +22,8 @@ describe('lost poster domain', () => {
     expect(getRescueQrUrl('PC-123456', 'https://pawpass.example')).toBe('https://pawpass.example/p/PC-123456');
   });
 
-  it('links an active pet card directly to the poster section in its editor', () => {
-    expect(getPosterEditorHref('pet/123')).toBe('/mascotas/pet%2F123#cartel-se-busca');
+  it('links an active pet card directly to the poster section in loss management', () => {
+    expect(getPosterEditorHref('pet/123')).toBe('/mascotas/pet%2F123/perdida#cartel-se-busca');
   });
 
   it('allows downloading when the preview is ready without a second phone consent gate', () => {

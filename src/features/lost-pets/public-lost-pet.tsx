@@ -1,3 +1,5 @@
+import { QuickRecovery } from './lost-report-form';
+import type { OwnedReport } from './owned-reports';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AppHeader } from '@/features/navigation/app-header';
@@ -19,7 +21,7 @@ export type PublicLostPetDetailData = {
   whatsapp_phone: string;
 };
 
-export function PublicLostPetDetail({ pet, photoUrl, signedIn }: { pet: PublicLostPetDetailData; photoUrl: string | null; signedIn: boolean }) {
+export function PublicLostPetDetail({ pet, photoUrl, signedIn, ownedReport }: { pet: PublicLostPetDetailData; photoUrl: string | null; signedIn: boolean; ownedReport?: OwnedReport }) {
   return (
     <main className="lost-detail-page">
       <AppHeader active="lost" signedIn={signedIn} />
@@ -29,9 +31,10 @@ export function PublicLostPetDetail({ pet, photoUrl, signedIn }: { pet: PublicLo
           <div><strong>Alerta de búsqueda activa</strong><p>Comparte esta ficha para ayudar a {pet.pet_name} a volver a casa.</p></div>
         </div>
         <article className="lost-detail-card">
-          <div className="lost-detail-photo">{photoUrl ? <Image src={photoUrl} alt={`Foto reciente de ${pet.pet_name}`} fill sizes="(max-width: 900px) 100vw, 45vw" unoptimized /> : <PawIcon />}</div>
+          <div className="lost-detail-photo">{photoUrl ? <Image src={photoUrl} alt={`Foto reciente de ${pet.pet_name}`} width={900} height={900} style={{ width: '100%', height: 'auto', objectFit: 'contain' }} unoptimized /> : <PawIcon />}</div>
           <div className="lost-detail-body">
             <h1>{pet.pet_name}</h1>
+            {ownedReport && <div className="lost-card-owner"><span>Esta es tu mascota</span><Link href={`/mascotas/${ownedReport.petId}/perdida`}>Editar alerta y cartel</Link><QuickRecovery reportId={ownedReport.reportId} /></div>}
             <p className="lost-detail-meta">{pet.species === 'perro' ? 'Perro' : 'Gato'} · Código {pet.public_code}</p>
             <section className="lost-detail-location"><h2>Última ubicación vista</h2><p>{pet.last_seen_location || 'Ubicación pendiente'}</p>{pet.last_seen_at && <time dateTime={pet.last_seen_at}>{new Date(pet.last_seen_at).toLocaleString('es-MX', { dateStyle: 'long', timeStyle: 'short' })}</time>}</section>
             <div className="lost-detail-contact"><h2>Contacta a su familia</h2><WhatsAppActions name={pet.pet_name} code={pet.public_code} whatsapp={pet.whatsapp_phone} callPhone={pet.rescue_phone} urgent /></div>

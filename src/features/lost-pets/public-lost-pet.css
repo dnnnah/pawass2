@@ -128,3 +128,7 @@
   .lost-detail-location p { font-size: 1.125rem; }
   .lost-detail-contact .button { min-height: 50px; }
 }
+
+/* Preserve the natural aspect ratio of every public search photograph. */
+.lost-detail-photo { height: auto; min-height: 0; aspect-ratio: auto; }
+.lost-detail-photo img { display: block; width: 100%; height: auto; object-fit: contain; object-position: center; }

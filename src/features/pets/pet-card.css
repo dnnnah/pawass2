@@ -21,3 +21,8 @@
 .editor-qr { margin-top: 1.2rem; }
 .editor-qr summary { min-height: 44px; cursor: pointer; font-weight: 700; }
 .editor-qr svg { margin: .75rem 0; }
+
+.pet-card__navigation nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; border: 0; padding-top: 0; }
+.pet-card__navigation nav a { justify-content: center; gap: .4rem; padding: .65rem .5rem; text-align: center; }
+.pet-card__navigation nav .pet-card__loss-link { border-color: #d59da4; color: #8d2630; }
+@media (max-width: 380px) { .pet-card__navigation nav { grid-template-columns: 1fr; } }
