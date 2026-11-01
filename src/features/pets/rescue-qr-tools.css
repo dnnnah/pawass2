@@ -3,7 +3,11 @@
 .qr-tools__code { width: fit-content; max-width: 100%; margin: 0 auto 1rem; background: #fff; }
 .qr-tools__code svg { display: block; max-width: 100%; height: auto; }
 .qr-tools > a { display: block; overflow-wrap: anywhere; font-size: .85rem; }
-.qr-tools p { color: var(--ink-soft); font-size: .92rem; }
-.qr-tools__actions { display: flex; flex-wrap: wrap; gap: .6rem; }
-.qr-tools__actions .button { flex: 1 1 140px; }
+.qr-tools p { margin: .75rem 0 0; color: var(--ink-soft); font-size: .92rem; }
+.qr-tools__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1.5rem; border-top: 1px solid var(--line); padding-top: 1.25rem; }
+.qr-tools__actions .button { min-width: 0; }
+.qr-tools__actions .button:last-child { grid-column: 1 / -1; }
 .qr-tools { margin-top: 2rem; }
+
+.qr-tools > p[role="status"]:empty { display: none; }
+@media (max-width: 420px) { .qr-tools__actions { grid-template-columns: minmax(0, 1fr); } .qr-tools { padding: 1rem; } }

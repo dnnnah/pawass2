@@ -11,6 +11,17 @@ const sections = [
 ] as const;
 export function EditorSectionNav() {
   const [active, setActive] = useState<string>('identidad');
+  const [headerOffset, setHeaderOffset] = useState<number>();
+  useEffect(() => {
+    const header = document.querySelector('.app-header');
+    if (!header) return;
+    const measure = () => setHeaderOffset(Math.ceil(header.getBoundingClientRect().height));
+    measure();
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
+    observer?.observe(header);
+    window.addEventListener('resize', measure);
+    return () => { observer?.disconnect(); window.removeEventListener('resize', measure); };
+  }, []);
   useEffect(() => {
     if (!('IntersectionObserver' in window)) return;
     const observer = new IntersectionObserver(entries => {
@@ -20,5 +31,5 @@ export function EditorSectionNav() {
     sections.forEach(({ id }) => { const element = document.getElementById(id); if (element) observer.observe(element); });
     return () => observer.disconnect();
   }, []);
-  return <nav className="pet-editor-navbar" aria-label="Secciones del editor">{sections.map(section => <a key={section.id} href={`#${section.id}`} aria-current={active === section.id ? 'location' : undefined} onClick={() => setActive(section.id)}><EditorIcon kind={section.icon} />{section.label}</a>)}</nav>;
+  return <nav style={{ top: headerOffset }} className="pet-editor-navbar" aria-label="Secciones del editor">{sections.map(section => <a key={section.id} href={`#${section.id}`} aria-current={active === section.id ? 'location' : undefined} onClick={() => setActive(section.id)}><EditorIcon kind={section.icon} />{section.label}</a>)}</nav>;
 }

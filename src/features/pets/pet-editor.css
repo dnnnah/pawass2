@@ -2,7 +2,7 @@
 .pet-editor-heading h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 4vw, 2.7rem); }
 .pet-editor-heading p { margin: 0; color: var(--ink-soft); }
 .editor-loss-notice { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .8rem; margin-bottom: 1rem; border-radius: 12px; background: var(--danger-soft); padding: .8rem 1rem; color: var(--danger); }
-.pet-editor-navbar { position: sticky; top: 76px; z-index: 2; display: flex; overflow-x: auto; gap: .25rem; margin: 1rem 0 1.5rem; border-bottom: 1px solid var(--line); background: #fff; padding: .4rem 0; }
+.pet-editor-navbar { position: sticky; top: 76px; z-index: 2; display: flex; overflow-x: auto; max-width: 100%; overscroll-behavior-x: contain; gap: .25rem; margin: 0 0 1.5rem; border-bottom: 1px solid var(--line); background: #fff; padding: .4rem 0; }
 .pet-editor-navbar a { display: inline-flex; flex: 0 0 auto; align-items: center; min-height: 46px; gap: .4rem; border-radius: 12px; padding: .5rem .75rem; color: var(--blue-deep); font-weight: 750; text-decoration: none; }
 .pet-editor-navbar a[aria-current], .pet-editor-navbar a:hover, .pet-editor-navbar a:focus-visible { background: var(--blue-light); }
 .pet-detail-main h2 .editor-icon { margin-right: .5rem; }
@@ -22,7 +22,9 @@
 .editor-expand .care-section { margin: .75rem 0 0; }
 .pet-detail-main section[id] { scroll-margin-top: 160px; }
 @media (max-width: 760px) {
-  .pet-editor-navbar { margin-inline: -1rem; padding-inline: 1rem; }
+  .pet-editor-navbar { margin-inline: 0; padding-inline: 0; }
   .pet-editor-heading { flex-wrap: wrap; }
   .editor-overview { padding: 1.1rem; }
 }
+
+@media (max-width: 620px) { .pet-editor-navbar { top: 64px; } }
