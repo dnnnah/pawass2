@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { DoseStatusBadge, doseStatusTone } from './dose-status-badge';
+import { StatusSymbol } from '@/features/brand/status-badge';
 import { RecordActionIcon } from '@/features/brand/record-action-icon';
 import './health-record-manager.css';
 import { useActionState, useId, useState, useSyncExternalStore } from 'react';
@@ -10,7 +12,6 @@ import {
   HEALTH_DOCUMENT_CATEGORIES,
   calculateDoseStatus,
   suggestNextDoseDate,
-  type DoseStatus,
   type HealthDoseKind,
   type PetSpecies,
 } from './domain';
@@ -49,13 +50,6 @@ export type HealthDocumentRow = {
 
 const initialState: FormState = { ok: false, message: '' };
 const kindLabels: Record<HealthDoseKind, string> = { vaccination: 'Vacuna', deworming: 'Desparasitación' };
-const statusLabels = {
-  'sin-informacion': 'Sin información',
-  'sin-proxima-fecha': 'Sin próxima fecha',
-  vencida: 'Vencida',
-  'proxima-a-vencer': 'Próxima a vencer',
-  'al-dia': 'Al día',
-} as const;
 
 export function HealthRecordManager({
   petId,
@@ -131,7 +125,7 @@ function DoseRecordCard({ petId, species, kind, record }: {
         <div className="record-heading-actions"><DoseStatusBadge status={status} /><span className="record-private" title="Este registro es privado y no aparece en el QR"><RecordActionIcon kind="eye-off" />Privado</span><button className="record-icon-button" type="button" title="Editar registro" aria-label={`Editar registro: ${record.label}`} aria-expanded={editing} aria-controls={editorId} onClick={() => setEditing(!editing)}><RecordActionIcon kind="edit" /></button></div>
       </div>
       <dl className="health-record-details">
-        <div><dt>Próxima fecha</dt><dd>{record.next_dose_date ? formatDate(record.next_dose_date) : 'Sin próxima fecha registrada'}</dd></div>
+        <div><dt>Próxima fecha</dt><dd>{record.next_dose_date ? <time dateTime={record.next_dose_date} className={`dose-next-date dose-next-date--${status ? doseStatusTone[status] : 'unknown'}`}><StatusSymbol name={status === 'vencida' ? 'urgent' : status === 'proxima-a-vencer' ? 'clock' : 'calendar'} />{formatDate(record.next_dose_date)}</time> : <span className="dose-next-date dose-next-date--unknown"><StatusSymbol name="unknown" />Sin próxima fecha registrada</span>}</dd></div>
         {record.lot && <div><dt>Lote</dt><dd>{record.lot}</dd></div>}
         {record.veterinarian && <div><dt>Veterinario</dt><dd>{record.veterinarian}</dd></div>}
         {record.notes && <div className="health-record-details__notes"><dt>Notas</dt><dd>{record.notes}</dd></div>}
@@ -292,14 +286,6 @@ function DeleteDocumentControl({ petId, document }: { petId: string; document: H
       <summary className="button health-danger-action">Eliminar documento</summary>
       <div><p>Se quitarán el archivo y su registro privado. Esta acción no se puede deshacer.</p><form action={deleteHealthDocument}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="documentId" value={document.id} /><button className="button button--outline health-danger-action" type="submit">Confirmar eliminación</button></form></div>
     </details>
-  );
-}
-
-function DoseStatusBadge({ status }: { status: DoseStatus | null }) {
-  return (
-    <span className={`health-status${status ? ` health-status--${status}` : ''}`}>
-      {status && <span aria-hidden="true" />}{status ? statusLabels[status] : 'Estado local al cargar'}
-    </span>
   );
 }
 

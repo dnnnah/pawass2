@@ -123,3 +123,19 @@ No declarar cerrado el cierre de primera versión hasta completar las verificaci
 - Cinco pruebas nuevas cubren visibilidad inválida, falta de sesión, mascota ajena y publicación/ocultación por el dueño sin usar datos remotos.
 - Se inspeccionaron el botón real de regreso, el lápiz y ojo junto a cuidados, el lápiz de vacuna y los espacios del carnet. Se abrió la edición de cuidado y vacuna sin guardar. Se confirmó que no hay iframe en el editor, que el QR es su última sección y que la alerta ofrece Ver ficha pública.
 - Verificación final de esta distribución: 57 pruebas dirigidas aprobadas (pérdida/cartel/rutas/caché y cuidados/salud/visibilidad), lint, typecheck y build aprobados. La descarga de archivos sigue pendiente por el permiso rechazado anteriormente; no se reintentó.
+
+## Verificación responsive y semántica de estados
+
+Se corrigió la navbar que conservaba top de 76 px frente a una cabecera móvil de 64 px; ahora observa la altura real y no usa márgenes laterales negativos. El QR reserva margen y padding propios para separar texto y acciones.
+
+| Ancho CSS real | Ancho del documento | Hueco cabecera/navbar fija | Texto QR al primer botón |
+|---|---|---|---|
+| 320 px | 320 px | 0 px | 45 px |
+| 768 px | 768 px | 0 px | 45 px |
+| 1024 px | 1024 px | 0 px | 45 px |
+
+El escalado del navegador requería compensar el ancho solicitado; se verificaron las medidas CSS reales, no solo el parámetro del override. A 320 px también se revisaron Mis mascotas, edición de pérdida, carnet, QR público, ficha pública de pérdida y tablón: todos conservaron ancho de documento de 320 px. Se restableció el viewport después de revisar.
+
+Las etiquetas compartidas de cuidado y dosis muestran iconos y tonos por estado, también en fichas públicas. Se confirmaron los estilos calculados de Precaución, Informativa, Vencida y Sin próxima fecha, con SVG presente. Contrastes texto/fondo: informativa 7.30:1, precaución 7.89:1, urgente/vencida 7.44:1, al día 7.68:1 y desconocido 5.92:1. Las fechas pendientes o vencidas adoptan su tono.
+
+18 pruebas de salud/cuidados, lint, typecheck y build aprobados. Esta revisión no cambió registros remotos ni intentó descargas. La comprobación responsive de estos recorridos sustituye la limitación anterior del override de 320 px; no equivale por sí sola a conformidad WCAG completa.

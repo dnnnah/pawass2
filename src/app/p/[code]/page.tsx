@@ -1,3 +1,4 @@
+import { CareSeverityBadge } from '@/features/brand/status-badge';
 import { PetNote } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -64,7 +65,7 @@ export default async function RescuePage({ params }: Props) {
               <ul>
                 {visibleCareAlerts.map((alert, index) => (
                   <li className={`rescue-care__item rescue-care__item--${alert.severity}`} key={`${alert.category}-${index}`}>
-                    <div className="rescue-care__heading"><strong>{alert.label}</strong><span>{severityLabel(alert.severity)}</span></div>
+                    <div className="rescue-care__heading"><strong>{alert.label}</strong><CareSeverityBadge severity={alert.severity} /></div>
                     {alert.instructions && <p>{alert.instructions}</p>}
                   </li>
                 ))}
@@ -77,12 +78,6 @@ export default async function RescuePage({ params }: Props) {
       <PetNote name={pet.pet_name} rescue={!showHomeNotice || Boolean(status?.lost)} recovered={showHomeNotice && !status?.lost} />
     </main>
   );
-}
-
-function severityLabel(severity: string) {
-  if (severity === 'critical') return 'Alerta crítica';
-  if (severity === 'precaution') return 'Precaución';
-  return 'Información';
 }
 
 function SetupNotice() {

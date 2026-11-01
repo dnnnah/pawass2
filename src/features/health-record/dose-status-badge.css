@@ -1,0 +1,5 @@
+.dose-record-status { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .8rem; }
+.dose-record-status time { font-size: .9rem; font-weight: 750; }
+.dose-record-status[data-tone="critical"] time { color: #8d2630; }
+.dose-record-status[data-tone="precaution"] time { color: #144b6b; }
+.dose-record-status[data-tone="current"] time { color: #12536b; }

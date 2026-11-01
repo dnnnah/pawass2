@@ -262,7 +262,7 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .health-record-entry, .health-document-entry { margin: .7rem 0; border: 1px solid #d5e1e5; border-radius: 13px; background: #f8fbfc; padding: 1rem; }
 .health-record-nav a span { display: inline-grid; min-width: 1.55rem; min-height: 1.55rem; place-items: center; border-radius: 999px; background: var(--blue-light); padding: 0 .25rem; color: var(--blue-deep); }
 .severity-badge--precaution, .rescue-care__item--precaution { border-color: #bdd5df; background: #eaf3f6; color: #315d70; }
-.rescue-care__item--precaution .rescue-care__heading span { color: #315d70; }
+.rescue-care__item--precaution .rescue-care__heading span:not(.status-badge):not(.status-badge__label) { color: #315d70; }
 .care-alert-item { margin: .65rem 0; border: 1px solid #d5e1e5; border-radius: 13px; background: #f8fbfc; padding: 1rem; }
 .care-alert-item__visibility { display: inline-flex; border-radius: 999px; background: #eaf3f6; padding: .25rem .55rem; color: #315d70; font-weight: 700; }
 .care-alert-item__visibility:has(+ .care-alert-item__instructions) { margin-bottom: .45rem; }
@@ -394,9 +394,9 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .rescue-care__item--precaution { border-color: #b8d2dd; background: var(--warning-soft); }
 .rescue-care__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.8rem; }
 .rescue-care__heading strong { color: var(--ink); }
-.rescue-care__heading span { color: var(--ink-soft); font-size: 0.77rem; font-weight: 800; white-space: nowrap; }
-.rescue-care__item--critical .rescue-care__heading span { color: #92212b; }
-.rescue-care__item--precaution .rescue-care__heading span { color: var(--warning); }
+.rescue-care__heading span:not(.status-badge):not(.status-badge__label) { color: var(--ink-soft); font-size: 0.77rem; font-weight: 800; white-space: nowrap; }
+.rescue-care__item--critical .rescue-care__heading span:not(.status-badge):not(.status-badge__label) { color: #92212b; }
+.rescue-care__item--precaution .rescue-care__heading span:not(.status-badge):not(.status-badge__label) { color: var(--warning); }
 .rescue-care__item p { margin: 0.4rem 0 0; color: var(--ink); font-size: 0.9rem; }
 
 .account-settings { max-width: 900px; }
@@ -508,7 +508,7 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .lost-detail-care { margin-top: 1.3rem; }
 .lost-detail-care ul { margin: .5rem 0 0; padding: 0; list-style: none; }
 .lost-detail-care li { border-top: 1px solid var(--line); padding: .7rem 0; }
-.lost-detail-care li > span { float: right; color: var(--ink-soft); font-size: .78rem; font-weight: 750; }
+.lost-detail-care li > span:not(.status-badge):not(.status-badge__label) { float: right; color: var(--ink-soft); font-size: .78rem; font-weight: 750; }
 .lost-detail-care li p { margin: .3rem 0 0; font-size: .88rem; }
 .lost-detail-contact { display: grid; gap: .5rem; margin-top: 1.5rem; }
 .lost-detail-contact h2 { margin-bottom: 0; }
@@ -985,3 +985,6 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 
 .poster-disclosure > summary { list-style: none; width: fit-content; }
 .poster-disclosure > summary::-webkit-details-marker { display: none; }
+.care-alert-item__heading .status-badge { margin-top: .5rem; }
+.rescue-care__heading { flex-wrap: wrap; }
+.lost-detail-care .status-badge { margin: .35rem 0 .35rem .5rem; vertical-align: middle; }

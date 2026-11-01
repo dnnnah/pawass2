@@ -98,7 +98,7 @@
 .lost-detail-care ul { margin: .6rem 0 0; }
 .lost-detail-care li { padding: .8rem 0; }
 .lost-detail-care li > strong { color: var(--ink); font-size: 1rem; }
-.lost-detail-care li > span { float: none; margin-left: .6rem; border-radius: 999px; background: var(--blue-light); padding: .25rem .55rem; color: var(--blue-deep); font-size: .92rem; }
+.lost-detail-care li > span:not(.status-badge) { float: none; margin-left: .6rem; border-radius: 999px; background: var(--blue-light); padding: .25rem .55rem; color: var(--blue-deep); font-size: .92rem; }
 .lost-detail-care li > p { margin: .4rem 0 0; color: var(--ink-soft); font-size: 1rem; line-height: 1.5; }
 
 .lost-detail-contact { gap: .75rem; margin: 0; border-top: 1px solid var(--line); padding-top: 1.2rem; }

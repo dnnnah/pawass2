@@ -1,3 +1,4 @@
+import { CareSeverityBadge } from '@/features/brand/status-badge';
 import { QuickRecovery } from './lost-report-form';
 import type { OwnedReport } from './owned-reports';
 import Image from 'next/image';
@@ -41,7 +42,7 @@ export function PublicLostPetDetail({ pet, photoUrl, signedIn, ownedReport }: { 
             {pet.wearing && <section className="lost-detail-section"><h2>Señas o ropa</h2><p>{pet.wearing}</p></section>}
             {pet.message && <section className="lost-detail-section"><h2>Mensaje de su familia</h2><p>{pet.message}</p></section>}
             {pet.reward && <section className="lost-detail-section"><h2>Recompensa informativa</h2><p>{pet.reward}</p></section>}
-            {pet.care_alerts?.length > 0 && <section className="lost-detail-care"><h2>Alertas de cuidado autorizadas</h2><ul>{pet.care_alerts.map((alert, index) => <li key={`${alert.category}-${index}`}><strong>{alert.label}</strong><span>{alert.severity === 'critical' ? 'Alerta crítica' : alert.severity === 'precaution' ? 'Precaución' : 'Información'}</span>{alert.instructions && <p>{alert.instructions}</p>}</li>)}</ul></section>}
+            {pet.care_alerts?.length > 0 && <section className="lost-detail-care"><h2>Alertas de cuidado autorizadas</h2><ul>{pet.care_alerts.map((alert, index) => <li key={`${alert.category}-${index}`}><strong>{alert.label}</strong><CareSeverityBadge severity={alert.severity} />{alert.instructions && <p>{alert.instructions}</p>}</li>)}</ul></section>}
             <Link className="button button--outline lost-detail-qr-link" href={`/p/${pet.public_code}`}>Abrir ficha QR de {pet.pet_name}</Link>
             <p className="privacy-note">Esta página solo contiene información elegida por su tutor para ayudar durante la búsqueda.</p>
           </div>

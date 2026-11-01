@@ -2,6 +2,7 @@
 
 import { useId, useState, useActionState } from 'react';
 import { CARE_ALERT_CATALOG, CARE_ALERT_CATEGORIES, type CareAlertCategory, type CareAlertSeverity } from './domain';
+import { CareSeverityBadge } from '@/features/brand/status-badge';
 import { RecordActionIcon } from '@/features/brand/record-action-icon';
 import { deleteCareAlert, saveCareAlert, setCareAlertVisibility } from './actions';
 import type { FormState } from '@/features/profile/actions';
@@ -25,7 +26,7 @@ const categoryLabels: Record<CareAlertCategory, string> = {
   temperament: 'Temperamento',
 };
 const severityLabels: Record<CareAlertSeverity, string> = {
-  critical: 'Crítica',
+  critical: 'Urgente',
   precaution: 'Precaución',
   informative: 'Informativa',
 };
@@ -56,7 +57,7 @@ export function CareAlertManager({ petId, alerts }: { petId: string; alerts: Car
 function CareAlertItem({ petId, alert }: { petId: string; alert: CareAlertRecord }) {
   const [editing, setEditing] = useState(false);
   const editorId = useId();
-  return <li className="care-alert-item"><div className="care-alert-item__heading"><div><p className="care-alert-item__category">{categoryLabels[alert.category]}</p><h3>{alert.label}</h3><span className={`severity-badge severity-badge--${alert.severity}`}>{severityLabels[alert.severity]}</span></div><div className="record-heading-actions"><button className="record-icon-button" type="button" title="Editar alerta" aria-label={`Editar alerta: ${alert.label}`} aria-expanded={editing} aria-controls={editorId} onClick={() => setEditing(!editing)}><RecordActionIcon kind="edit" /></button><VisibilityControl petId={petId} alert={alert} disabled={editing} /></div></div><p className="care-alert-item__visibility">{alert.qr_visible ? 'Pública en QR y cartel' : 'Privada: solo tú puedes verla'}</p>{alert.instructions && <p className="care-alert-item__instructions">{alert.instructions}</p>}{editing && <div id={editorId}><CareAlertForm petId={petId} alert={alert} /><button className="button button--text" type="button" onClick={() => setEditing(false)}>Cancelar edición</button></div>}<form action={deleteCareAlert} className="care-alert-item__delete"><input type="hidden" name="petId" value={petId} /><input type="hidden" name="alertId" value={alert.id} /><button className="button button--text care-alert-delete" type="submit">Eliminar alerta</button></form></li>;
+  return <li className="care-alert-item"><div className="care-alert-item__heading"><div><p className="care-alert-item__category">{categoryLabels[alert.category]}</p><h3>{alert.label}</h3><CareSeverityBadge severity={alert.severity} /></div><div className="record-heading-actions"><button className="record-icon-button" type="button" title="Editar alerta" aria-label={`Editar alerta: ${alert.label}`} aria-expanded={editing} aria-controls={editorId} onClick={() => setEditing(!editing)}><RecordActionIcon kind="edit" /></button><VisibilityControl petId={petId} alert={alert} disabled={editing} /></div></div><p className="care-alert-item__visibility">{alert.qr_visible ? 'Pública en QR y cartel' : 'Privada: solo tú puedes verla'}</p>{alert.instructions && <p className="care-alert-item__instructions">{alert.instructions}</p>}{editing && <div id={editorId}><CareAlertForm petId={petId} alert={alert} /><button className="button button--text" type="button" onClick={() => setEditing(false)}>Cancelar edición</button></div>}<form action={deleteCareAlert} className="care-alert-item__delete"><input type="hidden" name="petId" value={petId} /><input type="hidden" name="alertId" value={alert.id} /><button className="button button--text care-alert-delete" type="submit">Eliminar alerta</button></form></li>;
 }
 function VisibilityControl({ petId, alert, disabled }: { petId: string; alert: CareAlertRecord; disabled: boolean }) {
   const [state, action, pending] = useActionState(setCareAlertVisibility, initialState);

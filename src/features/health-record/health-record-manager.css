@@ -28,3 +28,8 @@
   .health-record-main .record-heading-actions .record-icon-button { margin-left: auto; }
   .health-record-main .health-form__actions .button { width: 100%; }
 }
+.dose-next-date { display: inline-flex; align-items: center; flex-wrap: wrap; gap: .4rem; font-weight: 750; }
+.dose-next-date--critical { color: #8d2630; }
+.dose-next-date--precaution { color: #144b6b; }
+.dose-next-date--current { color: #12536b; }
+.dose-next-date--unknown { color: #476274; }

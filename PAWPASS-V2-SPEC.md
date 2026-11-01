@@ -232,3 +232,6 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 - Cuidados, carnet y documentos muestran conteos y registros básicos, con acceso a ver y gestionar más. Se usa color e iconografía junto a etiquetas; las fotos públicas conservan su proporción natural y se muestran completas.
 
 - Ya está en casa es un botón real con icono que abre la confirmación explícita y ofrece Cancelar. Cada alerta de cuidado muestra lápiz de edición y ojo que publica/oculta esa alerta y sus instrucciones; Agregar aparece al final. Los registros del carnet muestran lápiz y estado privado con ojo tachado, sin habilitar publicación del expediente.
+
+- La jerarquía de estados incluye color, etiqueta y símbolo: informativa violeta, precaución azul, urgente/vencida rojo, al día azul mineral y datos desconocidos gris. Vacunas y próximas fechas usan la misma semántica; no se deduce estado si falta la fecha.
+- La navbar del editor se ajusta a la altura real de la cabecera. Las acciones del QR se separan de las instrucciones y se apilan en pantallas estrechas, sin desbordar el documento.

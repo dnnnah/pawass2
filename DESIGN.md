@@ -20,6 +20,19 @@ colors:
   line-violet: "#d5cbed"
   surface-cobalt: "#f0f7ff"
   line-cobalt: "#c2d9ed"
+  status-info-ink: "#574080"
+  status-info-surface: "#efebf7"
+  status-precaution-line: "#99bacb"
+  status-critical-line: "#d9a6ac"
+  status-current-line: "#9bbdc9"
+  status-precaution-ink: "#144b6b"
+  status-precaution-surface: "#e1eef5"
+  status-critical-ink: "#8d2630"
+  status-critical-surface: "#fcebed"
+  status-current-ink: "#12536b"
+  status-current-surface: "#edf5f8"
+  status-unknown-ink: "#476274"
+  status-unknown-surface: "#f3f6f8"
 typography:
   display:
     fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
@@ -49,7 +62,10 @@ typography:
     fontSize: "clamp(2rem, 4vw, 2.7rem)"
   small:
     fontSize: "0.85rem"
+  date:
+    fontSize: "0.9rem"
 rounded:
+  status: "10px"
   field: "9px"
   button: "12px"
   card: "16px"
@@ -202,3 +218,9 @@ Foto, nombre, especie y estado preceden a una sola acción sólida: Ver ficha p�
 La gestión de pérdida tiene página propia para reporte, regreso y cartel. La tarjeta usa primario público y dos acciones de contorno separadas para ficha/alerta; el regreso rápido requiere confirmar. El editor usa una navbar horizontal fija bajo la cabecera, con iconos y sección actual. El QR aparece abierto al final de cada editor, sin vista previa incrustada; Ver ficha pública está en la cabecera. Salud y documentos usan resúmenes privados con acceso al carnet. El reporte se edita antes del cartel plegable y la recuperación. Ya está en casa usa botón con icono, no un disclosure textual. Cian apoya salud/fotografía y violeta documentos/cuidados. Texto de prioridad y privacidad acompaña siempre al color. Las fotos públicas usan ancho fluido y altura natural.
 
 Los registros de cuidados sitúan lápiz y ojo en la cabecera; vacunas muestran lápiz y estado privado. Los controles de agregar quedan debajo de sus listas. El carnet conserva una escala de espacio de 1rem / 1.2rem / 1.5rem y separa sección, registro, formulario y acciones sin márgenes negativos en móvil.
+
+### Estados con color, símbolo y texto
+
+Informativa usa violeta y círculo de información; Precaución usa azul y escudo, o reloj en una dosis próxima. Urgente/Vencida usa rojo y triángulo. Al día usa azul mineral y calendario con marca; sin información/fecha usa gris y pregunta/calendario. Las próximas fechas siguen el tono de su estado. Los colores de texto/fondo superan 4.5:1; el significado siempre está escrito.
+
+La navbar mide la altura real de la cabecera para quedar pegada a ella al desplazarse, sin márgenes laterales negativos en móvil. El texto y el primer botón del QR se separan 45 px, con una línea de división. Los botones se apilan por debajo de 420 px.
