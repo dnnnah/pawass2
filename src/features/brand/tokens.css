@@ -1,0 +1,72 @@
+:root {
+  color-scheme: light;
+  --ink: #173b4b;
+  --ink-soft: #506b77;
+  --blue: #176986;
+  --blue-deep: #12536b;
+  --blue-light: #e2f0f4;
+  --paper: #fff;
+  --mineral: #ffffff;
+  --line: #c8d9de;
+  --focus: #176986;
+  --danger: #b6323c;
+  --radius: 16px;
+  --danger-soft: #fcebed;
+  --warning: #315d70;
+  --warning-soft: #eaf3f6;
+  --accent-violet: #6651a3;
+  --accent-cyan: #087c9f;
+  --accent-cobalt: #3154aa;
+  --font-body: "Nunito Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --text-body: 1rem;
+  --text-small: .85rem;
+  --text-label: .92rem;
+  --text-title: 2rem;
+  --leading-body: 1.55;
+  --leading-heading: 1.12;
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius-field: 9px;
+  --radius-action: 12px;
+  --radius-card: 16px;
+  --radius-rescue: 20px;
+  --radius-pill: 999px;
+  --action-height: 48px;
+  --action-border: #527483;
+  --action-hover: #f0f6f8;
+  --danger-deep: #962a32;
+  --danger-ink: #842932;
+  --surface: #f5fafc;
+  --motion-fast: 120ms;
+  --status-info-ink: #574080;
+  --status-info-surface: #efebf7;
+  --status-info-line: #d5cbed;
+  --status-precaution-ink: #144b6b;
+  --status-precaution-surface: #e1eef5;
+  --status-precaution-line: #99bacb;
+  --status-critical-ink: #8d2630;
+  --status-critical-surface: #fcebed;
+  --status-critical-line: #d9a6ac;
+  --status-current-ink: #12536b;
+  --status-current-surface: #edf5f8;
+  --status-current-line: #9bbdc9;
+  --status-unknown-ink: #476274;
+  --status-unknown-surface: #f3f6f8;
+  --status-unknown-line: #bdcdd5;
+}
+
+/* Tailwind v4 utilities share the same semantic palette and typography. */
+@theme inline {
+  --color-brand: var(--blue);
+  --color-brand-deep: var(--blue-deep);
+  --color-brand-soft: var(--blue-light);
+  --color-ink: var(--ink);
+  --color-muted: var(--ink-soft);
+  --color-surface: var(--surface);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-body);
+}
