@@ -23,7 +23,7 @@ export default async function HealthRecordPage({ params }: Props) {
   if (!supabase) return <main className="setup-page"><h1>Conecta Supabase para continuar</h1><p>El carnet privado necesita una sesión segura con el proyecto de datos.</p></main>;
   const { data } = await supabase.auth.getClaims();
   const identity = getIdentityFromClaims(data?.claims);
-  if (!identity) redirect('/');
+  if (!identity) redirect('/acceso');
 
   const { data: pet } = await supabase.from('pets').select('id,name,species')
     .eq('id', id).eq('owner_id', identity.id).maybeSingle();

@@ -13,10 +13,10 @@ import { signInAsDevTestAccount } from './actions';
 
 type Mode = 'entrar' | 'crear' | 'recuperar';
 
-export function AuthPanel({ configured, showDevTestAccount = false }: { configured: boolean; showDevTestAccount?: boolean }) {
+export function AuthPanel({ configured, showDevTestAccount = false, initialMode = 'entrar', initialMessage = '' }: { configured: boolean; showDevTestAccount?: boolean; initialMode?: 'entrar' | 'crear'; initialMessage?: string }) {
   const router = useRouter();
-  const [mode, setMode] = useState<Mode>('entrar');
-  const [message, setMessage] = useState('');
+  const [mode, setMode] = useState<Mode>(initialMode);
+  const [message, setMessage] = useState(initialMessage);
   const [pending, setPending] = useState(false);
   const [registrationPassword, setRegistrationPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');

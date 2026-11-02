@@ -21,7 +21,7 @@ export default async function PetsPage() {
   if (!supabase) return <SetupRequired />;
   const { data } = await supabase.auth.getClaims();
   const identity = getIdentityFromClaims(data?.claims);
-  if (!identity) redirect('/');
+  if (!identity) redirect('/acceso');
 
   const [{ data: profile }, { data: pets }] = await Promise.all([
     supabase.from('profiles').select('first_name,rescue_phone,whatsapp_phone').eq('id', identity.id).maybeSingle(),

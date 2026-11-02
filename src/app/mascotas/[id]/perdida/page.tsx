@@ -29,7 +29,7 @@ export default async function LostReportPage({ params }: Props) {
   if (!supabase) return <main className="setup-page"><h1>Conecta Supabase para continuar</h1><p>El reporte de pérdida necesita una sesión segura con el proyecto de datos.</p></main>;
   const { data } = await supabase.auth.getClaims();
   const identity = getIdentityFromClaims(data?.claims);
-  if (!identity) redirect('/');
+  if (!identity) redirect('/acceso');
   const [{ data: pet }, { data: report }] = await Promise.all([
     supabase.from('pets').select('id,name,species,primary_photo_path,contact_override_enabled,rescue_phone_override,whatsapp_phone_override').eq('id', id).eq('owner_id', identity.id).maybeSingle(),
     supabase.from('lost_pet_reports').select('id,pet_id,status,lost_at,recovered_at,last_seen_location,last_seen_at,wearing,message,reward,recent_photo_path').eq('pet_id', id).eq('status', 'active').maybeSingle(),
