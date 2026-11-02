@@ -3,6 +3,7 @@
 @import "../features/brand/actions.css";
 @import "../features/auth/auth.css";
 @import "../features/health-record/health-record.css";
+@import "../features/brand/brand.css";
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--mineral); color: var(--ink); font-family: var(--font-body); font-size: var(--text-body); line-height: var(--leading-body); }
@@ -21,8 +22,6 @@ p { max-width: 68ch; }
 code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #203f52; font-size: 0.92em; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.brand { display: inline-flex; align-items: center; gap: 0.55rem; color: var(--blue-deep); font-size: 1.55rem; font-weight: 750; letter-spacing: -0.045em; text-decoration: none; }
-.brand__paw { width: 1.8rem; height: 1.8rem; fill: currentColor; }
 .section-label { margin-bottom: 0.45rem; color: var(--blue); font-size: 0.77rem; font-weight: 750; letter-spacing: 0.1em; line-height: 1.25; text-transform: uppercase; }
 .form-stack { display: flex; flex-direction: column; gap: 1.1rem; }
 .field { display: flex; min-width: 0; flex-direction: column; gap: 0.4rem; margin: 0; border: 0; padding: 0; }
@@ -158,7 +157,7 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .route-loading__panel { min-height: 7rem; border: 1px solid #dce6e9; }
 @keyframes loading-shimmer { to { background-position: -200% 0; } }
 @media (prefers-reduced-motion: reduce) { .route-loading__bar, .route-loading__panel { animation: none; } }
-@media (max-width: 620px) { .lost-report-page__state { gap: .65rem; } .pet-trail { flex-wrap: wrap; } }
+@media (max-width: 620px) { .lost-report-page__state { gap: .65rem; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
@@ -208,9 +207,6 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .care-alert-form .field select, .care-alert-form .field textarea { width: 100%; border: 1px solid #91acb7; border-radius: var(--radius-field); background: #fff; padding: 0.7rem 0.8rem; color: var(--ink); }
 .care-alert-form .field textarea { resize: vertical; }
 .care-alert-form__public { border-radius: 10px; background: #f1f7f8; padding: 0.8rem; }
-.pet-detail-contact { margin-top: 2.8rem; border-top: 1px solid var(--line); padding-top: 1.4rem; }
-.pet-detail-contact h2 { margin-bottom: 0.35rem; }
-.pet-detail-contact > div > p { color: var(--ink-soft); }
 
 .rescue-care { margin-top: 1.5rem; }
 .rescue-care h2 { margin-bottom: 0.8rem; font-family: var(--font-body); font-size: 1.55rem; }
@@ -408,7 +404,6 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .profile-needed { border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.2rem; }
 .profile-needed p { margin: .3rem 0; }
 .account-footer { border-top: 1px solid var(--line); padding-top: 1.25rem; }
-.pet-detail-main { padding-top: 1rem; }
 #cuidados, #identidad, #fotografia, #contactos { scroll-margin-top: 100px; }
 .pet-details-editor, .pet-photo-editor, .pet-detail-contact, .care-section { margin: 0 0 1.5rem; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 1.5rem; }
 .editor-heading h2, .pet-photo-editor h2, .pet-detail-contact h2, .care-section h2 { margin-bottom: .45rem; font-family: inherit; font-size: 1.4rem; letter-spacing: -.02em; }
@@ -422,7 +417,6 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .age-options label { border: 1px solid var(--line); border-radius: 8px; padding: .35rem .6rem; }
 .age-options label:has(input:checked) { border-color: var(--blue); background: var(--blue-light); }
 .pet-details-form > .button { align-self: flex-start; margin-top: .5rem; }
-.pet-detail-contact .contact-editor { border: 0; padding: 0; }
 .contact-editor summary { display: flex; min-height: 48px; align-items: center; }
 .photo-upload-form input[type="file"] { padding: .6rem; background: #f7fafb; }
 .photo-upload-form input::file-selector-button { margin-right: .65rem; border: 1px solid #527483; border-radius: 6px; background: #fff; padding: .4rem .6rem; color: var(--ink); font: inherit; cursor: pointer; }
@@ -471,19 +465,7 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
-
-.pet-detail { width: 28px; height: 28px; flex: 0 0 auto; color: var(--blue); }
-.pet-note { display: flex; width: 100%; justify-content: center; align-items: center; gap: .8rem; color: var(--blue-deep); }
-.pet-note p { margin: 0; font-size: 1rem; text-align: center; }
-.pet-note > img { flex: 0 0 auto; width: 22px; height: 22px; }
-.pet-note .pet-detail--sparkle { width: 20px; height: 20px; }
-.pet-note--rescue { color: var(--ink); }
 .rescue-photo--image { background: #dce9ed; }
-@media (max-width: 620px) {
-  .pet-note { gap: .55rem; }
-  .pet-note p { font-size: .88rem; }
-  .pet-note > .pet-detail--sparkle { display: none; }
-}
 .field select, .phone-field__row select {
   appearance: none;
   padding-right: 2.6rem;
@@ -495,18 +477,7 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 select option:checked { background: #e2f0f4; color: #12536b; }
 .field select:focus, .phone-field__row select:focus { border-color: var(--blue); background-color: #f3f9fc; }
 .lost-board__empty { background: #f5fafc; border-color: #bed8e3; }
-.pet-note { margin: 1rem 0; border-radius: 12px; background: #f3f8fb; padding: 1.2rem; }
 @media (forced-colors: active) { .field select, .phone-field__row select { appearance: auto; background-image: none; } }
-.pet-trail { display: flex; justify-content: center; align-items: center; gap: clamp(.75rem, 3vw, 2rem); margin: 1.5rem 0 2rem; padding: 1.2rem 0; }
-.pet-trail .pet-detail { width: 44px; height: 44px; }
-.pet-trail .pet-detail--dog { transform: rotate(-8deg); }
-.pet-trail .pet-detail--cat { transform: rotate(8deg); }
-.pet-detail--sparkle { color: var(--accent-cyan); }
-.pet-detail--collar, .pet-detail--heart { color: var(--accent-violet); }
-.pet-detail--dog { color: var(--accent-cobalt); }
-.pet-detail--cat { color: var(--accent-cyan); }
-.pet-trail .pet-detail--heart { fill: #eee8fa; }
-.pet-trail .pet-detail--sparkle { width: 26px; height: 26px; fill: #e0f5fb; }
 .pet-card:nth-child(even) { border-color: #d5cbed; }
 .pet-card:nth-child(even) .pet-card__body { background: #faf8ff; }
 .pet-card:nth-child(even) .pet-card__photo { background: #efebf7; }
@@ -514,30 +485,11 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 .lost-pet-card:nth-child(even) .lost-pet-card__body { background: #f0f7ff; }
 .lost-filters { grid-template-columns: minmax(180px, 320px) minmax(0, 1fr); }
 .filter-feedback { padding-bottom: .85rem; color: var(--ink-soft); font-size: .85rem; }
-.site-footer { width: min(100% - 2.5rem, 1100px); margin: 2.5rem auto 0; border-top: 1px solid var(--line); }
-.site-footer__content { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-.site-footer__content p { margin: 0; color: var(--ink); font-weight: 650; }
-.site-footer__content > span { color: var(--ink-soft); }
-.site-footer .brand { font-size: 1.35rem; }
-.site-footer .brand__paw { width: 25px; height: 25px; }
 @media (max-width: 620px) {
-  .pet-trail { gap: .8rem; margin: 1rem 0 1.5rem; }
-  .pet-trail .pet-detail { width: 34px; height: 34px; }
-  .pet-trail .pet-detail--sparkle { width: 17px; height: 17px; }
-  .pet-trail > img { width: 20px; height: 20px; }
   .lost-filters { grid-template-columns: 1fr; }
   .filter-feedback { padding-bottom: 0; }
-  .site-footer { width: calc(100% - 1.25rem); }
-  .site-footer__content { justify-content: center; flex-direction: column; text-align: center; }
 }
 .account-shell, .lost-detail-page, .rescue-page { min-height: 0; }
-.site-footer { margin-top: 1.25rem; padding: .4rem 0 1rem; }
-.site-footer .pet-trail { margin: .15rem 0 .5rem; padding: .65rem 0; }
-.site-footer .pet-trail .pet-detail { width: 26px; height: 26px; }
-.site-footer .pet-trail .pet-detail--sparkle { width: 18px; height: 18px; }
-.site-footer__content { gap: .5rem 1rem; }
-.site-footer__content p { font-size: .9rem; }
-.site-footer__content > span { font-size: .8rem; }
 .lost-encouragement { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 0 0 2rem; }
 .lost-encouragement > div { display: flex; align-items: flex-start; gap: .8rem; border-radius: 12px; background: #f4f0fc; padding: 1.1rem; }
 .lost-encouragement > div:last-child { background: #edf7fc; }
@@ -546,9 +498,6 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 .lost-encouragement p { margin: 0; color: var(--ink-soft); font-size: .9rem; }
 @media (max-width: 620px) {
   .lost-encouragement { grid-template-columns: 1fr; gap: .8rem; margin-bottom: 1.5rem; }
-  .site-footer__content { gap: .35rem; }
-  .site-footer .brand { font-size: 1.2rem; }
-  .site-footer .brand__paw { width: 22px; height: 22px; }
 }
 .menu-toggle { display: inline-flex; min-height: 48px; align-items: center; gap: .6rem; margin-left: auto; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: .6rem .8rem; color: var(--blue-deep); font: inherit; font-weight: 700; cursor: pointer; }
 .menu-toggle:hover, .menu-toggle[aria-expanded="true"] { border-color: var(--blue); background: var(--blue-light); }
@@ -566,22 +515,8 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 .pet-details-editor .editor-heading { margin-bottom: 1rem; }
 .pet-details-editor .editor-heading h2 { margin: 0 0 .35rem; }
 .pet-details-editor .editor-heading p:last-child { margin: 0; }
-.not-found-page { display: grid; min-height: min(74svh, 780px); place-items: center; padding: 2rem 1rem; }
-.not-found-card { width: min(100%, 680px); border: 1px solid #cddde2; border-radius: 20px; background: #fff; padding: clamp(1.25rem, 5vw, 2.5rem); text-align: center; }
-.not-found-card > .brand { justify-content: center; }
-.not-found-card__illustration { display: flex; align-items: center; justify-content: center; gap: .5rem; margin: 1.8rem 0 .9rem; color: #176986; }
-.not-found-card__illustration .pet-detail--dog { width: 58px; height: 58px; }
-.not-found-card__illustration .pet-detail--sparkle { width: 25px; height: 25px; }
-.not-found-card__code { margin: 0 0 .35rem; color: #12556e; font-size: .8rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.not-found-card h1 { margin: 0 auto .6rem; font-size: clamp(1.8rem, 5vw, 2.5rem); }
-.not-found-card > p:not(.not-found-card__code) { max-width: 48ch; margin: 0 auto; color: #526a74; }
-.not-found-card__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .65rem; margin: 1.35rem 0 .5rem; }
-.not-found-card__actions .button { min-height: 48px; }
-.not-found-card__home { display: inline-flex; min-height: 44px; align-items: center; font-weight: 700; }
 @media (max-width: 620px) {
   .editor-group, .age-field { padding: .85rem; }
-  .not-found-card__actions { flex-direction: column; }
-  .not-found-card__actions .button { width: 100%; }
 }
 
 .quick-recovery { margin-top: .8rem; color: var(--blue-deep); }
