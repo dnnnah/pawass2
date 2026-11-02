@@ -1,3 +1,5 @@
+import { PetStatusBadge } from '@/features/pets/pet-status';
+import { PageFrame, PageContent, PageHeading } from '@/components/ui/page-layout';
 import { RescueQrTools } from '@/features/pets/rescue-qr-tools';
 import { getRescueQrUrl } from '@/features/lost-pets/poster-domain';
 import { getPublicPetViewHref } from '@/features/pets/pet-card-domain';
@@ -10,7 +12,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { AppHeader } from '@/features/navigation/app-header';
-import { LostReportForm, RecoverPetForm } from '@/features/lost-pets/lost-report-form';
+import { LostReportForm } from '@/features/lost-pets/lost-report-form';
+import { RecoverPetForm } from '@/features/lost-pets/recovery-forms';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
 import { createClient } from '@/lib/supabase/server';
 import { getIdentityFromClaims } from '@/lib/supabase/identity';
@@ -45,21 +48,18 @@ export default async function LostReportPage({ params }: Props) {
   const whatsapp = pet.contact_override_enabled ? pet.whatsapp_phone_override : profile?.whatsapp_phone;
 
   return (
-    <main className="account-shell">
+    <PageFrame className="account-shell">
       <AppHeader active="pets" />
-      <div className="account-main lost-report-page">
+      <PageContent className="lost-report-page">
         <Link className="back-link" href={`/mascotas/${pet.id}`}>← Volver a la ficha de {pet.name}</Link>
-        <header className={`lost-report-page__state ${activeReport ? 'lost-report-page__state--lost' : 'lost-report-page__state--home'}`}>
-          <span className="lost-report-page__state-dot" aria-hidden="true" />
-          <div><p className="eyebrow">Estado actual</p><h1>{activeReport ? `${pet.name} está reportada como perdida` : `${pet.name} está en casa`}</h1><p>{activeReport ? 'La alerta está publicada y aparece en el tablón público. Cuando vuelva, confirma su regreso aquí.' : 'La alerta pública solo se activa cuando tú decides reportar que se perdió.'}</p></div>
-        </header>
+        <PageHeading className={`lost-report-page__state ${activeReport ? 'lost-report-page__state--lost' : 'lost-report-page__state--home'}`} eyebrow="Estado actual" title={activeReport ? `${pet.name} está reportada como perdida` : `${pet.name} está en casa`} description={activeReport ? 'La alerta está publicada y aparece en el tablón público. Cuando vuelva, confirma su regreso aquí.' : 'La alerta pública solo se activa cuando tú decides reportar que se perdió.'} aside={<PetStatusBadge status={activeReport ? 'lost' : 'home'} />} />
         {code?.code && <Link className="button button--outline lost-page-view-link" href={getPublicPetViewHref(code.code, Boolean(activeReport))}>Ver ficha pública</Link>}
         <section className="lost-report-page__form" aria-labelledby="lost-form-heading"><header><span className="eyebrow">{activeReport ? 'Alerta pública activa' : 'Ayúdale a volver a casa'}</span><h2 id="lost-form-heading">{activeReport ? 'Editar datos del reporte' : 'Reportar que se perdió'}</h2><p>{activeReport ? 'Actualiza la última ubicación, el momento aproximado y los detalles visibles para quien pueda encontrarla.' : 'La publicación es pública. Revisa el aviso de privacidad y confirma antes de compartir los datos.'}</p></header><LostReportForm petId={pet.id} report={activeReport} /></section>
         {activeReport && <LostPosterDisclosure><LostPosterPanel pet={pet} code={code?.code || ''} photoUrl={photoUrl} phone={phone || null} whatsapp={whatsapp || null} report={activeReport} alerts={(alerts || []) as CareAlertRecord[]} /></LostPosterDisclosure>}
         {activeReport && <section className="lost-report-page__recovery" id="confirmar-regreso" aria-labelledby="recovery-heading"><div><span className="eyebrow">¿Ya se reunió con su familia?</span><h2 id="recovery-heading">Confirma que ya está en casa</h2><p>Esto cerrará la alerta pública, retirará la foto reciente y mostrará el aviso de regreso en su QR durante 30 días.</p></div><RecoverPetForm report={activeReport} /></section>}
         {code?.code && <RescueQrTools url={getRescueQrUrl(code.code, getSiteUrl())} code={code.code} name={pet.name} />}
 
-      </div>
-    </main>
+      </PageContent>
+    </PageFrame>
   );
 }

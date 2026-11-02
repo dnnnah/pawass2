@@ -1,10 +1,13 @@
 'use client';
+import { FormGrid } from '@/components/ui/form-layout';
+
+import './lost-report-form.css';
 
 import { Button } from '@/components/ui/button';
 import { FormMessage } from '@/components/ui/form-message';
 
-import { useActionState, useId, useState, useTransition } from 'react';
-import { createLostReport, recoverPet, updateLostReport } from './actions';
+import { useActionState, useState, useTransition } from 'react';
+import { createLostReport, updateLostReport } from './actions';
 import type { LostReportRow } from './lost-report-state';
 import type { FormState } from '@/features/profile/actions';
 import { convertImageToWebp } from '@/lib/image';
@@ -39,7 +42,7 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
         {report ? <input type="hidden" name="reportId" value={report.id} /> : <input type="hidden" name="petId" value={petId} />}
         {!report && <div className="lost-public-notice"><strong>La alerta será pública e indexable.</strong><p>Mostrará el nombre, los contactos de rescate, las alertas ya autorizadas para el QR y los detalles que agregues aquí. Si no indicas ubicación, aparecerá “Ubicación pendiente”.</p><label className="consent-check"><input type="checkbox" name="publicConsent" required /><span>Entiendo qué información se publicará y acepto crear la alerta.</span></label></div>}
         <label className="field"><span>Última ubicación vista <em>opcional</em></span><input name="lastSeenLocation" maxLength={160} defaultValue={report?.last_seen_location || ''} placeholder="Ciudad, colonia o zona" /></label>
-        <fieldset className="lost-time-fields"><legend>Cuándo se perdió <em>opcional</em></legend><div className="form-grid form-grid--two"><label className="field"><span>Día aproximado</span><input type="date" name="lastSeenDate" defaultValue={lastSeenDate} /></label><label className="field"><span>Hora aproximada</span><input type="time" name="lastSeenTime" defaultValue={lastSeenTime} /></label></div><p>Completa el día y la hora, o deja ambos campos vacíos.</p></fieldset>
+        <fieldset className="lost-time-fields"><legend>Cuándo se perdió <em>opcional</em></legend><FormGrid columns={2}><label className="field"><span>Día aproximado</span><input type="date" name="lastSeenDate" defaultValue={lastSeenDate} /></label><label className="field"><span>Hora aproximada</span><input type="time" name="lastSeenTime" defaultValue={lastSeenTime} /></label></FormGrid><p>Completa el día y la hora, o deja ambos campos vacíos.</p></fieldset>
         <label className="field"><span>¿Qué llevaba puesto? <em>opcional</em></span><input name="wearing" maxLength={160} defaultValue={report?.wearing || ''} placeholder="Ej. Collar azul y pechera roja" /></label>
         <label className="field"><span>Qué hacer si la ves <em>opcional</em></span><textarea name="message" maxLength={500} rows={3} defaultValue={report?.message || ''} placeholder="Ej. No la persigas. Llámame y mantén la distancia; se asusta si intentan cargarla." /></label>
         <label className="field"><span>Recompensa informativa <em>opcional</em></span><input name="reward" inputMode="numeric" pattern="[0-9]*" maxLength={100} value={reward} onChange={(event) => { if (/^[0-9]*$/.test(event.target.value)) setReward(event.target.value); }} placeholder="Ej. 1000" /><small>Solo dígitos, sin símbolos ni decimales.</small>{legacyReward && <small>La recompensa anterior contiene texto. Escribe una cantidad en dígitos o deja el campo vacío para retirarla al guardar.</small>}</label>
@@ -63,23 +66,4 @@ function localTimePart(value: string): string {
   const date = new Date(value);
   if (!Number.isFinite(date.getTime())) return '';
   return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-}
-
-export function RecoverPetForm({ report }: { report: Pick<LostReportRow, 'id'> }) {
-  const [state, action, pending] = useActionState(recoverPet, initialState);
-  return (
-    <form action={action} className="recovery-form">
-      <input type="hidden" name="reportId" value={report.id} />
-      <label className="consent-check"><input type="checkbox" name="confirmRecovery" required /><span>Confirmo que esta mascota ya está en casa.</span></label>
-      <FormMessage>{state.message}</FormMessage>
-      <Button fullWidth type="submit" disabled={pending}>{pending ? 'Cerrando alerta…' : 'Marcar como recuperada'}</Button>
-    </form>
-  );
-}
-
-
-export function QuickRecovery({ reportId }: { reportId: string }) {
-  const [open, setOpen] = useState(false);
-  const panelId = useId();
-  return <div className="quick-recovery"><Button variant="outline" className="recovery-trigger" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(!open)}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 15l2 2 4-4" /></svg>Ya está en casa</Button>{open && <div id={panelId}><p>Se cerrará la búsqueda pública y se mostrará el aviso de regreso durante 30 días.</p><RecoverPetForm report={{ id: reportId }} /><Button variant="text" onClick={() => setOpen(false)}>Cancelar</Button></div>}</div>;
 }

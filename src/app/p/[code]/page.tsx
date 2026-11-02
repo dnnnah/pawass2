@@ -1,3 +1,5 @@
+import '@/features/rescue/rescue-pages.css';
+import { PageFrame, PawPlaceholder } from '@/components/ui/page-layout';
 import { CareSeverityBadge } from '@/features/brand/status-badge';
 import { PetNote } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
@@ -46,12 +48,12 @@ export default async function RescuePage({ params }: Props) {
   if (error || !pet?.rescue_phone || !pet.whatsapp_phone) notFound();
 
   return (
-    <main className="rescue-page">
+    <PageFrame className="rescue-page">
       <header className="rescue-header"><BrandMark /><span>Ficha de rescate</span></header>
       {status?.lost && <div className="rescue-state-banner rescue-state-banner--lost"><strong>Mascota perdida</strong><span>Su familia busca ayuda para encontrarla.</span><Link href={`/perdidas/${code}`}>Ver alerta y ubicación</Link></div>}
       {!status?.lost && showHomeNotice && <div className="rescue-state-banner rescue-state-banner--home"><strong>Ya está en casa</strong><span>Gracias por ayudar a reunir a {pet.pet_name} con su familia.</span></div>}
       <article className="rescue-card">
-        <div className={`rescue-photo ${photoUrl ? 'rescue-photo--image' : 'rescue-photo--empty'}`}>{photoUrl ? <Image src={photoUrl} alt={`Foto de ${pet.pet_name}`} width={560} height={420} unoptimized /> : <PawIllustration />}</div>
+        <div className={`rescue-photo ${photoUrl ? 'rescue-photo--image' : 'rescue-photo--empty'}`}>{photoUrl ? <Image src={photoUrl} alt={`Foto de ${pet.pet_name}`} width={560} height={420} unoptimized /> : <PawPlaceholder />}</div>
         <div className="rescue-card__body">
           <h1>{pet.pet_name}</h1>
           <p className="species-label">{pet.species === 'perro' ? 'Perro' : 'Gato'} <span aria-hidden="true">·</span> Código {code}</p>
@@ -76,14 +78,10 @@ export default async function RescuePage({ params }: Props) {
         </div>
       </article>
       <PetNote name={pet.pet_name} rescue={!showHomeNotice || Boolean(status?.lost)} recovered={showHomeNotice && !status?.lost} />
-    </main>
+    </PageFrame>
   );
 }
 
 function SetupNotice() {
   return <main className="setup-page"><BrandMark /><h1>Ficha temporalmente no disponible</h1><p>La aplicación necesita conexión con el proyecto de datos.</p></main>;
-}
-
-function PawIllustration() {
-  return <svg viewBox="0 0 180 180"><ellipse cx="45" cy="48" rx="18" ry="25" transform="rotate(-24 45 48)"/><ellipse cx="91" cy="31" rx="18" ry="25"/><ellipse cx="137" cy="48" rx="18" ry="25" transform="rotate(24 137 48)"/><ellipse cx="158" cy="91" rx="15" ry="21" transform="rotate(45 158 91)"/><path d="M90 77c-26 0-61 41-50 64 9 19 34 2 50 2s41 17 50-2c11-23-24-64-50-64Z"/></svg>;
 }

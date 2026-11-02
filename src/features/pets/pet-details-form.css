@@ -1,0 +1,23 @@
+
+.pet-details-form { margin-top: .8rem; }
+.age-field { gap: .75rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.age-field legend { padding-right: .5rem; }
+.age-options { display: flex; flex-wrap: wrap; }
+.age-options label { display: inline-flex; min-height: 44px; align-items: center; gap: .45rem; font-size: .88rem; }
+.age-options input { width: 18px; height: 18px; min-height: 0; flex: 0 0 18px; margin: 0; padding: 0; accent-color: var(--blue); }
+.editor-group { display: grid; min-width: 0; gap: 1.1rem; margin: 0; }
+.editor-group legend { margin-bottom: .65rem; color: var(--ink); font-size: 1rem; font-weight: 750; }
+.editor-group .form-description { margin-bottom: .1rem; }
+.age-field { margin: .5rem 0; }
+.age-field legend { margin-bottom: .5rem; }
+.age-options { gap: .4rem; }
+.age-options label { border: 1px solid var(--line); border-radius: 8px; padding: .35rem .6rem; }
+.age-options label:has(input:checked) { border-color: var(--blue); background: var(--blue-light); }
+.pet-details-form > .button { align-self: flex-start; margin-top: .5rem; }
+.editor-group { border: 1px solid #d5e1e5; border-radius: 13px; background: #f8fbfc; padding: 1rem; }
+.editor-group legend { margin-left: -.35rem; padding: 0 .35rem; }
+.age-field { border: 1px solid #d5e1e5; border-radius: 13px; background: #f8fbfc; padding: 1rem; }
+.age-field legend { padding: 0 .35rem; }
+@media (max-width: 620px) {
+  .editor-group, .age-field { padding: .85rem; }
+}

@@ -1,0 +1,9 @@
+
+.profile-form { gap: 1.25rem; }
+
+.account-settings { max-width: 900px; }
+.account-contact-panel { box-shadow: 0 10px 28px rgba(26, 66, 84, .06); }
+.account-contact-panel .profile-form { gap: 1.35rem; }
+.account-privacy-note { margin: 1.8rem 0 2.4rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 1.3rem 0; }
+.account-privacy-note h2 { margin-bottom: .4rem; font-size: 1.3rem; }
+.account-privacy-note p { margin: 0; color: var(--ink-soft); }

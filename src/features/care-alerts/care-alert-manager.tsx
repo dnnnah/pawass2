@@ -1,4 +1,9 @@
 'use client';
+import { FormGrid } from '@/components/ui/form-layout';
+
+import './care-alerts-pages.css';
+
+import { SectionHeading } from '@/components/ui/page-layout';
 
 import { Button } from '@/components/ui/button';
 import { FormMessage } from '@/components/ui/form-message';
@@ -37,10 +42,7 @@ const severityLabels: Record<CareAlertSeverity, string> = {
 export function CareAlertManager({ petId, alerts }: { petId: string; alerts: CareAlertRecord[] }) {
   return (
     <section className="care-section" aria-labelledby="care-heading">
-      <div className="section-title">
-        <div><h2 id="care-heading">Alertas de cuidado</h2><p>Elige qué necesita saber quien encuentre a tu mascota.</p></div>
-        <span className="section-count">{alerts.length} {alerts.length === 1 ? 'alerta' : 'alertas'}</span>
-      </div>
+      <SectionHeading headingId="care-heading" title="Alertas de cuidado" description="Elige qué necesita saber quien encuentre a tu mascota." aside={<span className="section-count">{alerts.length} {alerts.length === 1 ? 'alerta' : 'alertas'}</span>} />
       <p className="care-privacy-note">El ojo controla si la alerta y sus instrucciones son públicas en el QR y el cartel. El lápiz abre su edición. Las alertas con el ojo tachado permanecen privadas.</p>
       {alerts.length > 0 ? (
         <ol className="care-alert-list">
@@ -82,7 +84,7 @@ function CareAlertForm({ petId, alert }: { petId: string; alert?: CareAlertRecor
     <form action={action} className="form-stack care-alert-form">
       <input type="hidden" name="petId" value={petId} />
       {alert && <input type="hidden" name="alertId" value={alert.id} />}
-      <div className="form-grid form-grid--two">
+      <FormGrid columns={2}>
         <label className="field" htmlFor={`${formId}-category`}>
           <span>Tipo</span>
           <select id={`${formId}-category`} name="category" value={category} onChange={(event) => {
@@ -105,7 +107,7 @@ function CareAlertForm({ petId, alert }: { petId: string; alert?: CareAlertRecor
             <option value="other">Otra</option>
           </select>
         </label>
-      </div>
+      </FormGrid>
       {custom && (
         <label className="field" htmlFor={`${formId}-label`}>
           <span>Nombre de la alerta</span>

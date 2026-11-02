@@ -1,0 +1,26 @@
+
+.lost-time-fields { display: grid; gap: .55rem; margin: 0; border: 1px solid #d9a9ad; border-radius: 12px; background: #fff; padding: .9rem; }
+.lost-time-fields legend { padding: 0 .35rem; font-weight: 750; }
+.lost-time-fields > p { margin: 0; color: var(--ink-soft); font-size: .84rem; }
+.lost-report-page { padding-top: 1.2rem; }
+.lost-report-page__state { display: flex; align-items: flex-start; gap: .9rem; margin: 1.1rem 0 1.3rem; border: 1px solid #bdd5df; border-radius: 16px; background: #edf5f7; padding: clamp(1rem, 3vw, 1.35rem); }
+.lost-report-page__state--lost { border-color: #dfa9ae; background: var(--danger-soft); color: #77252d; }
+.lost-report-page__state .eyebrow, .lost-report-page__recovery .eyebrow, .lost-report-page__form .eyebrow { margin: 0 0 .3rem; color: var(--blue-deep); font-size: .76rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.lost-report-page__state--lost .eyebrow { color: #77252d; }
+.lost-report-page__state h1 { margin: 0 0 .35rem; font-size: clamp(1.55rem, 4vw, 2.15rem); }
+.lost-report-page__state p:last-child { margin: 0; color: inherit; }
+.lost-report-page__recovery, .lost-report-page__form { margin: 1rem 0; border: 1px solid var(--line); border-radius: 16px; background: #fff; padding: clamp(1rem, 3vw, 1.4rem); }
+.lost-report-page__recovery { border-color: #bdd5df; background: #f4f9fa; }
+.lost-report-page__recovery h2, .lost-report-page__form h2 { margin: 0 0 .35rem; font-size: clamp(1.3rem, 3vw, 1.65rem); }
+.lost-report-page__recovery p, .lost-report-page__form header > p { margin: 0 0 1rem; color: var(--ink-soft); }
+.lost-report-page__recovery .recovery-form { max-width: 560px; margin: 0; }
+@media (max-width: 620px) { .lost-report-page__state { gap: .65rem; } }
+.lost-report-editor { margin: 0 0 .65rem; }
+.lost-report-editor > summary { display: flex; width: 100%; list-style: none; }
+.lost-report-editor > summary::-webkit-details-marker { display: none; }
+.lost-report-editor[open] > summary { margin-bottom: 1rem; }
+.lost-report-form { border: 1px solid #d9a9ad; border-radius: 14px; background: #fffafb; padding: 1rem; }
+.lost-public-notice { border-radius: 10px; background: var(--danger-soft); padding: .9rem; color: #79242c; font-size: .87rem; }
+.lost-public-notice p { margin: .25rem 0 .65rem; color: #54282c; }
+.lost-public-notice .consent-check { font-size: .83rem; }
+.lost-page-view-link { margin-bottom: 1.2rem; }

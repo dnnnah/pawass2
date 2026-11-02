@@ -1,3 +1,43 @@
+
+.lost-detail-photo { display: grid; min-height: 250px; place-items: center; background: #fcebed; color: #9d3740; }
+.lost-detail-photo { height: 250px; overflow: hidden; }
+.lost-detail-photo img { width: 100%; height: 100%; object-fit: contain; }
+.lost-detail-photo svg { width: 92px; fill: currentColor; }
+.lost-detail-wrap { width: min(100% - 2.5rem, 920px); margin: 2rem auto; }
+.lost-detail-banner { display: flex; align-items: center; gap: .8rem; margin-bottom: 1rem; border-radius: 12px; background: var(--danger-soft); padding: .75rem 1rem; color: #70232a; }
+.lost-detail-banner > span:last-child { font-size: .86rem; }
+.lost-detail-card { display: grid; grid-template-columns: minmax(210px, .7fr) minmax(0, 1.3fr); overflow: hidden; border: 1px solid #d7a8ac; border-radius: 18px; background: #fff; }
+.lost-detail-body { padding: clamp(1.2rem, 4vw, 2.2rem); }
+.lost-detail-body h1 { margin: 0 0 .35rem; }
+.lost-detail-meta { margin: 0 0 1.2rem; color: var(--ink-soft); }
+.lost-detail-location { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: .9rem 0; }
+.lost-detail-location h2, .lost-detail-section h2, .lost-detail-care h2, .lost-detail-contact h2 { margin-bottom: .3rem; font-family: inherit; font-size: 1rem; letter-spacing: 0; }
+.lost-detail-location p, .lost-detail-section p { margin-bottom: .2rem; color: var(--ink); }
+.lost-detail-location time { color: var(--ink-soft); font-size: .82rem; }
+.lost-detail-section { margin-top: 1rem; }
+.lost-detail-care { margin-top: 1.3rem; }
+.lost-detail-care ul { margin: .5rem 0 0; padding: 0; list-style: none; }
+.lost-detail-care li { border-top: 1px solid var(--line); padding: .7rem 0; }
+.lost-detail-care li > span:not(.status-badge):not(.status-badge__label) { float: right; color: var(--ink-soft); font-size: .78rem; font-weight: 750; }
+.lost-detail-care li p { margin: .3rem 0 0; font-size: .88rem; }
+.lost-detail-contact { display: grid; gap: .5rem; margin-top: 1.5rem; }
+.lost-detail-contact h2 { margin-bottom: 0; }
+.lost-detail-contact .whatsapp-actions { margin: 0; }
+.lost-detail-body .privacy-note { margin-top: 1rem; }
+
+@media (max-width: 760px) {
+  .lost-detail-card { grid-template-columns: 1fr; }
+  .lost-detail-photo { min-height: 160px; }
+  .lost-detail-photo svg { width: 70px; }
+  .lost-detail-wrap { width: min(100% - 1.2rem, 920px); margin: 1rem auto; }
+  .lost-detail-banner { align-items: flex-start; flex-direction: column; gap: .3rem; }
+}
+.lost-detail-photo { height: 420px; min-height: 320px; background: #dce9ed; color: #527483; }
+.lost-detail-card { border-color: var(--line); }
+@media (max-width: 620px) {
+  .lost-detail-photo { height: 260px; min-height: 0; }
+}
+.lost-detail-care .status-badge { margin: .35rem 0 .35rem .5rem; vertical-align: middle; }
 .lost-detail-page { min-height: 0; }
 
 .lost-detail-wrap {

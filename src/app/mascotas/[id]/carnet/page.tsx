@@ -1,3 +1,4 @@
+import { PageFrame, PageContent, PageHeading } from '@/components/ui/page-layout';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
@@ -38,21 +39,19 @@ export default async function HealthRecordPage({ params }: Props) {
   ]);
 
   return (
-    <main className="account-shell">
+    <PageFrame className="account-shell">
       <AppHeader active="pets" />
-      <div className="account-main health-record-main">
+      <PageContent className="health-record-main">
         <Link className="back-link" href={`/mascotas/${pet.id}`}>← Volver a la ficha de {pet.name}</Link>
-        <header className="health-record-hero">
-          <div><h1>Carnet de salud de {pet.name}</h1><p className="health-record-hero__species">{pet.species === 'perro' ? 'Perro' : 'Gato'} · Carnet privado</p><p>Guarda y consulta vacunas, desparasitaciones, intervenciones y documentos en un solo lugar.</p></div>
-        </header>
+        <PageHeading title={`Carnet de salud de ${pet.name}`} description="Guarda y consulta vacunas, desparasitaciones, intervenciones y documentos en un solo lugar." aside={<span className="section-count">{pet.species === 'perro' ? 'Perro' : 'Gato'} · Carnet privado</span>} />
         <HealthRecordManager
           petId={pet.id}
           species={pet.species as PetSpecies}
           records={(records || []) as HealthRecordRow[]}
           documents={(documents || []) as HealthDocumentRow[]}
         />
-      </div>
-    </main>
+      </PageContent>
+    </PageFrame>
   );
 }
 

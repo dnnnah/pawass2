@@ -1,3 +1,5 @@
+import '@/features/pets/pets-dashboard.css';
+import { PageFrame, PageContent, PageHeading } from '@/components/ui/page-layout';
 import { PetNote, PetTrail } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -37,10 +39,10 @@ export default async function PetsPage() {
   const photoUrls = await createPhotoUrls('pet-photos', (pets || []).map((pet) => pet.primary_photo_path), supabase);
   const photoUrlByPet = new Map((pets || []).map((pet) => [pet.id, pet.primary_photo_path ? photoUrls.get(pet.primary_photo_path) || null : null] as const));
   return (
-    <main className="account-shell">
+    <PageFrame className="account-shell">
       <AppHeader active="pets" />
-      <div className="account-main pets-dashboard">
-        <header className="welcome"><div><h1 id="pets-heading">Mis mascotas</h1><p>{profile?.first_name && <>Hola, <strong>{profile.first_name}</strong>. </>}Sus fichas, contactos y cuidados, siempre a la mano.</p></div><span className="section-count">{(pets || []).length} {(pets || []).length === 1 ? 'mascota' : 'mascotas'}</span></header>
+      <PageContent className="pets-dashboard">
+        <PageHeading headingId="pets-heading" title="Mis mascotas" description={<>{profile?.first_name && <>Hola, <strong>{profile.first_name}</strong>. </>}Sus fichas, contactos y cuidados, siempre a la mano.</>} aside={<span className="section-count">{(pets || []).length} {(pets || []).length === 1 ? 'mascota' : 'mascotas'}</span>} />
         <PetTrail />
         <section className="pets-section" aria-labelledby="pets-heading">
           {!profileComplete && <div className="profile-needed"><strong>Completa tus contactos para activar una ficha QR.</strong><p>Guarda tu nombre y teléfono de rescate antes de registrar una mascota.</p><Link href="/cuenta">Ir a Mi cuenta</Link></div>}
@@ -51,8 +53,8 @@ export default async function PetsPage() {
           {profileComplete ? <PetCreateControl phone={profile!.rescue_phone!} whatsapp={profile!.whatsapp_phone!} hasPets={Boolean((pets || []).length)} /> : (pets || []).length === 0 ? <p className="empty-pets">Cuando completes tus contactos, podrás crear una ficha de rescate.</p> : null}
         </section>
         <PetNote /><p className="account-footer">Las alertas de cuidado se editan desde la ficha privada de cada mascota. Solo aparecen en el QR cuando las autorizas.</p>
-      </div>
-    </main>
+      </PageContent>
+    </PageFrame>
   );
 }
 

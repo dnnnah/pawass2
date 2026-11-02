@@ -1,4 +1,5 @@
 'use client';
+import './navigation.css';
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';

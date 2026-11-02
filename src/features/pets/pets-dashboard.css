@@ -1,0 +1,21 @@
+
+.pet-list { margin-bottom: 1rem; }
+.pets-section { margin-top: 0; }
+.pet-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; margin: 1.3rem 0 1.5rem; }
+
+@media (max-width: 620px) {
+  .pet-list { grid-template-columns: 1fr; gap: 1rem; }
+}
+.pet-list { gap: 1.5rem; }
+@media (max-width: 620px) {
+  .pet-list { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+
+.profile-needed p { color: var(--ink-soft); }
+.profile-needed a { font-weight: 700; }
+.account-footer { margin-top: 2rem; color: var(--ink-soft); font-size: 0.85rem; }
+.profile-needed { margin-bottom: 1.2rem; border-color: #b9cbd1; background: #f8fbfc; }
+.account-footer { margin-bottom: 1.3rem; }
+.profile-needed { border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.2rem; }
+.profile-needed p { margin: .3rem 0; }
+.account-footer { border-top: 1px solid var(--line); padding-top: 1.25rem; }

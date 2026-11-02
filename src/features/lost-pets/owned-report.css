@@ -1,0 +1,3 @@
+
+.lost-card-owner { margin-top: 1rem; border-top: 1px solid var(--line); padding-top: .8rem; }
+.lost-card-owner > span { display: block; color: var(--ink-soft); font-size: .8rem; margin-bottom: .5rem; }

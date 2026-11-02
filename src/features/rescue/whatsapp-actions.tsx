@@ -1,3 +1,4 @@
+import './whatsapp-actions.css';
 export function WhatsAppActions({ name, code, whatsapp, urgent = false, callPhone }: { name: string; code: string; whatsapp: string; urgent?: boolean; callPhone?: string }) {
   const text = encodeURIComponent(`Hola, encontré a ${name} (${code}). ¿Puedes ayudarme a reunirle contigo?`);
   const number = whatsapp.replace(/\D/g, '');

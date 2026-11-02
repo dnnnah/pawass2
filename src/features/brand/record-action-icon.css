@@ -5,3 +5,6 @@
 .record-icon-button:disabled { opacity: .55; cursor: wait; }
 .record-heading-actions { display: flex; align-items: start; flex-wrap: wrap; gap: .5rem; }
 .record-private { display: inline-flex; align-items: center; gap: .35rem; min-height: 44px; color: var(--ink-soft); font-size: .85rem; }
+
+.record-heading-actions form { margin: 0; }
+.record-heading-actions .form-message { max-width: 30ch; font-size: .85rem; }

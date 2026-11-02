@@ -1,3 +1,5 @@
+import '@/features/lost-pets/lost-board.css';
+import { PageFrame, PageContent, PageHeading, EmptyState } from '@/components/ui/page-layout';
 import { getOwnedReports } from '@/features/lost-pets/owned-reports';
 import { LostBoardMessages } from '@/features/lost-pets/lost-board-messages';
 import { LostSpeciesFilter } from '@/features/lost-pets/lost-species-filter';
@@ -43,17 +45,17 @@ export default async function LostPetsPage({ searchParams }: Props) {
     photo_url: pet.photo_path ? photoUrls.get(pet.photo_path) || null : fallbackUrls.get(fallbackPaths.get(pet.public_code) || '') || null,
   }));
   return (
-    <main className="account-shell public-lost-shell">
+    <PageFrame className="account-shell public-lost-shell">
         <AppHeader active="lost" signedIn={Boolean(identity)} />
-      <div className="account-main lost-board">
-        <header className="lost-board__heading"><div><h1>Mascotas perdidas</h1><p>Ayúdanos a compartir estas alertas activas y a reunir a cada mascota con su familia.</p></div></header>
+      <PageContent className="lost-board">
+        <PageHeading title="Mascotas perdidas" description="Ayúdanos a compartir estas alertas activas y a reunir a cada mascota con su familia." />
         <PetTrail />
         <LostBoardMessages />
         <LostSpeciesFilter species={species} />
         <div className="lost-results-heading"><h2>Alertas de búsqueda</h2><p role="status">{pets.length} {pets.length === 1 ? 'alerta activa' : 'alertas activas'}{species ? ' con estos filtros' : ''}</p>{species && <Link href="/perdidas">Limpiar filtros</Link>}</div>
-        {petsWithUrls.length ? <div className="lost-pet-list">{petsWithUrls.map((pet) => <LostPetCard key={pet.public_code} pet={pet} ownedReport={ownedReports.get(pet.public_code)} />)}</div> : <section className="lost-board__empty"><h2>{species ? 'No encontramos alertas con esos filtros' : 'No hay búsquedas activas por ahora'}</h2><p>{species ? 'Prueba otra especie o consulta todas las alertas.' : 'Aquí aparecen las mascotas con una alerta de pérdida activa. Cuando vuelven a casa, dejan el tablón.'}</p>{species && <Link href="/perdidas" className="button button--outline">Ver todas las alertas</Link>}</section>}
+        {petsWithUrls.length ? <div className="lost-pet-list">{petsWithUrls.map((pet) => <LostPetCard key={pet.public_code} pet={pet} ownedReport={ownedReports.get(pet.public_code)} />)}</div> : <EmptyState title={species ? 'No encontramos alertas con esos filtros' : 'No hay búsquedas activas por ahora'} description={species ? 'Prueba otra especie o consulta todas las alertas.' : 'Aquí aparecen las mascotas con una alerta de pérdida activa. Cuando vuelven a casa, dejan el tablón.'} action={species && <Link href="/perdidas" className="button button--outline">Ver todas las alertas</Link>} />}
         <p className="lost-board__privacy">Las fichas muestran solo datos de rescate y los detalles que el tutor decidió publicar.</p>
-      </div>
-    </main>
+      </PageContent>
+    </PageFrame>
   );
 }

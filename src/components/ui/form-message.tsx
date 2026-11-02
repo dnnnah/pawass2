@@ -1,3 +1,4 @@
+import './forms.css';
 import type { ReactNode } from 'react';
 
 type FormMessageProps = {

@@ -1,5 +1,7 @@
 import { EditorIcon } from './editor-icon';
-import { QuickRecovery } from '@/features/lost-pets/lost-report-form';
+import { PetStatusBadge } from './pet-status';
+import { PawPlaceholder } from '@/components/ui/page-layout';
+import { QuickRecovery } from '@/features/lost-pets/recovery-forms';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
@@ -18,12 +20,12 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
   return (
     <article className="pet-card">
       <div className="pet-card__photo" role={photoUrl ? undefined : 'img'} aria-label={photoUrl ? undefined : `Aún no hay una foto registrada de ${pet.name}`}>
-        {photoUrl ? <Image src={photoUrl} width={360} height={240} alt={`Foto de ${pet.name}`} unoptimized /> : <><Image src="/paw-mark.svg" width={64} height={64} alt="" aria-hidden="true" /><span>Sin foto registrada</span></>}
+        {photoUrl ? <Image src={photoUrl} width={360} height={240} alt={`Foto de ${pet.name}`} unoptimized /> : <><PawPlaceholder /><span>Sin foto registrada</span></>}
       </div>
       <div className="pet-card__body">
         <div className="pet-card__heading">
           <div><h2>{pet.name}</h2><p>{pet.species === 'perro' ? 'Perro' : 'Gato'} <span aria-hidden="true">·</span> <span className="code-pill">{code}</span></p></div>
-          <span className={`pet-state ${isLost ? 'pet-state--lost' : ''}`}><span aria-hidden="true" />{isLost ? 'Perdida' : 'En casa'}</span>
+          <PetStatusBadge status={isLost ? 'lost' : 'home'} />
         </div>
         <div className="pet-card__navigation">
           <Link className="button button--primary" href={currentPublicView}>Ver ficha pública</Link>

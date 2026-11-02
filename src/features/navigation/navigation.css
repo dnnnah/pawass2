@@ -19,10 +19,3 @@
   .nav-link { line-height: 1.2; }
   .menu-toggle { min-height: 44px; padding: .45rem .65rem; }
 }
-
-.route-loading { display: grid; gap: 1rem; max-width: 900px; margin: 2rem auto; padding: 1.25rem; }
-.route-loading__bar, .route-loading__panel { border-radius: 12px; background: linear-gradient(90deg, #edf3f5, #f7fafb, #edf3f5); background-size: 200% 100%; animation: loading-shimmer 1.5s ease-in-out infinite; }
-.route-loading__bar { width: min(60%, 360px); height: 1.5rem; }
-.route-loading__panel { min-height: 7rem; border: 1px solid #dce6e9; }
-@keyframes loading-shimmer { to { background-position: -200% 0; } }
-@media (prefers-reduced-motion: reduce) { .route-loading__bar, .route-loading__panel { animation: none; } }

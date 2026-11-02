@@ -3,10 +3,6 @@
 .health-record-nav a span { display: inline-grid; min-width: 1.55rem; min-height: 1.55rem; place-items: center; border-radius: 999px; background: var(--blue-light); padding: 0 .25rem; color: var(--blue-deep); }
 
 .health-record-main { padding-bottom: 1rem; }
-.health-record-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin: 1.3rem 0 1.8rem; }
-.health-record-hero__species { margin-bottom: .45rem; color: var(--blue-deep); font-size: .9rem; font-weight: 700; }
-.health-record-hero h1 { margin-bottom: .55rem; font-size: clamp(2rem, 5vw, 3.2rem); }
-.health-record-hero p:last-child { max-width: 62ch; margin-bottom: 0; color: var(--ink-soft); }
 .health-record-nav { display: flex; flex-wrap: wrap; gap: .4rem .65rem; margin-bottom: 1.4rem; border-bottom: 1px solid var(--line); padding: 0 0 1rem; }
 .health-record-nav a { display: inline-flex; min-height: 44px; align-items: center; gap: .45rem; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: .45rem .75rem; font-weight: 700; text-decoration: none; }
 .health-record-nav a:hover { border-color: var(--blue); background: var(--blue-light); }
@@ -37,9 +33,6 @@
 .health-delete-control p { margin-bottom: .55rem; color: var(--ink-soft); font-size: .9rem; }
 .health-danger-action { border-color: #ddb6ba; color: #8d2630; }
 .health-danger-action:hover { border-color: #b6323c; background: #fcebed; }
-.health-empty { display: grid; gap: .2rem; padding: .85rem 0 1rem; }
-.health-empty p { margin: 0; font-weight: 750; }
-.health-empty span { color: var(--ink-soft); font-size: .9rem; }
 .health-add-panel { margin-top: .8rem; }
 .health-add-panel > summary { width: fit-content; cursor: pointer; list-style: none; }
 .health-add-panel > summary::-webkit-details-marker { display: none; }
@@ -47,7 +40,6 @@
 .health-form { display: grid; gap: 1rem; border: 1px solid #d4e2e7; border-radius: 14px; background: var(--surface); padding: clamp(1rem, 3vw, 1.4rem); }
 .health-form__title h3 { margin: 0 0 .2rem; font-size: 1.15rem; }
 .health-form__title p { margin: 0; color: var(--ink-soft); font-size: .9rem; }
-.health-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .health-form__wide { grid-column: 1 / -1; }
 .health-form .field small { display: block; margin-top: .25rem; color: var(--ink-soft); line-height: 1.45; }
 .health-confirm-date { display: flex; align-items: flex-start; gap: .65rem; border-radius: 10px; background: #eaf3f6; padding: .85rem; font-weight: 700; }
@@ -57,8 +49,6 @@
 .health-suggestion p:first-child { color: var(--ink); }
 .health-suggestion .button { width: fit-content; min-height: 42px; margin-top: .35rem; }
 .health-form__actions { display: flex; flex-wrap: wrap; gap: .7rem; }
-.health-form-message { margin: 0; color: #8d2630; font-weight: 700; }
-.health-form-message--success { color: var(--blue-deep); }
 .health-document-entry { display: grid; justify-items: start; gap: .35rem; padding: 1.1rem 0; }
 .health-document-category { margin: 0; color: var(--blue-deep); font-size: .82rem; font-weight: 750; }
 .health-document-entry h3 { margin: 0; overflow-wrap: anywhere; font-size: 1.05rem; }
@@ -68,12 +58,9 @@
 .health-form--compact { margin-top: .65rem; }
 .health-record-privacy { margin: 1.25rem 0 0; border-radius: 12px; background: #eaf3f6; padding: 1rem; color: #315d70; font-size: .9rem; }
 @media (max-width: 620px) {
-  .health-record-hero { margin-top: 1rem; }
-  .health-record-hero__species { font-size: .82rem; }
   .health-record-nav { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
   .health-record-nav a { min-height: 48px; justify-content: space-between; padding: .5rem .6rem; font-size: .83rem; }
   .health-panel__heading { align-items: flex-start; flex-direction: column; }
-  .health-form-grid { grid-template-columns: 1fr; gap: .85rem; }
   .health-form__wide { grid-column: auto; }
   .health-record-entry__top { flex-direction: column; gap: .55rem; }
   .health-delete-control > div { margin-left: -1rem; }
@@ -92,7 +79,6 @@
 .health-record-actions summary.button::-webkit-details-marker, .health-document-entry summary.button::-webkit-details-marker { display: none; }
 .health-delete-control > summary.button { border-color: #ddb6ba; color: #8d2630; }
 .health-delete-control > summary.button:hover { background: #fcebed; }
-.health-empty { margin-top: .45rem; border: 1px dashed #b8cdd4; border-radius: 12px; background: #f8fbfc; padding: 1rem; }
 .health-add-panel { margin-top: 1rem; }
 .health-record-privacy { border: 1px solid #cddde2; }
 @media (max-width: 620px) {
