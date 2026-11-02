@@ -1,5 +1,7 @@
 'use server';
 
+import { cleanSocialPhotos } from '@/features/pawgram-posts/assets';
+
 import { normalizeProfileInput } from '@/lib/domain';
 import { createAdminClient, createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
@@ -78,6 +80,8 @@ export async function deleteAccount(_previous: FormState, formData: FormData): P
 
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) return { ok: false, message: 'No se pudo eliminar la cuenta después de limpiar sus archivos. Inicia sesión e inténtalo de nuevo.' };
+  await cleanSocialPhotos();
+  revalidatePath('/pawgram', 'layout');
   await supabase.auth.signOut({ scope: 'local' });
   revalidatePath('/mascotas');
   revalidatePath('/cuenta');

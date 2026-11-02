@@ -1,5 +1,7 @@
 'use server';
 
+import { cleanSocialPhotos } from '@/features/pawgram-posts/assets';
+
 import { getCountries, type CountryCode } from 'libphonenumber-js';
 import { normalizePhoneNumber, validateQuickPetInput } from '@/lib/domain';
 import { getPetRevalidationPaths, normalizePetDetailsInput } from './domain';
@@ -185,6 +187,8 @@ export async function deletePet(_previous: FormState, formData: FormData): Promi
 
   const { error } = await supabase.from('pets').delete().eq('id', petId).eq('owner_id', user.id);
   if (error) return { ok: false, message: 'Los archivos se limpiaron, pero no se pudo eliminar la ficha. Vuelve a intentarlo.' };
+  await cleanSocialPhotos();
+  revalidatePath('/pawgram', 'layout');
   revalidatePath('/mascotas');
   return { ok: true, message: 'Eliminamos la ficha y reservamos su código para que nunca vuelva a asignarse.' };
 }

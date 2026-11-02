@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/server';
 import { socialWebp } from './image';
+import { cleanWithClient } from './cleanup';
 const bucket = 'pawgram-photos';
 // Only server-validated bytes enter this bucket. No browser upload or signed URL.
 export async function storeSocialPhoto(input: Buffer, ownerId: string, petId: string) {
@@ -20,17 +21,5 @@ export async function retireSocialPhoto(id: string) {
 }
 export async function cleanSocialPhotos() {
   const admin = createAdminClient();
-  if (!admin) return false;
-  const cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-  // Claim expired uploads atomically; publishing can only activate pending rows.
-  await admin.from('pawgram_assets').update({ state: 'retired' }).eq('state', 'pending').lt('created_at', cutoff);
-  const { data, error } = await admin.from('pawgram_assets').select('id,path').eq('state', 'retired').limit(100);
-  if (error) return false;
-  for (const asset of data || []) {
-    const { error: removeError } = await admin.storage.from(bucket).remove([asset.path]);
-    if (removeError) return false; // Durable row remains for the next attempt.
-    const { error: deleteError } = await admin.from('pawgram_assets').delete().eq('id', asset.id).eq('state', 'retired');
-    if (deleteError) return false;
-  }
-  return true;
+  return admin ? cleanWithClient(admin) : false;
 }
