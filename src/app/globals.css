@@ -991,4 +991,11 @@ select option:checked { background: #e2f0f4; color: #12536b; }
 
 .password-feedback { display: flex; align-items: flex-start; gap: .5rem; margin: -.35rem 0 0; color: var(--ink-soft); font-size: .9rem; }
 .password-feedback svg { width: 20px; height: 20px; flex: 0 0 20px; margin-top: .1rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.password-feedback--met { color: var(--blue-deep); font-weight: 700; }
+.password-feedback--met { color: #17623c; font-weight: 700; }
+
+.password-feedback--error { color: #a52a35; font-weight: 700; }
+.password-requirements { margin-top: -.35rem; }
+.password-requirements > p { margin: 0 0 .5rem; color: var(--ink-soft); font-size: .9rem; }
+.password-requirements ul { display: grid; gap: .45rem; list-style: none; margin: 0 0 .65rem; padding: 0; }
+.password-requirements .password-feedback { margin: 0; }
+.password-requirements > .password-feedback--met { color: #17623c; }

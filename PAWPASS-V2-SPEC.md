@@ -40,7 +40,7 @@ Las claves secretas de Supabase permanecen en el servidor. Los datos privados se
 ## 2. Cuenta y contactos de rescate
 
 - El tutor puede autenticarse con correo y contraseña o con Google.
-- En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces, muestra el requisito de 8 a 72 caracteres y avisa en vivo si coinciden. La creación permanece deshabilitada mientras falten esos requisitos y se vuelven a validar antes de enviar a Supabase.
+- En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces, muestra debajo del campo los requisitos de 8 a 72 caracteres, una mayúscula, un número y un carácter especial. Cada requisito cumplido muestra una palomita verde; debajo de la confirmación avisa en vivo si coinciden con palomita verde o si difieren con tache rojo. La creación permanece deshabilitada mientras falten esos requisitos y se vuelven a validar antes de enviar a Supabase.
 - Los correos de confirmación y recuperación de contraseña deben funcionar en producción mediante un servicio de envío configurado para la aplicación.
 - Después de autenticarse, completa su perfil antes de crear mascotas. El nombre es obligatorio; los dos campos de apellido son opcionales.
 - El teléfono para llamadas y WhatsApp usan el mismo número por defecto. El tutor puede separarlos expresamente si quiere. Cada número guardado incluye lada internacional. En los formularios se elige el país/lada por separado y se introducen solo dígitos; fuera de edición, el número nacional de diez dígitos se presenta como `55 1234 5678`.

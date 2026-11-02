@@ -148,3 +148,10 @@ Las etiquetas compartidas de cuidado y dosis muestran iconos y tonos por estado,
 - La sesión anónima mostró WhatsApp y ningún control de editar alerta, Ya está en casa o ubicación. Se revisaron las políticas de lost_pet_reports: leer y actualizar requieren que la mascota pertenezca al usuario autenticado. Consultar la ficha pública permanece abierto a quien escanea el QR o entra al tablón.
 - Para la prueba interactiva se usó un subdominio local permitido por Next.js; la vista IPv6 servía HTML pero no reaccionaba al cambio de modo. No se amplió allowedDevOrigins ni se modificaron sesiones existentes.
 - Build de producción aprobado al finalizar; no se creó una cuenta ni se enviaron formularios de autenticación durante la revisión.
+
+## Requisitos y confirmación de contraseña
+
+- El registro comprueba mínimo 8 caracteres, mayúscula, número y carácter especial. Cada requisito tiene su estado debajo del campo; se mantiene el máximo de 72 caracteres.
+- Por petición expresa, los requisitos cumplidos y la coincidencia usan palomitas verdes, y la confirmación diferente muestra tache rojo y mensaje. El botón permanece deshabilitado mientras falten requisitos o coincidencia.
+- Se verificaron visualmente los cuatro requisitos cumplidos y el mensaje rojo de discrepancia con datos ficticios, sin enviar el formulario ni crear cuentas.
+- Verificación final: 19 pruebas de registro y dominio, lint y compilación de producción con TypeScript aprobados.

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { validateRegistrationPassword, REGISTRATION_PASSWORD_MIN_LENGTH, REGISTRATION_PASSWORD_MAX_LENGTH } from './domain';
+import { validateRegistrationPassword, getRegistrationPasswordChecks, REGISTRATION_PASSWORD_MIN_LENGTH, REGISTRATION_PASSWORD_MAX_LENGTH } from './domain';
 import { PasswordField } from './password-field';
 import { signInAsDevTestAccount } from './actions';
 
@@ -19,7 +19,8 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
   const [confirmation, setConfirmation] = useState('');
   const requirementsId = useId();
   const matchId = useId();
-  const lengthMet = registrationPassword.length >= REGISTRATION_PASSWORD_MIN_LENGTH && registrationPassword.length <= REGISTRATION_PASSWORD_MAX_LENGTH;
+  const passwordChecks = getRegistrationPasswordChecks(registrationPassword);
+  const passwordValid = passwordChecks.every(check => check.met) && registrationPassword.length <= REGISTRATION_PASSWORD_MAX_LENGTH;
   const passwordsMatch = Boolean(registrationPassword && confirmation && registrationPassword === confirmation);
   function changeMode(next: Mode) {
     setMode(next); setMessage(''); setRegistrationPassword(''); setConfirmation('');
@@ -117,12 +118,12 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
         {mode !== 'recuperar' && <>
           <PasswordField key={`password-${mode}`} name="password" label="Contraseña" autoComplete={mode === 'crear' ? 'new-password' : 'current-password'} minLength={mode === 'crear' ? REGISTRATION_PASSWORD_MIN_LENGTH : undefined} maxLength={REGISTRATION_PASSWORD_MAX_LENGTH} disabled={!configured || pending} onChange={setRegistrationPassword} describedBy={mode === 'crear' ? requirementsId : undefined} />
           {mode === 'crear' && <>
-            <p id={requirementsId} className={`password-feedback ${lengthMet ? 'password-feedback--met' : ''}`} role="status" aria-live="polite"><PasswordRuleIcon met={lengthMet} /><span>Entre 8 y 72 caracteres.<span className="sr-only"> {lengthMet ? 'Requisito cumplido.' : 'Requisito pendiente.'}</span></span></p>
+            <div id={requirementsId} className="password-requirements" role="status" aria-live="polite"><p>Tu contraseña debe incluir:</p><ul>{passwordChecks.map(check => <li key={check.id} className={`password-feedback ${check.met ? 'password-feedback--met' : ''}`}><PasswordRuleIcon state={check.met ? 'met' : 'pending'} /><span>{check.label}<span className="sr-only">: {check.met ? 'cumplido' : 'pendiente'}.</span></span></li>)}</ul>{passwordValid && <p className="password-feedback password-feedback--met"><PasswordRuleIcon state="met" /><span>La contraseña cumple los requisitos.</span></p>}</div>
             <PasswordField name="passwordConfirmation" label="Confirma tu contraseña" autoComplete="new-password" minLength={REGISTRATION_PASSWORD_MIN_LENGTH} maxLength={REGISTRATION_PASSWORD_MAX_LENGTH} disabled={!configured || pending} onChange={setConfirmation} describedBy={matchId} invalid={Boolean(confirmation) && !passwordsMatch} />
-            <p id={matchId} className={`password-feedback ${passwordsMatch ? 'password-feedback--met' : ''}`} role="status" aria-live="polite"><PasswordRuleIcon met={passwordsMatch} /><span>{!confirmation ? 'Repite la misma contraseña.' : passwordsMatch ? 'Las contraseñas coinciden.' : 'Las contraseñas aún no coinciden.'}</span></p>
+            <p id={matchId} className={`password-feedback ${passwordsMatch ? 'password-feedback--met' : confirmation ? 'password-feedback--error' : ''}`} role="status" aria-live="polite"><PasswordRuleIcon state={passwordsMatch ? 'met' : confirmation ? 'error' : 'pending'} /><span>{!confirmation ? 'Repite la misma contraseña.' : passwordsMatch ? 'Las contraseñas coinciden.' : 'Las contraseñas aún no coinciden.'}</span></p>
           </>}
         </>}
-        <button className="button button--primary button--wide" type="submit" disabled={!configured || pending || (mode === 'crear' && (!lengthMet || !passwordsMatch))}>
+        <button className="button button--primary button--wide" type="submit" disabled={!configured || pending || (mode === 'crear' && (!passwordValid || !passwordsMatch))}>
           {pending ? 'Un momento…' : mode === 'crear' ? 'Crear cuenta' : mode === 'recuperar' ? 'Enviar enlace' : 'Iniciar sesión'}
         </button>
       </form>
@@ -152,6 +153,6 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
 }
 
 
-function PasswordRuleIcon({ met }: { met: boolean }) {
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" />{met ? <path d="m7 12 3 3 7-7" /> : <path d="M8 12h8" />}</svg>;
+function PasswordRuleIcon({ state }: { state: 'met' | 'error' | 'pending' }) {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" />{state === 'met' ? <path d="m7 12 3 3 7-7" /> : state === 'error' ? <path d="m8 8 8 8m0-8-8 8" /> : <path d="M8 12h8" />}</svg>;
 }
