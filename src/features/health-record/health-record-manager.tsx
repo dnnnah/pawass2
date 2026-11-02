@@ -122,7 +122,7 @@ function DoseRecordCard({ petId, species, kind, record }: {
     <article className="health-record-entry">
       <div className="health-record-entry__top">
         <div><h3>{record.label}</h3><p>Aplicada el <time dateTime={record.administered_on}>{formatDate(record.administered_on)}</time></p></div>
-        <div className="record-heading-actions"><DoseStatusBadge status={status} /><span className="record-private" title="Este registro es privado y no aparece en el QR"><RecordActionIcon kind="eye-off" />Privado</span><button className="record-icon-button" type="button" title="Editar registro" aria-label={`Editar registro: ${record.label}`} aria-expanded={editing} aria-controls={editorId} onClick={() => setEditing(!editing)}><RecordActionIcon kind="edit" /></button></div>
+        <div className="record-heading-actions"><DoseStatusBadge status={status} /><button className="record-icon-button" type="button" title="Editar registro" aria-label={`Editar registro: ${record.label}`} aria-expanded={editing} aria-controls={editorId} onClick={() => setEditing(!editing)}><RecordActionIcon kind="edit" /></button></div>
       </div>
       <dl className="health-record-details">
         <div><dt>Próxima fecha</dt><dd>{record.next_dose_date ? <time dateTime={record.next_dose_date} className={`dose-next-date dose-next-date--${status ? doseStatusTone[status] : 'unknown'}`}><StatusSymbol name={status === 'vencida' ? 'urgent' : status === 'proxima-a-vencer' ? 'clock' : 'calendar'} />{formatDate(record.next_dose_date)}</time> : <span className="dose-next-date dose-next-date--unknown"><StatusSymbol name="unknown" />Sin próxima fecha registrada</span>}</dd></div>
@@ -247,7 +247,7 @@ function DocumentUploadForm({ petId }: { petId: string }) {
   const formId = useId();
   const [category, setCategory] = useState('');
   return (
-    <form action={action} className="health-form" encType="multipart/form-data">
+    <form action={action} className="health-form">
       <input type="hidden" name="petId" value={petId} />
       <div className="health-form__title"><h3>Nuevo documento</h3><p>Formatos: PDF, JPEG, PNG o WebP · hasta 10 MB.</p></div>
       <div className="health-form-grid">

@@ -155,3 +155,11 @@ Las etiquetas compartidas de cuidado y dosis muestran iconos y tonos por estado,
 - Por petición expresa, los requisitos cumplidos y la coincidencia usan palomitas verdes, y la confirmación diferente muestra tache rojo y mensaje. El botón permanece deshabilitado mientras falten requisitos o coincidencia.
 - Se verificaron visualmente los cuatro requisitos cumplidos y el mensaje rojo de discrepancia con datos ficticios, sin enviar el formulario ni crear cuentas.
 - Verificación final: 19 pruebas de registro y dominio, lint y compilación de producción con TypeScript aprobados.
+
+## Correcciones finales de formularios y tarjetas
+
+- La ayuda de contraseña y confirmación solo aparece mientras el campo correspondiente tiene foco, incluyendo su botón de mostrar/ocultar.
+- Se retiró encType del formulario con acción de React para evitar el error de consola; React gestiona la codificación.
+- Se restauró el padding interior de cuidados y se separaron visibilidad y eliminación. El cambio de visibilidad indica guardado en el botón y anuncia el éxito para lectores de pantalla sin insertar un bloque que desplace las acciones. Los errores conservan texto visible.
+- Se retiró el indicador redundante de privacidad en vacunas; el expediente y los documentos permanecen privados.
+- Verificación al preparar el PR: 96 pruebas en 16 archivos, lint y build con TypeScript aprobados. No se afirma una reducción medida de la latencia de escritura de visibilidad; sigue pendiente de una prueba controlada.
