@@ -1,0 +1,76 @@
+.home { width: min(1100px, calc(100% - 3rem)); margin: 0 auto; }
+.hero { display: grid; grid-template-columns: 1.12fr 1fr; align-items: center; gap: clamp(2rem, 5vw, 4rem); padding: 4rem 0; }
+.intro h1 { margin-bottom: 1.5rem; font-size: clamp(2.35rem, 4.2vw, 3.5rem); font-weight: 800; }
+.intro h1 span { color: var(--blue); }
+.intro > p { color: var(--ink-soft); font-size: var(--text-body); }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.75rem 0 1rem; }
+.intro .login { font-size: 1rem; }
+.login a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.intro .detail { max-width: 45ch; margin: 1.5rem 0 0; font-size: var(--text-small); }
+.rescue, .poster, .record { min-width: 0; margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-card); }
+.demoLabel { padding: .7rem 1.25rem; background: var(--paper); color: var(--ink-soft); font-size: var(--text-small); text-align: center; }
+.petPortrait { display: flex; align-items: center; flex-direction: column; padding: 1.5rem; background: var(--blue-light); color: var(--blue-deep); }
+.petPortrait svg { width: 100px; height: 100px; color: var(--accent-cobalt); }
+.petPortrait > span { margin-top: .5rem; color: var(--ink); font-size: 2rem; font-weight: 800; }
+.petPortrait small { font-size: var(--text-label); }
+.rescueBody { padding: 1.5rem; background: var(--surface); }
+.rescueBody h2 { margin: 0 0 .75rem; font-size: 1.5rem; }
+.rescueBody p { color: var(--ink-soft); }
+.exampleActions { display: grid; gap: .65rem; }
+.exampleActions > span { display: block; border: 2px solid var(--action-border); border-radius: var(--radius-action); padding: .75rem; color: var(--ink); text-align: center; font-weight: 700; }
+.exampleActions > span:first-child { border-color: var(--blue); background: var(--blue); color: var(--paper); }
+.exampleCare { display: flex; align-items: center; gap: .75rem; margin: 1.25rem 0 .75rem; }
+.exampleCare svg { flex-shrink: 0; width: 28px; height: 28px; color: var(--accent-violet); }
+.exampleCare strong { display: block; color: var(--ink); }
+.rescueBody > small { color: var(--ink-soft); }
+.steps { border-block: 1px solid var(--line); padding: 3rem 0; }
+.steps h2 { max-width: 24ch; margin: 0 0 2rem; }
+.steps ol { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 0; padding: 0; list-style: none; counter-reset: steps; }
+.steps li { counter-increment: steps; }
+.steps li::before { display: block; width: fit-content; margin-bottom: .75rem; border-bottom: 2px solid var(--blue); padding: 0 .4rem .3rem; color: var(--blue-deep); font-size: 1.5rem; font-weight: 800; content: counter(steps); }
+.steps strong { display: block; margin-bottom: .6rem; font-size: 1.35rem; }
+.steps p { margin: 0; color: var(--ink-soft); }
+.feature { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(2rem, 6vw, 5rem); padding: 4rem 0; }
+.featureCopy > svg { width: 42px; height: 42px; margin-bottom: 1rem; color: var(--accent-violet); }
+.featureCopy h2 { margin-bottom: 1.25rem; }
+.featureCopy p { color: var(--ink-soft); }
+.featureCopy .button { margin-left: -1.1rem; }
+.poster { border-color: var(--status-critical-line); }
+.posterBody { padding: 2rem; background: var(--danger-soft); text-align: center; }
+.lostStatus { display: inline-block; border-radius: var(--radius-pill); padding: .35rem .8rem; background: var(--danger); color: var(--paper); font-size: var(--text-label); font-weight: 700; }
+.posterBody h3 { margin: 1rem 0; color: var(--danger-ink); font-size: 2rem; }
+.posterBody > svg { width: 96px; height: 96px; margin: .5rem auto 1.25rem; color: var(--danger-ink); }
+.posterBody small { color: var(--danger-ink); }
+.health { border-top: 1px solid var(--line); }
+.health .featureCopy { grid-column: 2; grid-row: 1; }
+.health .record { grid-column: 1; grid-row: 1; }
+.record { border-color: var(--status-info-line); }
+.recordBody { padding: 1.5rem; background: var(--status-info-surface); }
+.recordHeading { display: flex; align-items: center; gap: 1rem; }
+.recordHeading svg { flex-shrink: 0; width: 48px; height: 48px; color: var(--accent-violet); }
+.recordHeading h3 { margin: 0 0 .3rem; font-size: 1.5rem; }
+.recordHeading span { color: var(--status-info-ink); }
+.record dl { margin: 1.5rem 0 0; }
+.record dl > div { border-top: 1px solid var(--status-info-line); padding: 1rem 0; }
+.record dl > div:last-child { padding-bottom: 0; }
+.record dt { font-weight: 800; }
+.record dd { margin: .25rem 0 0; color: var(--status-info-ink); }
+.closing { padding: 3rem 1.5rem; border-radius: var(--radius-card); background: var(--blue-light); text-align: center; }
+.closing > svg { width: 40px; height: 40px; margin: 0 auto 1rem; color: var(--accent-cyan); }
+.closing h2 { margin-bottom: 1rem; }
+.closing p { margin: 0 auto 1.5rem; color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .home { width: calc(100% - 2rem); }
+  .hero, .feature { grid-template-columns: 1fr; gap: 2rem; padding: 2.5rem 0; }
+  .intro h1 { max-width: 16ch; }
+  .steps { padding: 2.5rem 0; }
+  .steps ol { grid-template-columns: 1fr; gap: 1.5rem; }
+  .steps li { display: grid; grid-template-columns: 2rem 1fr; column-gap: 1rem; }
+  .steps li::before { grid-row: span 2; align-self: start; }
+  .steps strong, .steps p { grid-column: 2; }
+  .health .featureCopy, .health .record { grid-column: auto; grid-row: auto; }
+  .closing { padding: 2rem 1.25rem; }
+}
+@media (max-width: 420px) { .actions { flex-direction: column; } .posterBody { padding: 1.5rem; } }
+.skip { position: fixed; z-index: 20; top: .5rem; left: 1rem; transform: translateY(-150%); border-radius: var(--radius-action); padding: .75rem 1rem; background: var(--blue); color: var(--paper); font-weight: 700; }
+.skip:focus { transform: translateY(0); }
