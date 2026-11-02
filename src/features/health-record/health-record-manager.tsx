@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+
 import Link from 'next/link';
 import { DoseStatusBadge, doseStatusTone } from './dose-status-badge';
 import { StatusSymbol } from '@/features/brand/status-badge';
@@ -178,14 +180,14 @@ function DoseForm({ petId, species, kind, record, onCancel }: {
           <input id={`${formId}-next`} name="nextDoseDate" type="date" value={nextDoseDate} onChange={(event) => { setNextDoseDate(event.target.value); setConfirmed(false); }} aria-describedby={`${formId}-next-help`} />
           <small id={`${formId}-next-help`}>{suggestion ? 'La sugerencia es una referencia; verifica el esquema indicado para tu mascota.' : 'Si tu veterinario indicó otra fecha, puedes escribirla aquí. Si no tienes una fecha, déjalo vacío.'}</small>
         </label>
-        {suggestion && suggestion !== nextDoseDate && <div className="health-suggestion" role="note"><p><strong>Referencia disponible:</strong> {formatDate(suggestion)}.</p><p>{options.find((item) => item.id === catalogId)?.suggestionNote}</p>{options.find((item) => item.id === catalogId)?.sourceUrl && <a href={options.find((item) => item.id === catalogId)?.sourceUrl} rel="noreferrer">Consultar referencia de salud pública</a>}<button className="button button--outline" type="button" onClick={() => { setNextDoseDate(suggestion); setConfirmed(false); }}>Usar esta fecha</button></div>}
+        {suggestion && suggestion !== nextDoseDate && <div className="health-suggestion" role="note"><p><strong>Referencia disponible:</strong> {formatDate(suggestion)}.</p><p>{options.find((item) => item.id === catalogId)?.suggestionNote}</p>{options.find((item) => item.id === catalogId)?.sourceUrl && <a href={options.find((item) => item.id === catalogId)?.sourceUrl} rel="noreferrer">Consultar referencia de salud pública</a>}<Button variant="outline" onClick={() => { setNextDoseDate(suggestion); setConfirmed(false); }}>Usar esta fecha</Button></div>}
         <label className="field" htmlFor={`${formId}-lot`}><span>Lote <em>opcional</em></span><input id={`${formId}-lot`} name="lot" maxLength={80} defaultValue={record?.lot || ''} /></label>
         <label className="field" htmlFor={`${formId}-vet`}><span>Veterinario o clínica <em>opcional</em></span><input id={`${formId}-vet`} name="veterinarian" maxLength={120} defaultValue={record?.veterinarian || ''} /></label>
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" maxLength={1000} rows={3} defaultValue={record?.notes || ''} /></label>
       </div>
       {nextDoseDate && <label className="health-confirm-date" htmlFor={`${formId}-confirm`}><input id={`${formId}-confirm`} name="nextDoseConfirmed" type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} /><span>Confirmo que la próxima fecha es correcta para esta mascota.</span></label>}
       {state.message && <p className={`health-form-message ${state.ok ? 'health-form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-      <div className="health-form__actions"><button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar registro'}</button>{record && <button className="button button--text" type="button" onClick={(event) => onCancel ? onCancel() : event.currentTarget.closest('details')?.removeAttribute('open')}>Cancelar edición</button>}</div>
+      <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar registro'}</Button>{record && <Button variant="text" onClick={(event) => onCancel ? onCancel() : event.currentTarget.closest('details')?.removeAttribute('open')}>Cancelar edición</Button>}</div>
     </form>
   );
 }
@@ -194,7 +196,7 @@ function DeleteRecordControl({ petId, record }: { petId: string; record: HealthR
   return (
     <details className="health-delete-control">
       <summary className="button health-danger-action">Eliminar registro</summary>
-      <div><p>Se quitará este registro del carnet. Esta acción no se puede deshacer.</p><form action={deleteHealthRecord}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="recordId" value={record.id} /><button className="button button--outline health-danger-action" type="submit">Confirmar eliminación</button></form></div>
+      <div><p>Se quitará este registro del carnet. Esta acción no se puede deshacer.</p><form action={deleteHealthRecord}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="recordId" value={record.id} /><Button variant="outline" className="health-danger-action" type="submit">Confirmar eliminación</Button></form></div>
     </details>
   );
 }
@@ -225,7 +227,7 @@ function ProcedureForm({ petId, record }: { petId: string; record?: HealthRecord
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" rows={3} maxLength={1000} defaultValue={record?.notes || ''} /></label>
       </div>
       {state.message && <p className={`health-form-message ${state.ok ? 'health-form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-      <div className="health-form__actions"><button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar intervención'}</button></div>
+      <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar intervención'}</Button></div>
     </form>
   );
 }
@@ -258,7 +260,7 @@ function DocumentUploadForm({ petId }: { petId: string }) {
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" rows={3} maxLength={1000} /></label>
       </div>
       {state.message && <p className={`health-form-message ${state.ok ? 'health-form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-      <div className="health-form__actions"><button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Subiendo…' : 'Guardar documento privado'}</button></div>
+      <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Subiendo…' : 'Guardar documento privado'}</Button></div>
     </form>
   );
 }
@@ -275,7 +277,7 @@ function DocumentEditForm({ petId, document }: { petId: string; document: Health
       <label className="field" htmlFor={`${formId}-date`}><span>Fecha del documento</span><input id={`${formId}-date`} name="documentDate" type="date" defaultValue={document.document_date || ''} /></label>
       <label className="field" htmlFor={`${formId}-notes`}><span>Notas</span><textarea id={`${formId}-notes`} name="notes" defaultValue={document.notes || ''} rows={2} maxLength={1000} /></label>
       {state.message && <p className="health-form-message" role="status">{state.message}</p>}
-      <button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar clasificación'}</button>
+      <Button type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar clasificación'}</Button>
     </form>
   );
 }
@@ -284,7 +286,7 @@ function DeleteDocumentControl({ petId, document }: { petId: string; document: H
   return (
     <details className="health-delete-control">
       <summary className="button health-danger-action">Eliminar documento</summary>
-      <div><p>Se quitarán el archivo y su registro privado. Esta acción no se puede deshacer.</p><form action={deleteHealthDocument}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="documentId" value={document.id} /><button className="button button--outline health-danger-action" type="submit">Confirmar eliminación</button></form></div>
+      <div><p>Se quitarán el archivo y su registro privado. Esta acción no se puede deshacer.</p><form action={deleteHealthDocument}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="documentId" value={document.id} /><Button variant="outline" className="health-danger-action" type="submit">Confirmar eliminación</Button></form></div>
     </details>
   );
 }

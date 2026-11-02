@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState } from 'react';
 import { deletePet } from './actions';
 import type { FormState } from '@/features/profile/actions';
@@ -16,8 +19,8 @@ export function DeletePetForm({ petId, publicCode }: { petId: string; publicCode
         <p>Esto elimina la ficha, las alertas e imágenes asociadas. El código {publicCode} quedará reservado y nunca se reutilizará.</p>
         <label className="field"><span>Escribe el código para confirmar</span><input name="confirmation" autoComplete="off" maxLength={9} required /></label>
         <label className="consent-check"><input name="confirmDelete" type="checkbox" required /><span>Entiendo que no se puede deshacer.</span></label>
-        {state.message && <p className="form-message" role="status" aria-live="polite">{state.message}</p>}
-        <button className="button button--danger" type="submit" disabled={pending}>{pending ? 'Eliminando…' : 'Eliminar mascota'}</button>
+        <FormMessage>{state.message}</FormMessage>
+        <Button variant="danger" type="submit" disabled={pending}>{pending ? 'Eliminando…' : 'Eliminar mascota'}</Button>
       </form>
     </details>
   );

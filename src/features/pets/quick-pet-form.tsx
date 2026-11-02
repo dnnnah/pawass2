@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState, useState } from 'react';
 import { createPet } from './actions';
 import { PetContactEditor } from './pet-contact-editor';
@@ -28,9 +31,9 @@ export function PetCreateControl({
       <QuickPetForm phone={phone} whatsapp={whatsapp} onFinish={() => setOpen(false)} />
     </section>
   ) : (
-    <button className="button button--primary add-pet-trigger" type="button" onClick={() => setOpen(true)}>
+    <Button className="add-pet-trigger" onClick={() => setOpen(true)}>
       <span aria-hidden="true">+</span>{hasPets ? 'Agregar mascota' : 'Registrar mi primera mascota'}
-    </button>
+    </Button>
   );
 }
 
@@ -42,14 +45,14 @@ function QuickPetForm({ phone, whatsapp, onFinish }: { phone: string; whatsapp: 
       return <div className="pet-setup-step">
         <StepHeading step={2} title="Completa su identidad" description="Raza, aspecto y edad aproximada. Puedes dejar campos vacíos." />
         <PetDetailsForm petId={state.petId} species={state.species || 'perro'} onComplete={() => setStep('contact')} />
-        <button className="button button--text" type="button" onClick={() => setStep('contact')}>Omitir por ahora</button>
+        <Button variant="text" onClick={() => setStep('contact')}>Omitir por ahora</Button>
       </div>;
     }
     if (step === 'contact') {
       return <div className="pet-setup-step">
         <StepHeading step={3} title="Elige a quién pueden contactar" description="Por defecto hereda los teléfonos de tu cuenta. Solo crea una excepción si esta mascota necesita otros números." />
         <PetContactEditor petId={state.petId} enabled={false} phone={phone} whatsapp={whatsapp} />
-        <div className="form-actions"><button className="button button--primary" type="button" onClick={onFinish}>Terminar</button><button className="button button--text" type="button" onClick={onFinish}>Lo haré después</button></div>
+        <div className="form-actions"><Button onClick={onFinish}>Terminar</Button><Button variant="text" onClick={onFinish}>Lo haré después</Button></div>
       </div>;
     }
     return <div className="pet-created" role="status" aria-live="polite">
@@ -57,7 +60,7 @@ function QuickPetForm({ phone, whatsapp, onFinish }: { phone: string; whatsapp: 
       <h3>La ficha ya está activa</h3>
       <p>{state.message}</p>
       <p className="form-description">Los pasos de identidad y contacto son opcionales. Puedes completarlos ahora o más adelante desde la ficha de tu mascota.</p>
-      <div className="form-actions"><button className="button button--primary" type="button" onClick={() => setStep('identity')}>Continuar al paso 2</button><button className="button button--text" type="button" onClick={onFinish}>Terminar por ahora</button></div>
+      <div className="form-actions"><Button onClick={() => setStep('identity')}>Continuar al paso 2</Button><Button variant="text" onClick={onFinish}>Terminar por ahora</Button></div>
     </div>;
   }
   return (
@@ -72,8 +75,8 @@ function QuickPetForm({ phone, whatsapp, onFinish }: { phone: string; whatsapp: 
         <div><strong>Al crearla, activas una ficha QR pública</strong><p>Cualquier persona con el código podrá ver el nombre, la especie y los teléfonos de rescate que elijas.</p><p className="privacy-summary__numbers">Llamadas y WhatsApp: <bdi>{whatsapp || phone}</bdi></p></div>
       </div>
       <label className="consent-check"><input type="checkbox" name="privacyAccepted" required /><span>Acepto que esos datos estén disponibles para quien tenga el código QR. Puedo cambiar los contactos después.</span></label>
-      {state.message && <p className="form-message" role="status" aria-live="polite">{state.message}</p>}
-      <button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Creando ficha…' : 'Crear ficha y activar QR'}</button>
+      <FormMessage>{state.message}</FormMessage>
+      <Button type="submit" disabled={pending}>{pending ? 'Creando ficha…' : 'Crear ficha y activar QR'}</Button>
     </form>
   );
 }

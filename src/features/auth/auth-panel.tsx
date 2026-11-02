@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import Image from 'next/image';
 import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -105,9 +108,9 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
       )}
 
       {mode !== 'recuperar' && (
-        <button className="button button--outline google-button" type="button" disabled={!configured || pending} onClick={handleGoogle}>
+        <Button variant="outline" className="google-button" disabled={!configured || pending} onClick={handleGoogle}>
           <Image src="/google-g.svg" width={20} height={20} alt="" aria-hidden="true" />Continuar con Google
-        </button>
+        </Button>
       )}
 
       {mode !== 'recuperar' && <div className="divider"><span>o con correo</span></div>}
@@ -125,19 +128,19 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
             <p hidden={!confirmationFocused} id={matchId} className={`password-feedback ${passwordsMatch ? 'password-feedback--met' : confirmation ? 'password-feedback--error' : ''}`} role="status" aria-live="polite"><PasswordRuleIcon state={passwordsMatch ? 'met' : confirmation ? 'error' : 'pending'} /><span>{!confirmation ? 'Repite la misma contraseña.' : passwordsMatch ? 'Las contraseñas coinciden.' : 'Las contraseñas aún no coinciden.'}</span></p>
           </>}
         </>}
-        <button className="button button--primary button--wide" type="submit" disabled={!configured || pending || (mode === 'crear' && (!passwordValid || !passwordsMatch))}>
+        <Button fullWidth type="submit" disabled={!configured || pending || (mode === 'crear' && (!passwordValid || !passwordsMatch))}>
           {pending ? 'Un momento…' : mode === 'crear' ? 'Crear cuenta' : mode === 'recuperar' ? 'Enviar enlace' : 'Iniciar sesión'}
-        </button>
+        </Button>
       </form>
 
       {showDevTestAccount && mode === 'entrar' && (
         <form action={signInAsDevTestAccount} className="dev-test-access">
-          <button className="button button--text" type="submit">Entrar a la cuenta de prueba</button>
+          <Button variant="text" type="submit">Entrar a la cuenta de prueba</Button>
           <small>Solo disponible en Supabase local durante desarrollo.</small>
         </form>
       )}
 
-      {message && <p className="form-message" role="status" aria-live="polite">{message}</p>}
+      <FormMessage>{message}</FormMessage>
 
       <div className="auth-panel__links">
         {mode === 'entrar' && <button type="button" className="text-button" onClick={() => { changeMode('recuperar'); }}>¿Olvidaste tu contraseña?</button>}

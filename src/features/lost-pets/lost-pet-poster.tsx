@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+
 import { QRCodeSVG } from 'qrcode.react';
 import NextImage from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -417,9 +419,9 @@ export function LostPetPoster({ pet }: { pet: LostPosterData }) {
       <div className="poster-studio__controls">
         <label className="field" htmlFor="poster-format"><span>Formato del cartel</span><select id="poster-format" value={formatId} onChange={(event) => setFormatId(event.target.value as PosterFormatId)}>{formats.map((format) => <option key={format.id} value={format.id}>{format.label} · {format.ratio}</option>)}</select></label>
         <div className="poster-studio__actions" aria-label="Acciones del cartel">
-          <button className="button button--primary" type="button" onClick={() => void exportPoster('download')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Descargar PNG</button>
-          <button className="button button--outline" type="button" onClick={() => void exportPoster('share')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Compartir</button>
-          {formatId === 'a4' || formatId === 'letter' ? <button className="button button--outline" type="button" onClick={() => void exportPoster('print')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Imprimir {formatId === 'a4' ? 'A4' : 'carta'}</button> : null}
+          <Button onClick={() => void exportPoster('download')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Descargar PNG</Button>
+          <Button variant="outline" onClick={() => void exportPoster('share')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Compartir</Button>
+          {formatId === 'a4' || formatId === 'letter' ? <Button variant="outline" onClick={() => void exportPoster('print')} disabled={!canExport} aria-describedby="poster-phone-notice poster-studio-status">Imprimir {formatId === 'a4' ? 'A4' : 'carta'}</Button> : null}
         </div>
       </div>
       <p id="poster-studio-status" className="poster-studio__status" role="status" aria-live="polite">{message}</p>

@@ -1,0 +1,20 @@
+.button { display: inline-flex; min-height: var(--action-height); align-items: center; justify-content: center; gap: 0.65rem; border: 2px solid transparent; padding: var(--space-3) 1.1rem; font-weight: 700; text-align: center; text-decoration: none; cursor: pointer; border-radius: var(--radius-action); transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease, transform var(--motion-fast) ease; }
+.button:hover:not(:disabled) { transform: none; }
+.button:disabled { cursor: not-allowed; opacity: 0.58; }
+.button--primary { background: var(--blue); color: var(--paper); }
+.button--primary:hover:not(:disabled) { background: var(--blue-deep); }
+.button--outline { border-color: var(--action-border); background: transparent; color: var(--ink); }
+.button--outline:hover:not(:disabled) { background: var(--action-hover); border-color: var(--blue); }
+.button--wide { width: 100%; }
+.button--whatsapp { background: var(--blue); color: var(--paper); }
+.button--whatsapp:hover { background: var(--blue-deep); }
+.button--text { border-color: transparent; color: var(--blue-deep); text-decoration: underline; text-underline-offset: .2em; background: transparent; }
+.text-button { border: 0; padding: var(--space-1); background: transparent; color: var(--blue-deep); font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 0.22em; min-height: 44px; }
+.button--danger { border-color: var(--danger); background: var(--danger); color: var(--paper); }
+.button--danger:hover:not(:disabled) { border-color: var(--danger-deep); background: var(--danger-deep); }
+.button--danger:disabled { opacity: 1; background: var(--danger-deep); border-color: var(--danger-deep); color: var(--paper); }
+.button--urgent-outline { border-color: var(--danger); background: #fff; color: var(--danger-ink); }
+.button--urgent-outline:hover:not(:disabled) { background: var(--danger-soft); }
+.button:active:not(:disabled) { transform: translateY(1px); }
+
+@media (prefers-reduced-motion: reduce) { .button { transition: none; } }

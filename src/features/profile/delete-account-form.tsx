@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState } from 'react';
 import { deleteAccount, type FormState } from './actions';
 
@@ -16,8 +19,8 @@ export function DeleteAccountForm() {
       <form action={action} className="form-stack danger-zone__form">
         <label className="field"><span>Escribe ELIMINAR CUENTA para confirmar</span><input name="confirmation" autoComplete="off" required /></label>
         <label className="consent-check"><input name="confirmDelete" type="checkbox" required /><span>Entiendo que eliminar la cuenta es permanente.</span></label>
-        {state.message && <p className="form-message" role="status" aria-live="polite">{state.message}</p>}
-        <button className="button button--danger" type="submit" disabled={pending}>{pending ? 'Eliminando…' : 'Eliminar mi cuenta'}</button>
+        <FormMessage>{state.message}</FormMessage>
+        <Button variant="danger" type="submit" disabled={pending}>{pending ? 'Eliminando…' : 'Eliminar mi cuenta'}</Button>
       </form>
     </section>
   );

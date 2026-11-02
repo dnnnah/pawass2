@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState } from 'react';
 import { useState } from 'react';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
@@ -34,8 +37,8 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
       </div>
       <label className="consent-check contact-editor__toggle"><input type="checkbox" checked={separateWhatsapp} onChange={(event) => setSeparateWhatsapp(event.target.checked)} /><span>Uso un número distinto para WhatsApp</span></label>
       <p className="form-description">Por defecto, WhatsApp y llamadas usan el mismo número. Solo guardamos otro número cuando eliges separarlo.</p>
-      {state.message && <p className={`form-message ${state.ok ? 'form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-      <div className="form-actions"><button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar contacto'}</button><span>La ficha QR nunca muestra tu nombre ni apellidos.</span></div>
+      <FormMessage success={state.ok}>{state.message}</FormMessage>
+      <div className="form-actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar contacto'}</Button><span>La ficha QR nunca muestra tu nombre ni apellidos.</span></div>
     </form>
   );
 }

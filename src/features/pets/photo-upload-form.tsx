@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState, useState, useTransition } from 'react';
 import { uploadPrimaryPhoto } from './actions';
 import { convertImageToWebp } from '@/lib/image';
@@ -35,8 +38,8 @@ export function PetPhotoUploadForm({ petId, publicCode }: { petId: string; publi
       <input type="hidden" name="publicCode" value={publicCode} />
       <label className="field"><span>Foto principal <em>opcional</em></span><input type="file" name="photo" accept="image/*" /></label>
       <p className="form-description">Elige una foto clara donde se vea su cara. Aparecerá en su ficha de rescate para ayudar a reconocerla.</p>
-      {(error || state.message) && <p className="form-message" role="status" aria-live="polite">{error || state.message}</p>}
-      <button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Preparando foto…' : 'Guardar foto'}</button>
+      <FormMessage>{error || state.message}</FormMessage>
+      <Button type="submit" disabled={pending}>{pending ? 'Preparando foto…' : 'Guardar foto'}</Button>
     </form>
   );
 }
