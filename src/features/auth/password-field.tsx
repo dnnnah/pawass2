@@ -11,6 +11,7 @@ export function PasswordField({
   maxLength = 72,
   disabled = false,
   onChange,
+  onFocusChange,
   describedBy,
   invalid,
 }: {
@@ -22,13 +23,14 @@ export function PasswordField({
   maxLength?: number;
   disabled?: boolean;
   onChange?: (value: string) => void;
+  onFocusChange?: (focused: boolean) => void;
   describedBy?: string;
   invalid?: boolean;
 }) {
   const id = useId();
   const [visible, setVisible] = useState(false);
   return (
-    <label className="field" htmlFor={id}>
+    <label className="field" htmlFor={id} onFocus={() => onFocusChange?.(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) onFocusChange?.(false); }}>
       <span>{label}</span>
       <span className="password-input">
         <input id={id} name={name} type={visible ? 'text' : 'password'} autoComplete={autoComplete} required={required} minLength={minLength} maxLength={maxLength} disabled={disabled} aria-describedby={describedBy} aria-invalid={invalid || undefined} onChange={event => onChange?.(event.target.value)} />

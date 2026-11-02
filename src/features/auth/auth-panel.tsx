@@ -19,6 +19,8 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
   const [confirmation, setConfirmation] = useState('');
   const requirementsId = useId();
   const matchId = useId();
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [confirmationFocused, setConfirmationFocused] = useState(false);
   const passwordChecks = getRegistrationPasswordChecks(registrationPassword);
   const passwordValid = passwordChecks.every(check => check.met) && registrationPassword.length <= REGISTRATION_PASSWORD_MAX_LENGTH;
   const passwordsMatch = Boolean(registrationPassword && confirmation && registrationPassword === confirmation);
@@ -116,11 +118,11 @@ export function AuthPanel({ configured, showDevTestAccount = false }: { configur
           <input name="email" type="email" autoComplete="email" required maxLength={254} disabled={!configured || pending} />
         </label>
         {mode !== 'recuperar' && <>
-          <PasswordField key={`password-${mode}`} name="password" label="Contraseña" autoComplete={mode === 'crear' ? 'new-password' : 'current-password'} minLength={mode === 'crear' ? REGISTRATION_PASSWORD_MIN_LENGTH : undefined} maxLength={REGISTRATION_PASSWORD_MAX_LENGTH} disabled={!configured || pending} onChange={setRegistrationPassword} describedBy={mode === 'crear' ? requirementsId : undefined} />
+          <PasswordField key={`password-${mode}`} name="password" label="Contraseña" autoComplete={mode === 'crear' ? 'new-password' : 'current-password'} minLength={mode === 'crear' ? REGISTRATION_PASSWORD_MIN_LENGTH : undefined} maxLength={REGISTRATION_PASSWORD_MAX_LENGTH} disabled={!configured || pending} onChange={setRegistrationPassword} onFocusChange={setPasswordFocused} describedBy={mode === 'crear' ? requirementsId : undefined} />
           {mode === 'crear' && <>
-            <div id={requirementsId} className="password-requirements" role="status" aria-live="polite"><p>Tu contraseña debe incluir:</p><ul>{passwordChecks.map(check => <li key={check.id} className={`password-feedback ${check.met ? 'password-feedback--met' : ''}`}><PasswordRuleIcon state={check.met ? 'met' : 'pending'} /><span>{check.label}<span className="sr-only">: {check.met ? 'cumplido' : 'pendiente'}.</span></span></li>)}</ul>{passwordValid && <p className="password-feedback password-feedback--met"><PasswordRuleIcon state="met" /><span>La contraseña cumple los requisitos.</span></p>}</div>
-            <PasswordField name="passwordConfirmation" label="Confirma tu contraseña" autoComplete="new-password" minLength={REGISTRATION_PASSWORD_MIN_LENGTH} maxLength={REGISTRATION_PASSWORD_MAX_LENGTH} disabled={!configured || pending} onChange={setConfirmation} describedBy={matchId} invalid={Boolean(confirmation) && !passwordsMatch} />
-            <p id={matchId} className={`password-feedback ${passwordsMatch ? 'password-feedback--met' : confirmation ? 'password-feedback--error' : ''}`} role="status" aria-live="polite"><PasswordRuleIcon state={passwordsMatch ? 'met' : confirmation ? 'error' : 'pending'} /><span>{!confirmation ? 'Repite la misma contraseña.' : passwordsMatch ? 'Las contraseñas coinciden.' : 'Las contraseñas aún no coinciden.'}</span></p>
+            <div hidden={!passwordFocused} id={requirementsId} className="password-requirements" role="status" aria-live="polite"><p>Tu contraseña debe incluir:</p><ul>{passwordChecks.map(check => <li key={check.id} className={`password-feedback ${check.met ? 'password-feedback--met' : ''}`}><PasswordRuleIcon state={check.met ? 'met' : 'pending'} /><span>{check.label}<span className="sr-only">: {check.met ? 'cumplido' : 'pendiente'}.</span></span></li>)}</ul>{passwordValid && <p className="password-feedback password-feedback--met"><PasswordRuleIcon state="met" /><span>La contraseña cumple los requisitos.</span></p>}</div>
+            <PasswordField name="passwordConfirmation" label="Confirma tu contraseña" autoComplete="new-password" minLength={REGISTRATION_PASSWORD_MIN_LENGTH} maxLength={REGISTRATION_PASSWORD_MAX_LENGTH} disabled={!configured || pending} onChange={setConfirmation} onFocusChange={setConfirmationFocused} describedBy={matchId} invalid={Boolean(confirmation) && !passwordsMatch} />
+            <p hidden={!confirmationFocused} id={matchId} className={`password-feedback ${passwordsMatch ? 'password-feedback--met' : confirmation ? 'password-feedback--error' : ''}`} role="status" aria-live="polite"><PasswordRuleIcon state={passwordsMatch ? 'met' : confirmation ? 'error' : 'pending'} /><span>{!confirmation ? 'Repite la misma contraseña.' : passwordsMatch ? 'Las contraseñas coinciden.' : 'Las contraseñas aún no coinciden.'}</span></p>
           </>}
         </>}
         <button className="button button--primary button--wide" type="submit" disabled={!configured || pending || (mode === 'crear' && (!passwordValid || !passwordsMatch))}>

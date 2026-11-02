@@ -226,3 +226,5 @@ Informativa usa violeta y círculo de información; Precaución usa azul y escud
 La navbar mide la altura real de la cabecera para quedar pegada a ella al desplazarse, sin márgenes laterales negativos en móvil. El texto y el primer botón del QR se separan 45 px, con una línea de división. Los botones se apilan por debajo de 420 px.
 
 En registro, cada contraseña conserva su control de mostrar/ocultar. Debajo se muestran los requisitos: mínimo 8 caracteres, una mayúscula, un número y un carácter especial. Por petición expresa del autor, esta validación usa una excepción localizada: palomita verde (#17623c) para requisitos cumplidos y coincidencia; tache rojo (#a52a35) si la confirmación difiere. Los estados también incluyen texto y avisos accesibles en vivo. Crear cuenta solo se habilita al cumplir todos los requisitos y confirmar la misma contraseña; se conserva el máximo de 72 caracteres.
+
+La ayuda de requisitos del registro solo se muestra mientras Contraseña tiene el foco; la ayuda de coincidencia solo mientras Confirma tu contraseña tiene el foco. El control de mostrar/ocultar mantiene visible la ayuda de su campo.
