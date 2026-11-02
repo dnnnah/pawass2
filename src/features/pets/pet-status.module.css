@@ -1,0 +1,29 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  border-radius: var(--radius-pill);
+  background: var(--status-current-surface);
+  padding: .3rem .65rem;
+  color: var(--status-current-ink);
+  font-size: .75rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.lost {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+}
+
+.dot {
+  width: .5rem;
+  height: .5rem;
+  flex: 0 0 .5rem;
+  border-radius: 50%;
+  background: var(--status-current-ink);
+}
+
+.lost .dot {
+  background: var(--danger);
+}
