@@ -12,10 +12,10 @@ export const dynamic = 'force-dynamic';
 
 export default async function AccountPage() {
   const supabase = await createClient();
-  if (!supabase) redirect('/');
+  if (!supabase) redirect('/acceso');
   const { data } = await supabase.auth.getClaims();
   const identity = getIdentityFromClaims(data?.claims);
-  if (!identity) redirect('/');
+  if (!identity) redirect('/acceso');
   const { data: profile } = await supabase.from('profiles').select('first_name,surname1,surname2,rescue_phone,whatsapp_phone').eq('id', identity.id).maybeSingle();
   const profileData = profile || { first_name: null, surname1: null, surname2: null, rescue_phone: null, whatsapp_phone: null };
   return (

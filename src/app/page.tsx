@@ -1,22 +1,22 @@
-import '@/features/auth/auth.css';
-import { AuthPanel } from '@/features/auth/auth-panel';
-import { BrandMark } from '@/features/auth/brand-mark';
-import { hasSupabaseEnvironment, isLocalTestLoginEnabled } from '@/lib/supabase/env';
+import type { Metadata } from 'next';
+import { AppHeader } from '@/features/navigation/app-header';
+import { HomeContent } from '@/features/home/home-content';
+import styles from '@/features/home/home.module.css';
+import { createClient } from '@/lib/supabase/server';
+import { getIdentityFromClaims } from '@/lib/supabase/identity';
+import { getSiteUrl } from '@/lib/supabase/env';
 
-export default function HomePage() {
-  return (
-    <main className="auth-layout">
-      <div className="auth-layout__brand"><BrandMark /></div>
-      <div className="auth-layout__content">
-        <div className="auth-story" aria-hidden="true">
-          <div className="story-orbit story-orbit--outer" />
-          <div className="story-orbit story-orbit--inner" />
-          <svg className="story-paw" viewBox="0 0 180 180"><ellipse cx="45" cy="48" rx="18" ry="25" transform="rotate(-24 45 48)"/><ellipse cx="91" cy="31" rx="18" ry="25"/><ellipse cx="137" cy="48" rx="18" ry="25" transform="rotate(24 137 48)"/><ellipse cx="158" cy="91" rx="15" ry="21" transform="rotate(45 158 91)"/><path d="M90 77c-26 0-61 41-50 64 9 19 34 2 50 2s41 17 50-2c11-23-24-64-50-64Z"/></svg>
-          <div className="story-note"><span className="story-note__dot"/><span>Una ficha lista cuando importa.</span></div>
-          <p>Su nombre.<br/>Una forma de volver a casa.</p>
-        </div>
-        <AuthPanel configured={hasSupabaseEnvironment()} showDevTestAccount={isLocalTestLoginEnabled()} />
-      </div>
-    </main>
-  );
+export const metadata: Metadata = {
+  title: 'PawPass — ficha de rescate QR y carnet privado para tu mascota',
+  description: 'Identifica a tu perro o gato con su ficha QR, comparte una alerta si se pierde y organiza sus cuidados en un carnet privado.',
+  alternates: { canonical: `${getSiteUrl()}/` },
+  robots: { index: true, follow: true },
+};
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data } = supabase ? await supabase.auth.getClaims() : { data: null };
+  const signedIn = Boolean(getIdentityFromClaims(data?.claims));
+  return <><a className={styles.skip} href="#contenido">Saltar al contenido</a><AppHeader active="home" signedIn={signedIn} /><HomeContent signedIn={signedIn} /></>;
 }

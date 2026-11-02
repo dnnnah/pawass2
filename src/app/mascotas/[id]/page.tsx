@@ -19,7 +19,7 @@ export default async function PetPage({ params }: Props) {
   if (!supabase) return <SetupRequired />;
   const { data } = await supabase.auth.getClaims();
   const identity = getIdentityFromClaims(data?.claims);
-  if (!identity) redirect('/');
+  if (!identity) redirect('/acceso');
 
   const { data: pet } = await supabase.from('pets')
     .select('id,name,species,breed,mixed_breed,sex,size,color,birth_date,approximate_age_years,approximate_age_months,weight_kg,microchip,ruac,sterilized,primary_photo_path,contact_override_enabled,rescue_phone_override,whatsapp_phone_override')

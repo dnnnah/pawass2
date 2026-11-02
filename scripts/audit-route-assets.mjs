@@ -6,14 +6,15 @@ import { gzipSync } from 'node:zlib';
 // Audit emitted production assets without a session or database fixtures.
 // Only ancestor layouts/loading boundaries and this page are route entries;
 // other pages listed in the RSC manifest are not inherited route styles.
-const routes = ['page', 'auth/reset-password/page', 'cuenta/page', 'mascotas/page', 'mascotas/[id]/page', 'mascotas/[id]/carnet/page', 'mascotas/[id]/perdida/page', 'perdidas/page', 'perdidas/[code]/page', 'p/[code]/page'];
+const routes = ['page', 'acceso/page', 'auth/reset-password/page', 'cuenta/page', 'mascotas/page', 'mascotas/[id]/page', 'mascotas/[id]/carnet/page', 'mascotas/[id]/perdida/page', 'perdidas/page', 'perdidas/[code]/page', 'p/[code]/page'];
 const features = {
-  acceso: ['.auth-story', new Set(['page', 'auth/reset-password/page'])],
+  portada: ['.home_hero', new Set(['page'])],
+  acceso: ['.auth-story', new Set(['acceso/page', 'auth/reset-password/page'])],
   carnet: ['.health-panel', new Set(['mascotas/[id]/carnet/page'])],
   cartel: ['.poster-studio', new Set(['mascotas/[id]/perdida/page'])],
   editor: ['.pet-details-editor', new Set(['mascotas/[id]/page'])],
   reporte: ['.lost-report-form', new Set(['mascotas/[id]/perdida/page'])],
-  navegacion: ['.app-menu', new Set(['cuenta/page', 'mascotas/page', 'mascotas/[id]/page', 'mascotas/[id]/carnet/page', 'mascotas/[id]/perdida/page', 'perdidas/page', 'perdidas/[code]/page'])],
+  navegacion: ['.app-menu', new Set(['page', 'cuenta/page', 'mascotas/page', 'mascotas/[id]/page', 'mascotas/[id]/carnet/page', 'mascotas/[id]/perdida/page', 'perdidas/page', 'perdidas/[code]/page'])],
   rescate: ['.rescue-card', new Set(['p/[code]/page'])],
 };
 const rows = [];

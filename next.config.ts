@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
   allowedDevOrigins: ['127.0.0.1'],
-  experimental: { serverActions: { bodySizeLimit: '12mb' } },
+  experimental: {
+    // Evita mezclar el CSS de portada con la cabecera que comparten otras rutas.
+    cssChunking: false,
+    serverActions: { bodySizeLimit: '12mb' },
+  },
   async headers() {
     return [{
       source: '/service-worker.js',

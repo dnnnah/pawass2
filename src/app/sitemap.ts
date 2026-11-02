@@ -7,10 +7,10 @@ export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();
-  if (!supabase) return [];
-  const { data } = await supabase.rpc('get_public_lost_pets', { p_species: null, p_query: null });
+  const { data } = supabase ? await supabase.rpc('get_public_lost_pets', { p_species: null, p_query: null }) : { data: [] };
   const pets = (data || []) as Pick<PublicLostPet, 'public_code' | 'lost_at'>[];
   return [
+    { url: `${getSiteUrl()}/`, changeFrequency: 'monthly', priority: 1 },
     { url: `${getSiteUrl()}/perdidas`, changeFrequency: 'hourly', priority: 0.8 },
     ...pets.map((pet) => ({
       url: `${getSiteUrl()}/perdidas/${encodeURIComponent(pet.public_code)}`,

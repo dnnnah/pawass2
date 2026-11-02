@@ -14,7 +14,7 @@ export async function GET(_request: Request, { params }: Props) {
   if (!supabase) notFound();
   const { data } = await supabase.auth.getClaims();
   const identity = getIdentityFromClaims(data?.claims);
-  if (!identity) redirect('/');
+  if (!identity) redirect('/acceso');
 
   const { data: pet } = await supabase.from('pets').select('id').eq('id', id).eq('owner_id', identity.id).maybeSingle();
   if (!pet) notFound();
