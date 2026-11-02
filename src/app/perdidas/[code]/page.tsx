@@ -1,3 +1,4 @@
+import { getOwnedReports } from '@/features/lost-pets/owned-reports';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PublicLostPetDetail, type PublicLostPetDetailData } from '@/features/lost-pets/public-lost-pet';
@@ -43,6 +44,10 @@ export default async function LostPetPage({ params }: Props) {
   const pet = (data?.[0] as LostPet | undefined) || null;
   if (!pet) notFound();
   const signedIn = Boolean(authData?.claims?.sub);
-  const photoUrl = await createPhotoUrl('lost-pet-photos', pet.photo_path);
-  return <PublicLostPetDetail pet={pet} photoUrl={photoUrl} signedIn={signedIn} />;
+  const ownedReports = typeof authData?.claims?.sub === 'string' ? await getOwnedReports(supabase, authData.claims.sub) : new Map();
+  const { data: photos } = pet.photo_path ? { data: null } : await supabase.rpc('get_public_pet_photo', { p_code: code });
+  const photoUrl = pet.photo_path
+    ? await createPhotoUrl('lost-pet-photos', pet.photo_path, supabase)
+    : await createPhotoUrl('pet-photos', photos?.[0]?.photo_path, supabase);
+  return <PublicLostPetDetail pet={pet} photoUrl={photoUrl} signedIn={signedIn} ownedReport={ownedReports.get(code)} />;
 }

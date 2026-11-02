@@ -40,7 +40,7 @@ Las claves secretas de Supabase permanecen en el servidor. Los datos privados se
 ## 2. Cuenta y contactos de rescate
 
 - El tutor puede autenticarse con correo y contraseña o con Google.
-- En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces y valida que coincidan antes de enviarla a Supabase.
+- En los formularios de acceso y cambio de contraseña puede mostrar u ocultar el texto del campo con un control accesible. El registro solicita la contraseña dos veces, muestra debajo del campo los requisitos de 8 a 72 caracteres, una mayúscula, un número y un carácter especial. Cada requisito cumplido muestra una palomita verde; debajo de la confirmación avisa en vivo si coinciden con palomita verde o si difieren con tache rojo. La creación permanece deshabilitada mientras falten esos requisitos y se vuelven a validar antes de enviar a Supabase.
 - Los correos de confirmación y recuperación de contraseña deben funcionar en producción mediante un servicio de envío configurado para la aplicación.
 - Después de autenticarse, completa su perfil antes de crear mascotas. El nombre es obligatorio; los dos campos de apellido son opcionales.
 - El teléfono para llamadas y WhatsApp usan el mismo número por defecto. El tutor puede separarlos expresamente si quiere. Cada número guardado incluye lada internacional. En los formularios se elige el país/lada por separado y se introducen solo dígitos; fuera de edición, el número nacional de diez dígitos se presenta como `55 1234 5678`.
@@ -78,7 +78,7 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 - Muestra nombre, especie, foto principal si existe, botones de llamada y WhatsApp y las alertas críticas o instrucciones de manejo que el tutor haya elegido publicar.
 - No muestra nombre ni apellidos del tutor, historial clínico completo ni documentos privados.
 - El contacto disponible se resuelve con la excepción de la mascota, si existe; en caso contrario, con los datos vigentes de la cuenta.
-- El botón de WhatsApp abre una conversación con un mensaje prellenado que identifica a la mascota y su código. Quien la encuentre puede elegir incluir su ubicación actual como enlace de mapa; se solicita su permiso antes de obtenerla.
+- El botón de WhatsApp abre una conversación con un mensaje prellenado que identifica a la mascota y su código. La aplicación no solicita ni añade la ubicación actual del dispositivo.
 - La ficha QR sigue disponible aunque la mascota no tenga una alerta de pérdida ni un futuro perfil comunitario.
 
 ## 5. Alertas de cuidado y salud privada
@@ -100,6 +100,7 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 ### Otros datos y documentos
 
 - El carnet privado permite registrar cirugías e intervenciones con fecha y notas.
+- Cada sección del carnet muestra su cantidad de registros y agrupa las acciones para agregar, editar y eliminar. La prioridad y la visibilidad QR se presentan explícitamente en las alertas autorizables; el carnet de salud permanece privado.
 - El tutor puede subir documentos clasificados, como cartilla de vacunación, certificado de esterilización, registro de microchip, receta, estudio médico o identificación.
 - Los documentos y el historial clínico completo son privados para el tutor autenticado; nunca se entregan desde la ficha QR ni desde el tablón público.
 - Las fotos de galería y los documentos son grupos distintos de archivos. La posible publicación de fotos en la comunidad se definirá en la etapa posterior.
@@ -116,6 +117,8 @@ El acceso al alta se muestra únicamente después de que el tutor elija “Agreg
 - La ubicación se describe en texto para que cualquier tutor pueda indicar dónde se vio a la mascota, sin dividir el producto ni el tablón por países. No se exige publicar una coordenada precisa.
 - La ficha de pérdida reutiliza identidad, contacto y alertas de cuidado elegidas. Añade únicamente los datos específicos del extravío.
 - Cada episodio de pérdida conserva fechas y estado. El contenido de pérdida se separa de los datos de salud y nunca añade información clínica que el tutor no haya autorizado ya para el QR.
+- El editor y la confirmación de recuperación tienen una ruta privada dedicada, separada de la tarjeta de mascota. Los estados “Perdida” y “En casa” se distinguen con texto, señal visual y acciones específicas.
+- La fecha y la hora aproximadas del extravío se capturan en campos independientes; el tutor completa ambos o deja ambos vacíos.
 - La ficha de pérdida tiene una URL pública propia, permite volver a la ficha QR y solo expone identidad, contactos efectivos, alertas elegidas y detalles del extravío.
 - El tablón muestra las alertas al abrirse y permite filtrar automáticamente por especie, sin botón de búsqueda ni búsqueda por zona; cada ficha permite contactar al tutor por WhatsApp.
 - Una mascota puede tener una alerta de pérdida activa a la vez. Al cerrar la alerta, sale de inmediato del tablón.
@@ -154,7 +157,7 @@ Los nombres **Pawshot** y **Pawsnap** son candidatos para la acción o sección 
 - Sin carnet físico imprimible ni exportación PDF del carnet.
 - Sin refugios, adopciones ni transferencias de titularidad.
 - Sin chat interno, comentarios ni pagos.
-- Sin rastreo GPS en tiempo real. La ubicación de quien encuentra a la mascota solo se incluye si esa persona decide enviarla por WhatsApp.
+- Sin rastreo GPS en tiempo real. La aplicación no obtiene la ubicación de quien encuentra a la mascota.
 - Sin edición de datos sin conexión.
 
 ## 11. Criterios de aceptación de la primera versión
@@ -176,8 +179,12 @@ Los nombres **Pawshot** y **Pawsnap** son candidatos para la acción o sección 
 ## 13. Dirección de interfaz aprobada
 
 - La pantalla principal privada muestra primero las mascotas del tutor. Cada mascota presenta una acción de **“Reportar perdida”** claramente visible. El carnet de salud y los documentos se consultan desde la ficha de esa mascota.
+- Cada tarjeta de mascota muestra foto, nombre y estado, una acción principal **Ver ficha pública** y dos accesos discretos: **Editar mascota** y **Pérdida**. Los detalles, QR permanente, carnet y acciones de recuperación viven dentro de sus secciones, sin tarjetas anidadas. La vista pública actual abre la ficha QR habitual cuando no hay alerta y la ficha pública de búsqueda mientras la alerta esté activa. El QR físico conserva `/p/<código>` para mantener su dirección estable; esa ficha muestra el estado de pérdida y el enlace a la búsqueda.
+- El área del editor ofrece dos acciones distintas: editar información/foto/contactos y abrir el carnet de salud. El área de pérdida muestra el estado actual y gestiona reporte, regreso y cartel. La vista pública de pérdida no se duplica como otra acción bajo la tarjeta.
+- La ficha privada de mascota presenta secciones de información con grupos de campos delimitados; la navegación indica qué se edita en cada área. En el carnet, vacunas y cada registro separan datos de aplicación, estado y acciones de editar/eliminar; los conteos y los botones de agregar se distinguen por sección.
+- Las rutas inexistentes muestran una página 404 propia con navegación de regreso a Mis mascotas, al tablón de pérdidas o al inicio.
 - La navegación principal usa un menú hamburguesa en todas las anchuras y contiene **Mis mascotas**, **Mascotas perdidas** y **Mi cuenta**. Salud y documentos se consultan dentro de cada mascota.
-- La ficha pública del QR muestra primero la foto y el nombre de la mascota, seguidos primero de WhatsApp como acción sólida, después de llamada como acción de contorno y de ubicación como apoyo textual. Las alertas de cuidado elegidas aparecen a continuación, con jerarquía según su importancia.
+- La ficha pública del QR muestra primero la foto y el nombre de la mascota, seguidos primero de WhatsApp como acción sólida, después de llamada como acción de contorno. Las alertas de cuidado elegidas aparecen a continuación, con jerarquía según su importancia.
 - Cuando hay una alerta de pérdida activa, la parte superior de la ficha QR muestra una franja clara de **“Mascota perdida”** y mantiene foto, nombre y botones de contacto en las primeras posiciones.
 - La estructura visual prioriza fotografías de las mascotas, fichas sencillas y cercanía. El fondo es blanco, con superficies y detalles azules en las fichas y texto azul oscuro de alto contraste. La tipografía es Nunito Sans Variable autoalojada; el carácter combina 75% profesional y 25% juguetón, con figuras de huellas, corazones, estrellas, collares, perros y gatos y acentos decorativos cian, cobalto y violeta.
 - El logo muestra la palabra **“pawpass” junto a una huellita**. La huellita y la identidad habitual usan azul, no rojo.
@@ -197,6 +204,7 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 - La navegación y las acciones deben funcionar con teclado; el foco ha de ser visible y seguir un orden lógico. Formularios, errores, estados y botones deben tener nombres e instrucciones comprensibles para lectores de pantalla.
 - El color nunca es el único indicador de pérdida, gravedad o estado de salud: se acompañará de texto e iconografía comprensible. La jerarquía azul/rojo debe conservar contraste suficiente.
 - La interfaz debe soportar ampliación de texto, reflujo en móvil y preferencias de movimiento reducido. Las áreas táctiles, mensajes de error y pasos de autenticación deben diseñarse para un uso accesible.
+- Las rutas dinámicas deben ofrecer respuesta visual inmediata y prefetch de su estructura de navegación mediante estados de carga; los datos personales siguen usando respuestas `no-store`.
 - Las fotografías informativas tendrán texto alternativo útil. El cartel tendrá una descripción textual accesible de la información que transmite, además de su imagen descargable o imprimible. El QR conservará una URL y un código legibles para acceso alternativo al escaneo.
 - Cada fase verificará sus flujos con revisión automática y pruebas manuales de teclado, lector de pantalla y móvil antes de considerarse terminada.
 
@@ -208,3 +216,24 @@ La **accesibilidad y el SEO son requisitos de la primera versión**, desde la ar
 - La ficha QR `/p/PC-XXXXXX` lleva `noindex` tanto en estado normal como durante una pérdida; la ruta pública separada de pérdida y el tablón son indexables solo mientras la alerta está activa. La vista de recuperación lleva `noindex`.
 - La política de indexación se aplica con directivas de página que los rastreadores puedan leer. `robots.txt` no debe impedir que un rastreador vea el `noindex` de una ficha pública. El SEO no debe ampliar por accidente la exposición de datos de salud o información privada.
 - Se revisarán indexación, rendimiento y resultados de búsqueda en cada fase que añada páginas públicas.
+
+### Ajustes de rescate y cartel
+
+- El PNG prioriza «Si la ves» y el temperamento autorizado. Agrega otros cuidados autorizados según el espacio disponible, manteniendo una letra legible y remitiendo al QR para el resto.
+- El logo conduce a Mis mascotas; las rutas privadas envían al acceso cuando no hay sesión.
+- Las fotos públicas usan permisos limitados a la foto vigente autorizada; no necesitan una clave administrativa. El tablón y la ficha de pérdida usan la foto habitual cuando no se cargó una reciente.
+
+### Organización del editor y gestión de pérdida
+
+- La tarjeta distingue Ver ficha pública, Editar ficha y Reportar pérdida/Editar alerta. Si está perdida, ofrece Ya está en casa con confirmación explícita. En el tablón y la ficha de pérdida, solo su dueño ve edición y regreso; la acción conserva autorización de sesión y RLS.
+- La página privada de pérdida prioriza editar el reporte. Después aparecen el cartel PNG plegable (se genera solo al abrirlo), la confirmación de regreso y el QR permanente al final. Tanto el editor general como la alerta ofrecen Ver ficha pública.
+- El editor usa una navbar de Información, Foto, Cuidados, Salud, Documentos y Contactos, visible al desplazarse. Conserva Editar alerta cuando hay búsqueda activa.
+- El QR permanente aparece abierto al final del editor de ficha y del editor de alerta, con instrucciones para compartir/imprimir y descargas PNG/SVG. El editor no incluye una vista previa incrustada; Ver ficha pública permite revisar lo publicado. Carnet, documentos, microchip y RUAC permanecen privados.
+- Cuidados, carnet y documentos muestran conteos y registros básicos, con acceso a ver y gestionar más. Se usa color e iconografía junto a etiquetas; las fotos públicas conservan su proporción natural y se muestran completas.
+
+- Ya está en casa es un botón real con icono que abre la confirmación explícita y ofrece Cancelar. Cada alerta de cuidado muestra lápiz de edición y ojo que publica/oculta esa alerta y sus instrucciones; Agregar aparece al final. Los registros del carnet muestran lápiz y estado privado con ojo tachado, sin habilitar publicación del expediente.
+
+- La jerarquía de estados incluye color, etiqueta y símbolo: informativa violeta, precaución azul, urgente/vencida rojo, al día azul mineral y datos desconocidos gris. Vacunas y próximas fechas usan la misma semántica; no se deduce estado si falta la fecha.
+- La navbar del editor se ajusta a la altura real de la cabecera. Las acciones del QR se separan de las instrucciones y se apilan en pantallas estrechas, sin desbordar el documento.
+
+- Ver ficha pública dentro del editor pertenece al área privada del dueño. El tablón y el QR permiten a cualquier visitante consultar la ficha pública y contactar. Editar alerta y Ya está en casa requieren la sesión del dueño, tanto en interfaz como mediante las políticas de datos.

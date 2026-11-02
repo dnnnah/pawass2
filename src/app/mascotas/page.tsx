@@ -5,6 +5,7 @@ import { BrandMark } from '@/features/auth/brand-mark';
 import { AppHeader } from '@/features/navigation/app-header';
 import { PetCreateControl } from '@/features/pets/quick-pet-form';
 import { PetCard } from '@/features/pets/pet-card';
+import Link from 'next/link';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
 import { createClient } from '@/lib/supabase/server';
 import { createPhotoUrls } from '@/lib/supabase/photo-url';
@@ -42,7 +43,7 @@ export default async function PetsPage() {
         <header className="welcome"><div><h1 id="pets-heading">Mis mascotas</h1><p>{profile?.first_name && <>Hola, <strong>{profile.first_name}</strong>. </>}Sus fichas, contactos y cuidados, siempre a la mano.</p></div><span className="section-count">{(pets || []).length} {(pets || []).length === 1 ? 'mascota' : 'mascotas'}</span></header>
         <PetTrail />
         <section className="pets-section" aria-labelledby="pets-heading">
-          {!profileComplete && <div className="profile-needed"><strong>Completa tus contactos para activar una ficha QR.</strong><p>Guarda tu nombre y teléfono de rescate antes de registrar una mascota.</p><a href="/cuenta">Ir a Mi cuenta</a></div>}
+          {!profileComplete && <div className="profile-needed"><strong>Completa tus contactos para activar una ficha QR.</strong><p>Guarda tu nombre y teléfono de rescate antes de registrar una mascota.</p><Link href="/cuenta">Ir a Mi cuenta</Link></div>}
           {(pets || []).length > 0 && <div className="pet-list">{(pets || []).map((pet) => {
             const code = codeByPet.get(pet.id);
             return code ? <PetCard key={pet.id} pet={pet} code={code} report={reportByPet.get(pet.id)} photoUrl={photoUrlByPet.get(pet.id)} /> : null;

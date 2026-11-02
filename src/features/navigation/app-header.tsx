@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { BrandMark } from '@/features/auth/brand-mark';
 import { signOut } from '@/features/auth/actions';
-import { getBrandHomePath } from '@/lib/supabase/auth-routing';
 
 type ActiveDestination = 'pets' | 'lost' | 'account';
 
@@ -26,7 +25,7 @@ export function AppHeader({ active, signedIn = true }: { active: ActiveDestinati
   }, [open]);
   return (
     <header className="app-header" ref={headerRef}>
-      <BrandMark href={getBrandHomePath(signedIn)} />
+      <BrandMark />
       <button ref={toggleRef} className="menu-toggle" type="button" aria-expanded={open} aria-controls="app-menu" aria-label={open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'} onClick={() => setOpen(!open)}>
         <svg viewBox="0 0 24 24" aria-hidden="true">{open ? <path d="m6 6 12 12M6 18 18 6" /> : <path d="M4 6h16M4 12h16M4 18h16" />}</svg><span>Menú</span>
       </button>

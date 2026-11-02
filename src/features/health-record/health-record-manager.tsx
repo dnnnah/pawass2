@@ -1,6 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { DoseStatusBadge, doseStatusTone } from './dose-status-badge';
+import { StatusSymbol } from '@/features/brand/status-badge';
+import { RecordActionIcon } from '@/features/brand/record-action-icon';
+import './health-record-manager.css';
 import { useActionState, useId, useState, useSyncExternalStore } from 'react';
 import type { FormState } from '@/features/profile/actions';
 import {
@@ -8,7 +12,6 @@ import {
   HEALTH_DOCUMENT_CATEGORIES,
   calculateDoseStatus,
   suggestNextDoseDate,
-  type DoseStatus,
   type HealthDoseKind,
   type PetSpecies,
 } from './domain';
@@ -47,13 +50,6 @@ export type HealthDocumentRow = {
 
 const initialState: FormState = { ok: false, message: '' };
 const kindLabels: Record<HealthDoseKind, string> = { vaccination: 'Vacuna', deworming: 'Desparasitación' };
-const statusLabels = {
-  'sin-informacion': 'Sin información',
-  'sin-proxima-fecha': 'Sin próxima fecha',
-  vencida: 'Vencida',
-  'proxima-a-vencer': 'Próxima a vencer',
-  'al-dia': 'Al día',
-} as const;
 
 export function HealthRecordManager({
   petId,
@@ -72,10 +68,10 @@ export function HealthRecordManager({
   return (
     <div className="health-record-layout">
       <nav className="health-record-nav" aria-label="Apartados del carnet de salud">
-        <a href="#vacunas">Vacunas <span>{vaccinations.length}</span></a>
-        <a href="#desparasitaciones">Desparasitaciones <span>{dewormings.length}</span></a>
-        <a href="#intervenciones">Cirugías e intervenciones <span>{procedures.length}</span></a>
-        <a href="#documentos">Documentos <span>{documents.length}</span></a>
+        <Link href="#vacunas">Vacunas <span>{vaccinations.length}</span></Link>
+        <Link href="#desparasitaciones">Desparasitaciones <span>{dewormings.length}</span></Link>
+        <Link href="#intervenciones">Cirugías e intervenciones <span>{procedures.length}</span></Link>
+        <Link href="#documentos">Documentos <span>{documents.length}</span></Link>
       </nav>
 
       <DoseSection id="vacunas" kind="vaccination" petId={petId} species={species} records={vaccinations} />
@@ -96,7 +92,7 @@ function DoseSection({ id, kind, petId, species, records }: {
   return (
     <section className="health-panel" id={id} aria-labelledby={`${id}-heading`}>
       <header className="health-panel__heading">
-        <div><h2 id={`${id}-heading`}>{kind === 'vaccination' ? 'Vacunas' : 'Desparasitaciones'}</h2></div>
+        <div><h2 id={`${id}-heading`}>{kind === 'vaccination' ? 'Vacunas' : 'Desparasitaciones'}</h2><span className="section-count">{records.length} {records.length === 1 ? 'registro' : 'registros'}</span></div>
         <DoseStatusBadge status={status} />
       </header>
       <p className="health-panel__intro">Registra cada aplicación con su fecha. PawPass no calcula vencimientos si no confirmas una próxima fecha.</p>
@@ -118,30 +114,32 @@ function DoseSection({ id, kind, petId, species, records }: {
 function DoseRecordCard({ petId, species, kind, record }: {
   petId: string; species: PetSpecies; kind: HealthDoseKind; record: HealthRecordRow;
 }) {
+  const [editing, setEditing] = useState(false);
+  const editorId = useId();
   const today = useTodayDate();
   const status = today ? calculateDoseStatus([{ nextDoseDate: record.next_dose_date }], today) : null;
   return (
     <article className="health-record-entry">
       <div className="health-record-entry__top">
         <div><h3>{record.label}</h3><p>Aplicada el <time dateTime={record.administered_on}>{formatDate(record.administered_on)}</time></p></div>
-        <DoseStatusBadge status={status} />
+        <div className="record-heading-actions"><DoseStatusBadge status={status} /><button className="record-icon-button" type="button" title="Editar registro" aria-label={`Editar registro: ${record.label}`} aria-expanded={editing} aria-controls={editorId} onClick={() => setEditing(!editing)}><RecordActionIcon kind="edit" /></button></div>
       </div>
       <dl className="health-record-details">
-        <div><dt>Próxima fecha</dt><dd>{record.next_dose_date ? formatDate(record.next_dose_date) : 'Sin próxima fecha registrada'}</dd></div>
+        <div><dt>Próxima fecha</dt><dd>{record.next_dose_date ? <time dateTime={record.next_dose_date} className={`dose-next-date dose-next-date--${status ? doseStatusTone[status] : 'unknown'}`}><StatusSymbol name={status === 'vencida' ? 'urgent' : status === 'proxima-a-vencer' ? 'clock' : 'calendar'} />{formatDate(record.next_dose_date)}</time> : <span className="dose-next-date dose-next-date--unknown"><StatusSymbol name="unknown" />Sin próxima fecha registrada</span>}</dd></div>
         {record.lot && <div><dt>Lote</dt><dd>{record.lot}</dd></div>}
         {record.veterinarian && <div><dt>Veterinario</dt><dd>{record.veterinarian}</dd></div>}
         {record.notes && <div className="health-record-details__notes"><dt>Notas</dt><dd>{record.notes}</dd></div>}
       </dl>
       <div className="health-record-actions">
-        <details><summary className="text-button">Editar registro</summary><DoseForm petId={petId} species={species} kind={kind} record={record} /></details>
+        {editing && <div id={editorId} className="health-inline-editor"><DoseForm petId={petId} species={species} kind={kind} record={record} onCancel={() => setEditing(false)} /></div>}
         <DeleteRecordControl petId={petId} record={record} />
       </div>
     </article>
   );
 }
 
-function DoseForm({ petId, species, kind, record }: {
-  petId: string; species: PetSpecies; kind: HealthDoseKind; record?: HealthRecordRow;
+function DoseForm({ petId, species, kind, record, onCancel }: {
+  petId: string; species: PetSpecies; kind: HealthDoseKind; record?: HealthRecordRow; onCancel?: () => void;
 }) {
   const [state, action, pending] = useActionState(saveHealthRecord, initialState);
   const formId = useId();
@@ -187,7 +185,7 @@ function DoseForm({ petId, species, kind, record }: {
       </div>
       {nextDoseDate && <label className="health-confirm-date" htmlFor={`${formId}-confirm`}><input id={`${formId}-confirm`} name="nextDoseConfirmed" type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} /><span>Confirmo que la próxima fecha es correcta para esta mascota.</span></label>}
       {state.message && <p className={`health-form-message ${state.ok ? 'health-form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-      <div className="health-form__actions"><button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar registro'}</button>{record && <button className="button button--text" type="button" onClick={(event) => event.currentTarget.closest('details')?.removeAttribute('open')}>Cancelar edición</button>}</div>
+      <div className="health-form__actions"><button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar registro'}</button>{record && <button className="button button--text" type="button" onClick={(event) => onCancel ? onCancel() : event.currentTarget.closest('details')?.removeAttribute('open')}>Cancelar edición</button>}</div>
     </form>
   );
 }
@@ -195,7 +193,7 @@ function DoseForm({ petId, species, kind, record }: {
 function DeleteRecordControl({ petId, record }: { petId: string; record: HealthRecordRow }) {
   return (
     <details className="health-delete-control">
-      <summary className="text-button">Eliminar</summary>
+      <summary className="button health-danger-action">Eliminar registro</summary>
       <div><p>Se quitará este registro del carnet. Esta acción no se puede deshacer.</p><form action={deleteHealthRecord}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="recordId" value={record.id} /><button className="button button--outline health-danger-action" type="submit">Confirmar eliminación</button></form></div>
     </details>
   );
@@ -207,7 +205,7 @@ function ProcedureSection({ petId, records }: { petId: string; records: HealthRe
     <section className="health-panel" id="intervenciones" aria-labelledby="procedures-heading">
       <header className="health-panel__heading"><div><h2 id="procedures-heading">Cirugías e intervenciones</h2></div><span className="section-count">{records.length} {records.length === 1 ? 'registro' : 'registros'}</span></header>
       <p className="health-panel__intro">Conserva el nombre, la fecha y notas importantes de cada procedimiento.</p>
-      {orderedRecords.length ? <ol className="health-record-list">{orderedRecords.map((record) => <li key={record.id}><article className="health-record-entry"><div className="health-record-entry__top"><div><h3>{record.label}</h3><p>Realizada el <time dateTime={record.administered_on}>{formatDate(record.administered_on)}</time></p></div></div>{record.notes && <p className="health-procedure-notes">{record.notes}</p>}<div className="health-record-actions"><details><summary className="text-button">Editar intervención</summary><ProcedureForm petId={petId} record={record} /></details><DeleteRecordControl petId={petId} record={record} /></div></article></li>)}</ol> : <div className="health-empty"><p>Aún no hay cirugías o intervenciones registradas.</p><span>Puedes guardar aquí procedimientos pasados y actuales.</span></div>}
+      {orderedRecords.length ? <ol className="health-record-list">{orderedRecords.map((record) => <li key={record.id}><article className="health-record-entry"><div className="health-record-entry__top"><div><h3>{record.label}</h3><p>Realizada el <time dateTime={record.administered_on}>{formatDate(record.administered_on)}</time></p></div></div>{record.notes && <p className="health-procedure-notes">{record.notes}</p>}<div className="health-record-actions"><details><summary className="button button--outline"><RecordActionIcon kind="edit" />Editar intervención</summary><ProcedureForm petId={petId} record={record} /></details><DeleteRecordControl petId={petId} record={record} /></div></article></li>)}</ol> : <div className="health-empty"><p>Aún no hay cirugías o intervenciones registradas.</p><span>Puedes guardar aquí procedimientos pasados y actuales.</span></div>}
       <details className="health-add-panel"><summary className="button button--primary">Agregar cirugía o intervención</summary><ProcedureForm petId={petId} /></details>
     </section>
   );
@@ -238,7 +236,7 @@ function DocumentSection({ petId, documents }: { petId: string; documents: Healt
     <section className="health-panel" id="documentos" aria-labelledby="documents-heading">
       <header className="health-panel__heading"><div><h2 id="documents-heading">Documentos</h2></div><span className="section-count">{documents.length} {documents.length === 1 ? 'archivo' : 'archivos'}</span></header>
       <p className="health-panel__intro">Sube cartillas, recetas o estudios. Los archivos se conservan en un espacio privado y solo se entregan después de verificar tu sesión y permisos.</p>
-      {orderedDocuments.length ? <ul className="health-document-list">{orderedDocuments.map((document) => <li key={document.id}><article className="health-document-entry"><p className="health-document-category">{document.label}</p><h3>{document.original_filename}</h3><p>{document.mime_type === 'application/pdf' ? 'PDF' : document.mime_type.slice(6).toUpperCase()} · {document.document_date ? `Fecha del documento: ${formatDate(document.document_date)} · ` : ''}{formatBytes(document.size_bytes)}</p><Link className="button button--outline" href={`/mascotas/${petId}/carnet/documentos/${document.id}`} target="_blank">Abrir documento <span className="sr-only">{document.original_filename} (en una pestaña nueva)</span></Link><details><summary className="text-button">Editar clasificación</summary><DocumentEditForm petId={petId} document={document} /></details><DeleteDocumentControl petId={petId} document={document} /></article></li>)}</ul> : <div className="health-empty"><p>Aún no hay documentos.</p><span>Los documentos que agregues solo estarán disponibles dentro de tu cuenta.</span></div>}
+      {orderedDocuments.length ? <ul className="health-document-list">{orderedDocuments.map((document) => <li key={document.id}><article className="health-document-entry"><p className="health-document-category">{document.label}</p><h3>{document.original_filename}</h3><p>{document.mime_type === 'application/pdf' ? 'PDF' : document.mime_type.slice(6).toUpperCase()} · {document.document_date ? `Fecha del documento: ${formatDate(document.document_date)} · ` : ''}{formatBytes(document.size_bytes)}</p><Link className="button button--outline" href={`/mascotas/${petId}/carnet/documentos/${document.id}`} target="_blank">Abrir documento <span className="sr-only">{document.original_filename} (en una pestaña nueva)</span></Link><details><summary className="button button--outline"><RecordActionIcon kind="edit" />Editar clasificación</summary><DocumentEditForm petId={petId} document={document} /></details><DeleteDocumentControl petId={petId} document={document} /></article></li>)}</ul> : <div className="health-empty"><p>Aún no hay documentos.</p><span>Los documentos que agregues solo estarán disponibles dentro de tu cuenta.</span></div>}
       <details className="health-add-panel"><summary className="button button--primary">Agregar documento</summary><DocumentUploadForm petId={petId} /></details>
     </section>
   );
@@ -249,7 +247,7 @@ function DocumentUploadForm({ petId }: { petId: string }) {
   const formId = useId();
   const [category, setCategory] = useState('');
   return (
-    <form action={action} className="health-form" encType="multipart/form-data">
+    <form action={action} className="health-form">
       <input type="hidden" name="petId" value={petId} />
       <div className="health-form__title"><h3>Nuevo documento</h3><p>Formatos: PDF, JPEG, PNG o WebP · hasta 10 MB.</p></div>
       <div className="health-form-grid">
@@ -285,17 +283,9 @@ function DocumentEditForm({ petId, document }: { petId: string; document: Health
 function DeleteDocumentControl({ petId, document }: { petId: string; document: HealthDocumentRow }) {
   return (
     <details className="health-delete-control">
-      <summary className="text-button">Eliminar documento</summary>
+      <summary className="button health-danger-action">Eliminar documento</summary>
       <div><p>Se quitarán el archivo y su registro privado. Esta acción no se puede deshacer.</p><form action={deleteHealthDocument}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="documentId" value={document.id} /><button className="button button--outline health-danger-action" type="submit">Confirmar eliminación</button></form></div>
     </details>
-  );
-}
-
-function DoseStatusBadge({ status }: { status: DoseStatus | null }) {
-  return (
-    <span className={`health-status${status ? ` health-status--${status}` : ''}`}>
-      {status && <span aria-hidden="true" />}{status ? statusLabels[status] : 'Estado local al cargar'}
-    </span>
   );
 }
 

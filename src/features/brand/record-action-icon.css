@@ -1,0 +1,7 @@
+.record-action-icon { display: block; width: 21px; height: 21px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.record-icon-button { display: inline-flex; width: 44px; height: 44px; flex: 0 0 44px; justify-content: center; align-items: center; border: 1px solid #9bb9c3; border-radius: 10px; background: #fff; color: var(--blue-deep); cursor: pointer; }
+.record-icon-button:hover { background: var(--blue-light); }
+.record-icon-button[aria-pressed="true"] { background: var(--blue-light); border-color: var(--blue); }
+.record-icon-button:disabled { opacity: .55; cursor: wait; }
+.record-heading-actions { display: flex; align-items: start; flex-wrap: wrap; gap: .5rem; }
+.record-private { display: inline-flex; align-items: center; gap: .35rem; min-height: 44px; color: var(--ink-soft); font-size: .85rem; }

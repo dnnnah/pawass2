@@ -7,8 +7,8 @@ Actualizado el 31 de octubre de 2026.
 | 1 y 2 | Cuenta, mascotas y alertas de cuidado | Implementadas en `main`. |
 | 3 | Pérdida, tablón público y recuperación | Implementada según el estado de GitHub. |
 | 4 | Carnet de salud privado por mascota | PR #6 integrado en `main`. |
-| 5 | Cartel de búsqueda | Lista para revisión en PR desde `feat/cartel-busqueda`; sin migraciones de base de datos. |
-| Cierre de primera versión | Accesibilidad, SEO, PWA y flujos completos | Siguiente fase, posterior a la revisión de fase 5. |
+| 5 | Cartel de búsqueda | PR #7 integrado en `main`; sin migraciones de base de datos. |
+| Cierre de primera versión | Accesibilidad, SEO, PWA y flujos completos | PR [#8](https://github.com/dnnnah/pawass2/pull/8) abierto para revisión desde `feat/cierre-primera-version`; no integrado. |
 | Posterior | Pawgram | Fuera de la primera versión. |
 
 ## Fase 5 — Cartel de “Se busca”

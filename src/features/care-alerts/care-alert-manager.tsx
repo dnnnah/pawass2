@@ -2,7 +2,9 @@
 
 import { useId, useState, useActionState } from 'react';
 import { CARE_ALERT_CATALOG, CARE_ALERT_CATEGORIES, type CareAlertCategory, type CareAlertSeverity } from './domain';
-import { deleteCareAlert, saveCareAlert } from './actions';
+import { CareSeverityBadge } from '@/features/brand/status-badge';
+import { RecordActionIcon } from '@/features/brand/record-action-icon';
+import { deleteCareAlert, saveCareAlert, setCareAlertVisibility } from './actions';
 import type { FormState } from '@/features/profile/actions';
 
 export type CareAlertRecord = {
@@ -24,7 +26,7 @@ const categoryLabels: Record<CareAlertCategory, string> = {
   temperament: 'Temperamento',
 };
 const severityLabels: Record<CareAlertSeverity, string> = {
-  critical: 'Crítica',
+  critical: 'Urgente',
   precaution: 'Precaución',
   informative: 'Informativa',
 };
@@ -36,28 +38,10 @@ export function CareAlertManager({ petId, alerts }: { petId: string; alerts: Car
         <div><h2 id="care-heading">Alertas de cuidado</h2><p>Elige qué necesita saber quien encuentre a tu mascota.</p></div>
         <span className="section-count">{alerts.length} {alerts.length === 1 ? 'alerta' : 'alertas'}</span>
       </div>
-      <p className="care-privacy-note">Las alertas son privadas. Solo las que autorices aparecen en su ficha QR, donde cualquier persona con el código puede verlas.</p>
+      <p className="care-privacy-note">El ojo controla si la alerta y sus instrucciones son públicas en el QR y el cartel. El lápiz abre su edición. Las alertas con el ojo tachado permanecen privadas.</p>
       {alerts.length > 0 ? (
         <ol className="care-alert-list">
-          {alerts.map((alert) => (
-            <li className="care-alert-item" key={alert.id}>
-              <div className="care-alert-item__heading">
-                <div><p className="care-alert-item__category">{categoryLabels[alert.category]}</p><h3>{alert.label}</h3></div>
-                <span className={`severity-badge severity-badge--${alert.severity}`}>{severityLabels[alert.severity]}</span>
-              </div>
-              <p className="care-alert-item__visibility">{alert.qr_visible ? 'Visible en ficha QR' : 'Solo tú puedes verla'}</p>
-              {alert.instructions && <p className="care-alert-item__instructions">{alert.instructions}</p>}
-              <details className="care-alert-editor">
-                <summary>Editar alerta</summary>
-                <CareAlertForm petId={petId} alert={alert} />
-              </details>
-              <form action={deleteCareAlert}>
-                <input type="hidden" name="petId" value={petId} />
-                <input type="hidden" name="alertId" value={alert.id} />
-                <button className="text-button" type="submit">Eliminar alerta</button>
-              </form>
-            </li>
-          ))}
+          {alerts.map((alert) => <CareAlertItem key={alert.id} petId={petId} alert={alert} />)}
         </ol>
       ) : (
         <p className="care-empty">Todavía no hay alertas. Puedes agregar alergias, cuidados o indicaciones de temperamento.</p>
@@ -68,6 +52,17 @@ export function CareAlertManager({ petId, alerts }: { petId: string; alerts: Car
       </details>
     </section>
   );
+}
+
+function CareAlertItem({ petId, alert }: { petId: string; alert: CareAlertRecord }) {
+  const [editing, setEditing] = useState(false);
+  const editorId = useId();
+  return <li className="care-alert-item"><div className="care-alert-item__heading"><div><p className="care-alert-item__category">{categoryLabels[alert.category]}</p><h3>{alert.label}</h3><CareSeverityBadge severity={alert.severity} /></div><div className="record-heading-actions"><button className="record-icon-button" type="button" title="Editar alerta" aria-label={`Editar alerta: ${alert.label}`} aria-expanded={editing} aria-controls={editorId} onClick={() => setEditing(!editing)}><RecordActionIcon kind="edit" /></button><VisibilityControl petId={petId} alert={alert} disabled={editing} /></div></div><p className="care-alert-item__visibility">{alert.qr_visible ? 'Pública en QR y cartel' : 'Privada: solo tú puedes verla'}</p>{alert.instructions && <p className="care-alert-item__instructions">{alert.instructions}</p>}{editing && <div id={editorId}><CareAlertForm petId={petId} alert={alert} /><button className="button button--text" type="button" onClick={() => setEditing(false)}>Cancelar edición</button></div>}<form action={deleteCareAlert} className="care-alert-item__delete"><input type="hidden" name="petId" value={petId} /><input type="hidden" name="alertId" value={alert.id} /><button className="button button--text care-alert-delete" type="submit">Eliminar alerta</button></form></li>;
+}
+function VisibilityControl({ petId, alert, disabled }: { petId: string; alert: CareAlertRecord; disabled: boolean }) {
+  const [state, action, pending] = useActionState(setCareAlertVisibility, initialState);
+  const label = alert.qr_visible ? `Ocultar del QR: ${alert.label}` : `Hacer pública en QR: ${alert.label}`;
+  return <form action={action} className="care-visibility-control" aria-busy={pending}><input type="hidden" name="petId" value={petId} /><input type="hidden" name="alertId" value={alert.id} /><input type="hidden" name="visibility" value={alert.qr_visible ? 'private' : 'public'} /><button className="record-icon-button" type="submit" title={pending ? 'Guardando visibilidad…' : label} aria-label={pending ? 'Guardando visibilidad…' : label} aria-pressed={alert.qr_visible} disabled={pending || disabled}><span className={pending ? 'care-visibility-pending' : undefined}><RecordActionIcon kind={alert.qr_visible ? 'eye' : 'eye-off'} /></span></button><span className="sr-only" role="status">{pending ? 'Guardando visibilidad…' : state.ok ? state.message : ''}</span>{!state.ok && state.message && <p className="care-visibility-error" role="alert">{state.message}</p>}</form>;
 }
 
 function CareAlertForm({ petId, alert }: { petId: string; alert?: CareAlertRecord }) {

@@ -16,7 +16,8 @@ async function uploadRecentPhoto(supabase: NonNullable<Awaited<ReturnType<typeof
 function getReport(formData: FormData) {
   return normalizeLostReport({
     lastSeenLocation: String(formData.get('lastSeenLocation') || ''),
-    lastSeenAt: String(formData.get('lastSeenAt') || ''),
+    lastSeenDate: String(formData.get('lastSeenDate') || ''),
+    lastSeenTime: String(formData.get('lastSeenTime') || ''),
     wearing: String(formData.get('wearing') || ''),
     message: String(formData.get('message') || ''),
     reward: String(formData.get('reward') || ''),

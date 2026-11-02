@@ -1,3 +1,4 @@
+import { getOwnedReports } from '@/features/lost-pets/owned-reports';
 import { LostBoardMessages } from '@/features/lost-pets/lost-board-messages';
 import { LostSpeciesFilter } from '@/features/lost-pets/lost-species-filter';
 import { PetTrail } from '@/features/brand/pet-note';
@@ -29,10 +30,17 @@ export default async function LostPetsPage({ searchParams }: Props) {
   const identity = getIdentityFromClaims(authData?.claims);
   const { data } = supabase ? await supabase.rpc('get_public_lost_pets', { p_species: species || null, p_query: null }) : { data: [] };
   const pets = (data || []) as PublicLostPet[];
-  const photoUrls = await createPhotoUrls('lost-pet-photos', pets.map((pet) => pet.photo_path));
+  const ownedReports = supabase && identity ? await getOwnedReports(supabase, identity.id) : new Map();
+  const photoUrls = await createPhotoUrls('lost-pet-photos', pets.map((pet) => pet.photo_path), supabase || undefined);
+  const fallbackPhotos = await Promise.all(pets.filter((pet) => !pet.photo_path).map(async (pet) => {
+    const { data } = await supabase!.rpc('get_public_pet_photo', { p_code: pet.public_code });
+    return [pet.public_code, data?.[0]?.photo_path || null] as const;
+  }));
+  const fallbackPaths = new Map(fallbackPhotos);
+  const fallbackUrls = await createPhotoUrls('pet-photos', fallbackPhotos.map(([, path]) => path), supabase || undefined);
   const petsWithUrls = pets.map((pet) => ({
     ...pet,
-    photo_url: pet.photo_path ? photoUrls.get(pet.photo_path) || null : null,
+    photo_url: pet.photo_path ? photoUrls.get(pet.photo_path) || null : fallbackUrls.get(fallbackPaths.get(pet.public_code) || '') || null,
   }));
   return (
     <main className="account-shell public-lost-shell">
@@ -43,7 +51,7 @@ export default async function LostPetsPage({ searchParams }: Props) {
         <LostBoardMessages />
         <LostSpeciesFilter species={species} />
         <div className="lost-results-heading"><h2>Alertas de búsqueda</h2><p role="status">{pets.length} {pets.length === 1 ? 'alerta activa' : 'alertas activas'}{species ? ' con estos filtros' : ''}</p>{species && <Link href="/perdidas">Limpiar filtros</Link>}</div>
-        {petsWithUrls.length ? <div className="lost-pet-list">{petsWithUrls.map((pet) => <LostPetCard key={pet.public_code} pet={pet} />)}</div> : <section className="lost-board__empty"><h2>{species ? 'No encontramos alertas con esos filtros' : 'No hay búsquedas activas por ahora'}</h2><p>{species ? 'Prueba otra especie o consulta todas las alertas.' : 'Aquí aparecen las mascotas con una alerta de pérdida activa. Cuando vuelven a casa, dejan el tablón.'}</p>{species && <Link href="/perdidas" className="button button--outline">Ver todas las alertas</Link>}</section>}
+        {petsWithUrls.length ? <div className="lost-pet-list">{petsWithUrls.map((pet) => <LostPetCard key={pet.public_code} pet={pet} ownedReport={ownedReports.get(pet.public_code)} />)}</div> : <section className="lost-board__empty"><h2>{species ? 'No encontramos alertas con esos filtros' : 'No hay búsquedas activas por ahora'}</h2><p>{species ? 'Prueba otra especie o consulta todas las alertas.' : 'Aquí aparecen las mascotas con una alerta de pérdida activa. Cuando vuelven a casa, dejan el tablón.'}</p>{species && <Link href="/perdidas" className="button button--outline">Ver todas las alertas</Link>}</section>}
         <p className="lost-board__privacy">Las fichas muestran solo datos de rescate y los detalles que el tutor decidió publicar.</p>
       </div>
     </main>

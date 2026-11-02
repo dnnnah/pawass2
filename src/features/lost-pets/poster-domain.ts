@@ -58,5 +58,5 @@ export function getRescueQrUrl(code: string, siteUrl: string): string {
 }
 
 export function getPosterEditorHref(petId: string): string {
-  return `/mascotas/${encodeURIComponent(petId)}#cartel-se-busca`;
+  return `/mascotas/${encodeURIComponent(petId)}/perdida#cartel-se-busca`;
 }

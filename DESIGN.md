@@ -20,6 +20,19 @@ colors:
   line-violet: "#d5cbed"
   surface-cobalt: "#f0f7ff"
   line-cobalt: "#c2d9ed"
+  status-info-ink: "#574080"
+  status-info-surface: "#efebf7"
+  status-precaution-line: "#99bacb"
+  status-critical-line: "#d9a6ac"
+  status-current-line: "#9bbdc9"
+  status-precaution-ink: "#144b6b"
+  status-precaution-surface: "#e1eef5"
+  status-critical-ink: "#8d2630"
+  status-critical-surface: "#fcebed"
+  status-current-ink: "#12536b"
+  status-current-surface: "#edf5f8"
+  status-unknown-ink: "#476274"
+  status-unknown-surface: "#f3f6f8"
 typography:
   display:
     fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
@@ -41,7 +54,18 @@ typography:
     fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.92rem"
     fontWeight: 700
+  section:
+    fontSize: "1.5rem"
+  compactTitle:
+    fontSize: "1.35rem"
+  compactDisplay:
+    fontSize: "clamp(2rem, 4vw, 2.7rem)"
+  small:
+    fontSize: "0.85rem"
+  date:
+    fontSize: "0.9rem"
 rounded:
+  status: "10px"
   field: "9px"
   button: "12px"
   card: "16px"
@@ -158,7 +182,7 @@ AppHeader muestra la marca y un botón “Menú” con icono SVG, nombre accesib
 
 ### Contacto de rescate
 
-WhatsApp mantiene azul de marca y precede a la llamada de contorno, cuando exista; la llamada durante una pérdida usa contorno rojo y ubicación ocupa el nivel de texto. Los avisos de pérdida o cuidado crítico usan rojo sin cambiar la identidad habitual de WhatsApp.
+WhatsApp mantiene azul de marca y precede a la llamada de contorno, cuando exista; la llamada durante una pérdida usa contorno rojo. Los avisos de pérdida o cuidado crítico usan rojo sin cambiar la identidad habitual de WhatsApp.
 
 ### PetTrail, mensajes y pie global
 
@@ -174,7 +198,7 @@ El panel “Mis mascotas” saluda con el nombre del tutor cuando está disponib
 
 - Do conservar la huella después de “pawpass”.
 - Do ofrecer foco visible, etiquetas claras y controles táctiles accesibles conforme a WCAG 2.2 AA.
-- Do mantener WhatsApp primero, llamada secundaria cuando esté disponible y ubicación como acción terciaria.
+- Do mantener WhatsApp primero y llamada secundaria cuando esté disponible, sin control de ubicación actual.
 - Do utilizar mensajes personalizados y figuras visibles sin ocultar información.
 
 ### Don't:
@@ -184,3 +208,23 @@ El panel “Mis mascotas” saluda con el nombre del tutor cuando está disponib
 - Don't usar decoración como sustituto de etiquetas o estados textuales.
 
 No canonizado: los rótulos superiores en mayúsculas y espaciado amplio que persisten en `.section-label`, y el rojo heredado en eliminación de cuenta/mascota, son desviaciones existentes; no se convierten en reglas para nuevas superficies ni se reparan en esta documentación.
+
+### Tarjetas de mascotas simplificadas
+
+Foto, nombre, especie y estado preceden a una sola acción sólida: Ver ficha pública. Una línea inferior ofrece Editar mascota y Reportar/Gestionar pérdida como enlaces. No anidar tarjetas ni mostrar todos los controles del editor en el listado. El QR permanente se abre en el editor; la recuperación se confirma en la página dedicada.
+
+### Editor, QR y estado de pérdida
+
+La gestión de pérdida tiene página propia para reporte, regreso y cartel. La tarjeta usa primario público y dos acciones de contorno separadas para ficha/alerta; el regreso rápido requiere confirmar. El editor usa una navbar horizontal fija bajo la cabecera, con iconos y sección actual. El QR aparece abierto al final de cada editor, sin vista previa incrustada; Ver ficha pública está en la cabecera. Salud y documentos usan resúmenes privados con acceso al carnet. El reporte se edita antes del cartel plegable y la recuperación. Ya está en casa usa botón con icono, no un disclosure textual. Cian apoya salud/fotografía y violeta documentos/cuidados. Texto de prioridad y privacidad acompaña siempre al color. Las fotos públicas usan ancho fluido y altura natural.
+
+Los registros de cuidados sitúan lápiz y ojo en la cabecera; vacunas muestran lápiz y estado privado. Los controles de agregar quedan debajo de sus listas. El carnet conserva una escala de espacio de 1rem / 1.2rem / 1.5rem y separa sección, registro, formulario y acciones sin márgenes negativos en móvil.
+
+### Estados con color, símbolo y texto
+
+Informativa usa violeta y círculo de información; Precaución usa azul y escudo, o reloj en una dosis próxima. Urgente/Vencida usa rojo y triángulo. Al día usa azul mineral y calendario con marca; sin información/fecha usa gris y pregunta/calendario. Las próximas fechas siguen el tono de su estado. Los colores de texto/fondo superan 4.5:1; el significado siempre está escrito.
+
+La navbar mide la altura real de la cabecera para quedar pegada a ella al desplazarse, sin márgenes laterales negativos en móvil. El texto y el primer botón del QR se separan 45 px, con una línea de división. Los botones se apilan por debajo de 420 px.
+
+En registro, cada contraseña conserva su control de mostrar/ocultar. Debajo se muestran los requisitos: mínimo 8 caracteres, una mayúscula, un número y un carácter especial. Por petición expresa del autor, esta validación usa una excepción localizada: palomita verde (#17623c) para requisitos cumplidos y coincidencia; tache rojo (#a52a35) si la confirmación difiere. Los estados también incluyen texto y avisos accesibles en vivo. Crear cuenta solo se habilita al cumplir todos los requisitos y confirmar la misma contraseña; se conserva el máximo de 72 caracteres.
+
+La ayuda de requisitos del registro solo se muestra mientras Contraseña tiene el foco; la ayuda de coincidencia solo mientras Confirma tu contraseña tiene el foco. El control de mostrar/ocultar mantiene visible la ayuda de su campo.

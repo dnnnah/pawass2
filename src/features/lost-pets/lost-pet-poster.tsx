@@ -6,14 +6,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { canExportPoster, getPosterContactInfo, getPosterFormats, type PosterFormatId } from './poster-domain';
 import './lost-pet-poster.css';
 
-export type PosterAlert = { label: string; severity: 'critical' | 'precaution' | 'informative'; instructions: string };
+export type PosterAlert = { category?: string; label: string; severity: 'critical' | 'precaution' | 'informative'; instructions: string };
 
 function getPriorityCareAlerts(alerts: PosterAlert[]): PosterAlert[] {
   const priority: Record<PosterAlert['severity'], number> = { critical: 0, precaution: 1, informative: 2 };
   return alerts
     .map((alert, index) => ({ alert, index }))
-    .sort((first, second) => priority[first.alert.severity] - priority[second.alert.severity] || first.index - second.index)
-    .slice(0, 2)
+    .sort((first, second) => Number(second.alert.category === 'temperament') - Number(first.alert.category === 'temperament') || priority[first.alert.severity] - priority[second.alert.severity] || first.index - second.index)
     .map(({ alert }) => alert);
 }
 
@@ -178,84 +177,49 @@ function drawPoster(context: CanvasRenderingContext2D, width: number, height: nu
   detail('Qué llevaba puesto', pet.wearing || '', wearingY, careY - px(10));
 
   const posterMessage = limitText(pet.message, 120);
-  const noteFontSize = px(20);
-  const noteLineHeight = px(23);
-  const noteTextX = detailsX + px(17);
-  const noteTextWidth = detailsWidth - px(29);
-  context.font = `650 ${noteFontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-  const noteLines = posterMessage ? wrapText(context, posterMessage, noteTextWidth) : [];
-  const noteCardHeight = noteLines.length ? px(52) + noteLines.length * noteLineHeight : 0;
-
   const priorityAlerts = getPriorityCareAlerts(pet.alerts);
-  let careCardHeight = 0;
-  if (priorityAlerts.length) {
-    const alertRows = priorityAlerts.map((alert) => {
-      const level = alert.severity === 'critical' ? 'Urgente' : alert.severity === 'precaution' ? 'Precaución' : 'Cuidado';
-      return `${level}: ${alert.label}${alert.instructions ? ` · ${alert.instructions}` : ''}`;
-    });
-    const cardX = detailsX;
-    const cardY = careY;
-    const cardWidth = detailsWidth;
-    const textX = cardX + px(34);
-    const textWidth = cardWidth - px(46);
-    const rowGap = px(4);
-    const noteGap = noteCardHeight ? px(8) : 0;
-    const cardBottomLimit = rewardTop - px(14) - noteCardHeight - noteGap;
-    function layoutCareRows(fontSize: number) {
-      context.font = `700 ${fontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-      const rows = alertRows.map((row) => wrapText(context, row, textWidth));
-      const bodyLineHeight = fontSize * 1.08;
-      const bodyHeight = rows.reduce((total, lines) => total + lines.length * bodyLineHeight, 0) + Math.max(0, rows.length - 1) * rowGap;
-      return { rows, bodyLineHeight, cardHeight: px(54) + bodyHeight };
+  const guidance = priorityAlerts.map((alert) => {
+    const level = alert.category === 'temperament' ? 'Temperamento' : alert.severity === 'critical' ? 'Urgente' : 'Cuidado';
+    return `${level}: ${alert.label}${alert.instructions ? ` · ${limitText(alert.instructions, 100)}` : ''}`;
+  });
+  if (posterMessage) guidance.unshift(posterMessage);
+  if (guidance.length) {
+    const textWidth = detailsWidth - px(32);
+    const fontSize = px(20);
+    const lineHeight = px(25);
+    const availableHeight = rewardTop - px(16) - careY;
+    context.font = `700 ${fontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    const rows: string[][] = [];
+    let usedHeight = px(54);
+    for (const text of guidance) {
+      const lines = wrapText(context, text, textWidth);
+      if (usedHeight + lines.length * lineHeight + px(28) > availableHeight) break;
+      rows.push(lines);
+      usedHeight += lines.length * lineHeight + px(10);
     }
-    let alertBodySize = px(23);
-    let careLayout = layoutCareRows(alertBodySize);
-    while (alertBodySize > px(14) && cardY + careLayout.cardHeight > cardBottomLimit) {
-      alertBodySize = Math.max(px(14), alertBodySize - px(1));
-      careLayout = layoutCareRows(alertBodySize);
-    }
-    const { rows, bodyLineHeight, cardHeight } = careLayout;
-    careCardHeight = cardHeight;
-    context.fillStyle = '#fcebed';
-    context.beginPath();
-    context.roundRect(cardX, cardY, cardWidth, cardHeight, px(14));
-    context.fill();
-    drawAlertMark(context, cardX + px(11), cardY + px(39), px(20), '#b6323c');
-    context.textAlign = 'center';
-    context.fillStyle = '#173b4b';
-    context.font = `800 ${px(16)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-    context.fillText('ALERTAS DE CUIDADO', cardX + cardWidth / 2, cardY + px(25), cardWidth - px(22));
-    context.textAlign = 'left';
-    context.fillStyle = '#101b24';
-    context.font = `700 ${alertBodySize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-    let lineY = cardY + px(51);
-    rows.forEach((lines) => {
-      lines.forEach((line) => {
-        context.fillText(line, textX, lineY, textWidth);
-        lineY += bodyLineHeight;
-      });
-      lineY += rowGap;
-    });
-  }
-
-  if (noteLines.length) {
-    const noteX = detailsX;
-    const noteY = careY + (careCardHeight ? careCardHeight + px(8) : 0);
+    const hasMore = rows.length < guidance.length;
+    const cardHeight = usedHeight + (hasMore ? px(28) : 0);
     context.fillStyle = '#e2f0f4';
     context.beginPath();
-    context.roundRect(noteX, noteY, detailsWidth, noteCardHeight, px(12));
-    context.fill();
-    context.fillStyle = '#176986';
-    context.beginPath();
-    context.roundRect(noteX + px(8), noteY + px(10), px(3), noteCardHeight - px(20), px(2));
+    context.roundRect(detailsX, careY, detailsWidth, cardHeight, px(14));
     context.fill();
     context.textAlign = 'left';
-    context.fillStyle = '#12536b';
-    context.font = `800 ${px(15)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-    context.fillText('NOTA PARA QUIEN LA ENCUENTRE', noteTextX, noteY + px(22), noteTextWidth);
     context.fillStyle = '#173b4b';
-    context.font = `650 ${noteFontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
-    noteLines.forEach((line, index) => context.fillText(line, noteTextX, noteY + px(45) + index * noteLineHeight, noteTextWidth));
+    context.font = `850 ${px(17)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    context.fillText('SI LA VES', detailsX + px(16), careY + px(28));
+    context.font = `700 ${fontSize}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+    let lineY = careY + px(56);
+    for (const lines of rows) {
+      for (const line of lines) {
+        context.fillText(line, detailsX + px(16), lineY, textWidth);
+        lineY += lineHeight;
+      }
+      lineY += px(10);
+    }
+    if (hasMore) {
+      context.font = `700 ${px(17)}px "Nunito Sans Variable", "Nunito Sans", sans-serif`;
+      context.fillText('Más indicaciones en la ficha QR', detailsX + px(16), lineY, textWidth);
+    }
   }
 
   if (pet.reward?.trim()) {
@@ -360,7 +324,7 @@ export function LostPetPoster({ pet }: { pet: LostPosterData }) {
     const posterMessage = limitText(pet.message, 120);
     const care = getPriorityCareAlerts(pet.alerts).map((alert) => {
       const level = alert.severity === 'critical' ? 'Urgente' : alert.severity === 'precaution' ? 'Precaución' : 'Cuidado';
-      return `${level}: ${alert.label}${alert.instructions ? ` · ${alert.instructions}` : ''}`;
+      return `${alert.category === 'temperament' ? 'Temperamento' : level}: ${alert.label}${alert.instructions ? ` · ${limitText(alert.instructions, 100)}` : ''}`;
     }).join('; ');
     const contacts = getPosterContactInfo(pet.phone, pet.whatsappPhone);
     const whatsappDescription = contacts.usesSameNumber
@@ -444,7 +408,7 @@ export function LostPetPoster({ pet }: { pet: LostPosterData }) {
 
   return (
     <section className="poster-studio" aria-labelledby="poster-heading">
-      <header className="poster-studio__header"><div><h2 id="poster-heading">Cartel de búsqueda</h2><p>Prepara una imagen clara para compartir o imprimir. El QR abre la ficha vigente de {pet.name}.</p></div></header>
+      <header className="poster-studio__header"><div><h2 id="poster-heading">Cartel de búsqueda</h2><p>El cartel prioriza qué hacer si la ves y su temperamento. Incluye los demás cuidados autorizados que quepan sin reducir la letra; el resto se consulta en el QR.</p></div></header>
       <div className="poster-studio__privacy" id="poster-phone-notice" role="note">
         <strong>El teléfono aparecerá escrito en el cartel.</strong>
         <p>Al descargar, compartir o imprimir, ese número quedará visible para cualquiera que reciba la imagen o vea el papel en la calle.</p>

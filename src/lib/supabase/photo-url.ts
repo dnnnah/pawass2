@@ -1,7 +1,7 @@
 import 'server-only';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { createAdminClient } from './server';
+import { createClient } from './server';
 import { signPhotoPaths } from './photo-url-mapping';
 
 type PhotoBucket = 'pet-photos' | 'lost-pet-photos';
@@ -18,7 +18,7 @@ export async function createPhotoUrls(
   paths: readonly (string | null | undefined)[],
   client?: PhotoStorageClient,
 ) {
-  const storageClient = client || createAdminClient();
+  const storageClient = client || await createClient();
   if (!storageClient) return new Map<string, string>();
   return signPhotoPaths(paths, (uniquePaths, expiresInSeconds) =>
     storageClient.storage.from(bucket).createSignedUrls(uniquePaths, expiresInSeconds),

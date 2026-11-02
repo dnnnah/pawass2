@@ -1,11 +1,9 @@
-import { PetDetail } from '@/features/brand/pet-note';
-import { QRCodeSVG } from 'qrcode.react';
+import { EditorIcon } from './editor-icon';
+import { QuickRecovery } from '@/features/lost-pets/lost-report-form';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getSiteUrl } from '@/lib/supabase/env';
-import { LostReportForm, RecoverPetForm } from '@/features/lost-pets/lost-report-form';
-import { getPosterEditorHref } from '@/features/lost-pets/poster-domain';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';
+import { getPublicPetViewHref } from './pet-card-domain';
 import './pet-card.css';
 
 type Pet = {
@@ -15,8 +13,8 @@ type Pet = {
 };
 
 export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: string; report?: LostReportRow | null; photoUrl?: string | null }) {
-  const publicUrl = `${getSiteUrl()}/p/${code}`;
   const isLost = report?.status === 'active';
+  const currentPublicView = getPublicPetViewHref(code, isLost);
   return (
     <article className="pet-card">
       <div className="pet-card__photo" role={photoUrl ? undefined : 'img'} aria-label={photoUrl ? undefined : `Aún no hay una foto registrada de ${pet.name}`}>
@@ -27,28 +25,15 @@ export function PetCard({ pet, code, report, photoUrl }: { pet: Pet; code: strin
           <div><h2>{pet.name}</h2><p>{pet.species === 'perro' ? 'Perro' : 'Gato'} <span aria-hidden="true">·</span> <span className="code-pill">{code}</span></p></div>
           <span className={`pet-state ${isLost ? 'pet-state--lost' : ''}`}><span aria-hidden="true" />{isLost ? 'Perdida' : 'En casa'}</span>
         </div>
-        <p className="pet-card__note"><PetDetail kind="collar" /> {pet.name}, sus pequeños detalles a la mano.</p>
-        <LostReportForm petId={pet.id} report={report} />
-        {isLost && report && <>
-          <p className="pet-card__lost-summary">{report.last_seen_location || 'Ubicación pendiente'} · Alerta activa desde {new Date(report.lost_at).toLocaleDateString('es-MX')}</p>
-          <Link className="button button--primary button--wide pet-card__poster-link" href={getPosterEditorHref(pet.id)}>
-            <PosterDownloadIcon />
-            Crear cartel y descargar imagen
-          </Link>
-          <Link className="button button--outline button--wide" href={`/perdidas/${code}`}>Ver ficha pública de pérdida</Link>
-          <RecoverPetForm report={report} />
-        </>}
-        <Link className="button button--outline button--wide" href={`/mascotas/${pet.id}`}>Editar ficha de {pet.name}</Link>
-        <Link className="button button--outline button--wide" href={`/mascotas/${pet.id}/carnet`}>Abrir carnet de salud de {pet.name}</Link>
-        <details className="pet-card__qr">
-          <summary>Mostrar código QR</summary>
-          <div className="pet-card__qr-preview"><QRCodeSVG value={publicUrl} size={144} level="M" title={`Código QR público de ${pet.name}`} /><a href={`/p/${code}`} target="_blank" rel="noreferrer">Abrir ficha habitual</a></div>
-        </details>
+        <div className="pet-card__navigation">
+          <Link className="button button--primary" href={currentPublicView}>Ver ficha pública</Link>
+          <nav aria-label={`Gestionar a ${pet.name}`}>
+            <Link className="button button--outline" href={`/mascotas/${pet.id}`}><EditorIcon kind="info" />Editar ficha</Link>
+            <Link className={`button button--outline ${isLost ? 'pet-card__loss-link' : ''}`} href={`/mascotas/${pet.id}/perdida`}><EditorIcon kind="care" />{isLost ? 'Editar alerta' : 'Reportar pérdida'}</Link>
+          </nav>
+          {isLost && report && <QuickRecovery reportId={report.id} />}
+        </div>
       </div>
     </article>
   );
-}
-
-function PosterDownloadIcon() {
-  return <svg className="pet-card__poster-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" /></svg>;
 }

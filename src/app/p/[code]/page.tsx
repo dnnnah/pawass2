@@ -1,3 +1,4 @@
+import { CareSeverityBadge } from '@/features/brand/status-badge';
 import { PetNote } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -9,6 +10,7 @@ import { getSiteUrl } from '@/lib/supabase/env';
 import { isRecoveryNoticeVisible } from '@/features/lost-pets/domain';
 import { createPhotoUrl } from '@/lib/supabase/photo-url';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Props = { params: Promise<{ code: string }> };
 type PublicCareAlert = { category: string; label: string; severity: 'critical' | 'precaution' | 'informative'; instructions: string };
@@ -46,7 +48,7 @@ export default async function RescuePage({ params }: Props) {
   return (
     <main className="rescue-page">
       <header className="rescue-header"><BrandMark /><span>Ficha de rescate</span></header>
-      {status?.lost && <div className="rescue-state-banner rescue-state-banner--lost"><strong>Mascota perdida</strong><span>Su familia busca ayuda para encontrarla.</span><a href={`/perdidas/${code}`}>Ver alerta y ubicación</a></div>}
+      {status?.lost && <div className="rescue-state-banner rescue-state-banner--lost"><strong>Mascota perdida</strong><span>Su familia busca ayuda para encontrarla.</span><Link href={`/perdidas/${code}`}>Ver alerta y ubicación</Link></div>}
       {!status?.lost && showHomeNotice && <div className="rescue-state-banner rescue-state-banner--home"><strong>Ya está en casa</strong><span>Gracias por ayudar a reunir a {pet.pet_name} con su familia.</span></div>}
       <article className="rescue-card">
         <div className={`rescue-photo ${photoUrl ? 'rescue-photo--image' : 'rescue-photo--empty'}`}>{photoUrl ? <Image src={photoUrl} alt={`Foto de ${pet.pet_name}`} width={560} height={420} unoptimized /> : <PawIllustration />}</div>
@@ -63,7 +65,7 @@ export default async function RescuePage({ params }: Props) {
               <ul>
                 {visibleCareAlerts.map((alert, index) => (
                   <li className={`rescue-care__item rescue-care__item--${alert.severity}`} key={`${alert.category}-${index}`}>
-                    <div className="rescue-care__heading"><strong>{alert.label}</strong><span>{severityLabel(alert.severity)}</span></div>
+                    <div className="rescue-care__heading"><strong>{alert.label}</strong><CareSeverityBadge severity={alert.severity} /></div>
                     {alert.instructions && <p>{alert.instructions}</p>}
                   </li>
                 ))}
@@ -76,12 +78,6 @@ export default async function RescuePage({ params }: Props) {
       <PetNote name={pet.pet_name} rescue={!showHomeNotice || Boolean(status?.lost)} recovered={showHomeNotice && !status?.lost} />
     </main>
   );
-}
-
-function severityLabel(severity: string) {
-  if (severity === 'critical') return 'Alerta crítica';
-  if (severity === 'precaution') return 'Precaución';
-  return 'Información';
 }
 
 function SetupNotice() {
