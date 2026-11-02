@@ -1,6 +1,3 @@
-.pet-editor-heading { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin: 1.5rem 0; }
-.pet-editor-heading h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 4vw, 2.7rem); }
-.pet-editor-heading p { margin: 0; color: var(--ink-soft); }
 .editor-loss-notice { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .8rem; margin-bottom: 1rem; border-radius: 12px; background: var(--danger-soft); padding: .8rem 1rem; color: var(--danger); }
 .pet-editor-navbar { position: sticky; top: 76px; z-index: 2; display: flex; overflow-x: auto; max-width: 100%; overscroll-behavior-x: contain; gap: .25rem; margin: 0 0 1.5rem; border-bottom: 1px solid var(--line); background: #fff; padding: .4rem 0; }
 .pet-editor-navbar a { display: inline-flex; flex: 0 0 auto; align-items: center; min-height: 46px; gap: .4rem; border-radius: 12px; padding: .5rem .75rem; color: var(--blue-deep); font-weight: 750; text-decoration: none; }
@@ -23,7 +20,6 @@
 .pet-detail-main section[id] { scroll-margin-top: 160px; }
 @media (max-width: 760px) {
   .pet-editor-navbar { margin-inline: 0; padding-inline: 0; }
-  .pet-editor-heading { flex-wrap: wrap; }
   .editor-overview { padding: 1.1rem; }
 }
 

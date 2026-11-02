@@ -36,14 +36,10 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .notice { display: flex; flex-direction: column; gap: 0.25rem; margin: 1rem 0; border-radius: 9px; background: #eaf3f7; padding: 0.9rem 1rem; color: var(--ink); font-size: 0.9rem; }
 .notice span { color: var(--ink-soft); }
 
-.account-shell { min-height: 100svh; }
-.account-main { width: min(100% - 2.5rem, 1160px); margin: 0 auto; padding: 3.2rem 0 2rem; }
-.welcome { justify-content: space-between; gap: 1rem; }
-.welcome p:last-child { margin-bottom: 0; color: var(--ink-soft); }
 .section-panel { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: clamp(1.2rem, 3vw, 2rem); }
-.form-heading, .section-title { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.form-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .form-heading { margin-bottom: 0.4rem; }
-.form-heading h2, .section-title h2 { margin-bottom: 0; }
+.form-heading h2 { margin-bottom: 0; }
 .email-badge, .section-count { max-width: 48%; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: 999px; padding: 0.35rem 0.7rem; color: var(--ink-soft); font-size: 0.77rem; }
 .form-description { color: var(--ink-soft); font-size: 0.9rem; }
 .profile-form { gap: 1.25rem; }
@@ -56,8 +52,6 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .phone-field__row select { text-overflow: ellipsis; }
 .form-actions { display: flex; align-items: center; gap: 1rem; }
 .form-actions > span { color: var(--ink-soft); font-size: 0.82rem; }
-.section-title { margin-bottom: 1.2rem; }
-.section-title .section-label { margin-bottom: 0.35rem; }
 .pet-list { margin-bottom: 1rem; }
 .code-pill { display: inline-block; border-radius: 999px; color: #244b61; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
 .contact-editor { grid-column: 1 / -1; border-top: 1px solid #dce6eb; padding-top: 0.8rem; }
@@ -105,17 +99,12 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .whatsapp-actions .button { width: 100%; }
 .privacy-note { margin: 1.4rem 0 0; color: var(--ink-soft); font-size: 0.81rem; }
 
-@media (max-width: 880px) {
-  .account-main { width: min(100% - 2rem, 760px); padding-top: 2.2rem; }
-}
-
 @media (max-width: 620px) {
   h1 { font-size: 2.35rem; }
   .form-heading { align-items: flex-start; flex-direction: column; }
   .email-badge { max-width: 100%; }
   .form-grid--three, .form-grid--two { grid-template-columns: 1fr; }
   .form-actions { align-items: flex-start; flex-direction: column; }
-  .section-title { align-items: flex-end; }
   .section-count { max-width: none; white-space: nowrap; }
   .code-pill { margin: 0.3rem 0 0; }
   .phone-field__row { grid-template-columns: minmax(112px, .85fr) minmax(0, 1.15fr); gap: 0.4rem; }
@@ -128,8 +117,6 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .lost-report-page { padding-top: 1.2rem; }
 .lost-report-page__state { display: flex; align-items: flex-start; gap: .9rem; margin: 1.1rem 0 1.3rem; border: 1px solid #bdd5df; border-radius: 16px; background: #edf5f7; padding: clamp(1rem, 3vw, 1.35rem); }
 .lost-report-page__state--lost { border-color: #dfa9ae; background: var(--danger-soft); color: #77252d; }
-.lost-report-page__state-dot { width: .8rem; height: .8rem; flex: 0 0 .8rem; margin-top: .5rem; border-radius: 50%; background: #4d8397; }
-.lost-report-page__state--lost .lost-report-page__state-dot { background: var(--danger); }
 .lost-report-page__state .eyebrow, .lost-report-page__recovery .eyebrow, .lost-report-page__form .eyebrow { margin: 0 0 .3rem; color: var(--blue-deep); font-size: .76rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
 .lost-report-page__state--lost .eyebrow { color: #77252d; }
 .lost-report-page__state h1 { margin: 0 0 .35rem; font-size: clamp(1.55rem, 4vw, 2.15rem); }
@@ -150,7 +137,6 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
-.welcome p { margin-bottom: 0; color: var(--ink-soft); }
 .pets-section { margin-top: 0; }
 .pet-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; margin: 1.3rem 0 1.5rem; }
 .pet-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); background: var(--paper); }
@@ -160,19 +146,13 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .pet-card__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.8rem; }
 .pet-card__heading h3 { margin-bottom: 0.25rem; font-family: var(--font-body); font-size: 1.8rem; letter-spacing: -0.025em; }
 .pet-card__heading p { margin: 0; color: var(--ink-soft); }
-.pet-state { display: inline-flex; align-items: center; gap: 0.45rem; border-radius: 999px; padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 750; white-space: nowrap; }
-.pet-state > span { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #56869a; }
 .add-pet-panel { border-color: #b6cfd7; background: #f5fafb; }
 .add-pet-panel__heading { align-items: flex-start; }
 .add-pet-panel__heading h2 { margin-bottom: 0.3rem; font-family: var(--font-body); font-size: 1.55rem; }
-.empty-pets { margin-top: 1rem; color: var(--ink-soft); }
 .profile-needed { margin-bottom: 1.2rem; border-color: #b9cbd1; background: #f8fbfc; }
 .account-footer { margin-bottom: 1.3rem; }
 .back-link { display: inline-flex; min-height: 44px; align-items: center; margin-bottom: 1rem; font-weight: 700; }
 .care-section { margin-top: 2.4rem; }
-.care-section > .section-title { align-items: flex-end; margin-bottom: 0.8rem; }
-.care-section > .section-title h2 { margin-bottom: 0.35rem; }
-.care-section > .section-title p { margin: 0; color: var(--ink-soft); }
 .care-privacy-note { max-width: none; border-radius: 10px; background: #e2f0f4; padding: 0.75rem 0.9rem; color: #294f5d; font-size: 0.87rem; }
 .care-alert-list { margin: 0; padding: 0; list-style: none; }
 .care-alert-item { border-bottom: 1px solid var(--line); }
@@ -206,10 +186,6 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .rescue-care__item p { margin: 0.4rem 0 0; color: var(--ink); font-size: 0.9rem; }
 
 .account-settings { max-width: 900px; }
-.account-page-heading { margin-bottom: 2rem; }
-.account-page-heading .section-label { margin-bottom: .55rem; }
-.account-page-heading h1 { margin-bottom: .55rem; }
-.account-page-heading p:last-child { margin-bottom: 0; color: var(--ink-soft); }
 .account-contact-panel { box-shadow: 0 10px 28px rgba(26, 66, 84, .06); }
 .account-contact-panel .profile-form { gap: 1.35rem; }
 .account-privacy-note { margin: 1.8rem 0 2.4rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 1.3rem 0; }
@@ -264,10 +240,7 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .lost-public-notice .consent-check { font-size: .83rem; }
 .recovery-form { display: grid; gap: .5rem; margin: .7rem 0; border: 1px solid var(--line); border-radius: 12px; background: #f7fafb; padding: .8rem; }
 .recovery-form .consent-check { font-size: .8rem; }
-.pet-state--lost > span { background: var(--danger); }
 .lost-board { padding-top: 2.4rem; }
-.lost-board__heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
-.lost-board__heading p:last-child { margin: 0; color: var(--ink-soft); }
 .lost-filters { display: grid; align-items: end; margin-bottom: 1.6rem; }
 .lost-filters .button { min-width: 140px; }
 .lost-pet-list { display: grid; }
@@ -286,11 +259,7 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 .lost-pet-card__date { font-size: .8rem !important; }
 .lost-pet-card__actions { display: grid; gap: .5rem; }
 .lost-pet-card__actions .whatsapp-actions { margin: 0; }
-.lost-board__empty { display: grid; justify-items: start; gap: .4rem; border-top: 1px solid var(--line); }
-.lost-board__empty h2 { margin-bottom: 0; }
-.lost-board__empty p { margin: 0 0 .5rem; color: var(--ink-soft); }
 .lost-board__privacy { margin-top: 1.7rem; color: var(--ink-soft); font-size: .82rem; }
-.lost-detail-page { min-height: 100svh; }
 .lost-detail-wrap { width: min(100% - 2.5rem, 920px); margin: 2rem auto; }
 .lost-detail-banner { display: flex; align-items: center; gap: .8rem; margin-bottom: 1rem; border-radius: 12px; background: var(--danger-soft); padding: .75rem 1rem; color: #70232a; }
 .lost-detail-banner > span:last-child { font-size: .86rem; }
@@ -321,7 +290,6 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 
 @media (max-width: 760px) {
   .danger-zone { grid-template-columns: 1fr; gap: 1.2rem; }
-  .lost-board__heading { align-items: flex-start; flex-direction: column; }
   .lost-filters { grid-template-columns: 1fr; }
   .lost-filters .button { width: 100%; }
   .lost-pet-card, .lost-detail-card { grid-template-columns: 1fr; }
@@ -334,17 +302,12 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 }
 
 @media (max-width: 620px) {
-  .account-main { width: min(100% - 1.25rem, 540px); padding-bottom: 1rem; }
-  .welcome { margin-bottom: 1.2rem; }
-  .welcome h1 { font-size: 2.25rem; }
   .pet-list { grid-template-columns: 1fr; gap: 1rem; }
   .pet-card__photo { min-height: 170px; }
   .pet-card__body { padding: 1rem; }
   .pet-card__heading { align-items: flex-start; }
   .pet-card__heading h3 { font-size: 1.7rem; }
   .care-section { margin-top: 2rem; }
-  .care-section > .section-title { align-items: flex-start; }
-  .care-section > .section-title .section-count { display: none; }
   .care-alert-item__heading { align-items: flex-start; }
   .care-alert-form { padding: 0.9rem; }
 }
@@ -354,11 +317,6 @@ body { caret-color: var(--blue); accent-color: var(--blue); }
 button, a, summary, input, select, textarea { touch-action: manipulation; }
 textarea { font: inherit; }
 textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
-.account-main { max-width: 1100px; padding-top: 2.8rem; }
-.account-main h1 { font-family: inherit; font-size: 2.5rem; font-weight: 750; letter-spacing: -.035em; }
-.welcome { display: flex; align-items: center; margin-bottom: 2rem; }
-.welcome h1 { margin-bottom: .55rem; }
-.welcome .section-count { background: var(--paper); padding: .5rem .8rem; }
 .pet-list { gap: 1.5rem; }
 .pet-card { border-color: #bed8e3; border-radius: 16px; }
 .pet-card__photo { height: 320px; min-height: 0; background: #dce9ed; }
@@ -368,8 +326,6 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .pet-card__heading h2 { margin: 0 0 .35rem; font-size: 2rem; }
 .pet-card__heading p { font-size: .82rem; }
 .code-pill { margin-left: .15rem; border: 0; background: transparent; padding: 0; font-weight: 500; }
-.pet-state { background: var(--blue-light); color: var(--blue-deep); }
-.pet-state--lost { background: var(--danger-soft); color: #842932; }
 .pet-card .lost-report-editor { margin-bottom: .65rem; }
 .add-pet-trigger { margin-top: .25rem; }
 .profile-needed { border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.2rem; }
@@ -391,9 +347,6 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .contact-editor summary { display: flex; min-height: 48px; align-items: center; }
 .photo-upload-form input[type="file"] { padding: .6rem; background: #f7fafb; }
 .photo-upload-form input::file-selector-button { margin-right: .65rem; border: 1px solid #527483; border-radius: 6px; background: #fff; padding: .4rem .6rem; color: var(--ink); font: inherit; cursor: pointer; }
-.lost-board__heading { margin-bottom: 2rem; }
-.lost-board__heading h1 { margin-bottom: .75rem; }
-.lost-board__heading p { max-width: 55ch; }
 .lost-filters { justify-content: start; gap: 1rem; border: 0; border-radius: 0; background: transparent; padding: 0 0 1.5rem; border-bottom: 1px solid var(--line); }
 .lost-results-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem 1rem; margin: 2rem 0 1.1rem; }
 .lost-results-heading h2 { margin: 0; font-family: inherit; font-size: 1.3rem; letter-spacing: -.02em; }
@@ -410,16 +363,9 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .lost-pet-card__location strong { color: var(--ink-soft); font-size: .75rem; font-weight: 600; }
 .lost-pet-card__location span { font-size: .95rem; }
 .lost-pet-card__actions { margin-top: 1.25rem; }
-.lost-board__empty { border: 1px solid var(--line); border-radius: 16px; padding: 2rem; }
-.lost-board__empty h2 { font-family: inherit; font-size: 1.3rem; }
 .lost-detail-photo { height: 420px; min-height: 320px; background: #dce9ed; color: #527483; }
 .lost-detail-card { border-color: var(--line); }
 @media (max-width: 620px) {
-  .account-main { padding-top: 1.5rem; }
-  .account-main h1 { font-size: 2rem; }
-  .welcome { align-items: flex-start; gap: .75rem; }
-  .welcome .section-count { margin-top: .3rem; white-space: nowrap; }
-  .welcome p { font-size: .9rem; }
   .pet-list, .lost-pet-list { grid-template-columns: 1fr; gap: 1.25rem; }
   .pet-card__photo, .lost-pet-card__photo { height: 220px; min-height: 0; }
   .pet-card__body, .lost-pet-card__body { padding: 1.1rem; }
@@ -427,7 +373,6 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   .pet-details-editor, .pet-photo-editor, .pet-detail-contact, .care-section { padding: 1.1rem; }
   .lost-filters { gap: .65rem; }
   .lost-filters .button { min-width: 0; }
-  .lost-board__empty { padding: 1.4rem; }
   .lost-detail-photo { height: 260px; min-height: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -444,7 +389,6 @@ textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 }
 select option:checked { background: #e2f0f4; color: #12536b; }
 .field select:focus, .phone-field__row select:focus { border-color: var(--blue); background-color: #f3f9fc; }
-.lost-board__empty { background: #f5fafc; border-color: #bed8e3; }
 @media (forced-colors: active) { .field select, .phone-field__row select { appearance: auto; background-image: none; } }
 .pet-card:nth-child(even) { border-color: #d5cbed; }
 .pet-card:nth-child(even) .pet-card__body { background: #faf8ff; }
@@ -457,7 +401,7 @@ select option:checked { background: #e2f0f4; color: #12536b; }
   .lost-filters { grid-template-columns: 1fr; }
   .filter-feedback { padding-bottom: 0; }
 }
-.account-shell, .lost-detail-page, .rescue-page { min-height: 0; }
+.rescue-page { min-height: 0; }
 .lost-encouragement { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 0 0 2rem; }
 .lost-encouragement > div { display: flex; align-items: flex-start; gap: .8rem; border-radius: 12px; background: #f4f0fc; padding: 1.1rem; }
 .lost-encouragement > div:last-child { background: #edf7fc; }

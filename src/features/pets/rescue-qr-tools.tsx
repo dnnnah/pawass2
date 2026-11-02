@@ -1,5 +1,7 @@
 'use client';
 
+import { FormMessage } from '@/components/ui/form-message';
+
 import { Button } from '@/components/ui/button';
 
 import './rescue-qr-tools.css';
@@ -44,5 +46,5 @@ export function RescueQrTools({ url, code, name }: { url: string; code: string; 
       else { await navigator.clipboard.writeText(url); setMessage('Enlace copiado. Puedes pegarlo en un mensaje.'); }
     } catch (error) { if (!(error instanceof DOMException && error.name === 'AbortError')) setMessage('No pudimos compartirlo. Copia la dirección que aparece debajo del QR.'); }
   }
-  return <section className="qr-tools" aria-labelledby="qr-heading"><h2 id="qr-heading">Su QR permanente</h2><div ref={qr} className="qr-tools__code"><QRCodeSVG value={url} size={240} level="M" marginSize={4} title={`Código QR de ${name}`} /></div><a href={url}>{url}</a><p>Este código siempre abre la ficha vigente. Descarga PNG para mensajes o SVG para imprimir a cualquier tamaño. Abre el archivo descargado y elige Imprimir. Conserva el margen blanco y prueba escanearlo antes de hacer varias copias.</p><div className="qr-tools__actions"><Button disabled={busy} onClick={() => void download('png')}>Descargar PNG</Button><Button variant="outline" disabled={busy} onClick={() => void download('svg')}>Descargar SVG</Button><Button variant="text" onClick={() => void share()}>Compartir ficha</Button></div><p role="status" aria-live="polite">{message}</p></section>;
+  return <section className="qr-tools" aria-labelledby="qr-heading"><h2 id="qr-heading">Su QR permanente</h2><div ref={qr} className="qr-tools__code"><QRCodeSVG value={url} size={240} level="M" marginSize={4} title={`Código QR de ${name}`} /></div><a href={url}>{url}</a><p>Este código siempre abre la ficha vigente. Descarga PNG para mensajes o SVG para imprimir a cualquier tamaño. Abre el archivo descargado y elige Imprimir. Conserva el margen blanco y prueba escanearlo antes de hacer varias copias.</p><div className="qr-tools__actions"><Button disabled={busy} onClick={() => void download('png')}>Descargar PNG</Button><Button variant="outline" disabled={busy} onClick={() => void download('svg')}>Descargar SVG</Button><Button variant="text" onClick={() => void share()}>Compartir ficha</Button></div><FormMessage>{message}</FormMessage></section>;
 }

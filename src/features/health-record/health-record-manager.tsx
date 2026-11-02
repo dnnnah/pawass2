@@ -1,5 +1,7 @@
 'use client';
 
+import { EmptyState } from '@/components/ui/page-layout';
+import { FormMessage } from '@/components/ui/form-message';
 import { Button } from '@/components/ui/button';
 
 import Link from 'next/link';
@@ -103,7 +105,7 @@ function DoseSection({ id, kind, petId, species, records }: {
           {orderedRecords.map((record) => <li key={record.id}><DoseRecordCard petId={petId} species={species} kind={kind} record={record} /></li>)}
         </ol>
       ) : (
-        <div className="health-empty"><p>Aún no hay registros de {kind === 'vaccination' ? 'vacunas' : 'desparasitaciones'}.</p><span>Cuando tengas la cartilla o un comprobante, agrégalo para conservarlo aquí.</span></div>
+        <EmptyState headingLevel={3} title={`Aún no hay registros de ${kind === 'vaccination' ? 'vacunas' : 'desparasitaciones'}.`} description="Cuando tengas la cartilla o un comprobante, agrégalo para conservarlo aquí." />
       )}
       <details className="health-add-panel">
         <summary className="button button--primary">Agregar {kind === 'vaccination' ? 'vacuna' : 'desparasitación'}</summary>
@@ -186,7 +188,7 @@ function DoseForm({ petId, species, kind, record, onCancel }: {
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" maxLength={1000} rows={3} defaultValue={record?.notes || ''} /></label>
       </div>
       {nextDoseDate && <label className="health-confirm-date" htmlFor={`${formId}-confirm`}><input id={`${formId}-confirm`} name="nextDoseConfirmed" type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} /><span>Confirmo que la próxima fecha es correcta para esta mascota.</span></label>}
-      {state.message && <p className={`health-form-message ${state.ok ? 'health-form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
+      <FormMessage success={state.ok}>{state.message}</FormMessage>
       <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar registro'}</Button>{record && <Button variant="text" onClick={(event) => onCancel ? onCancel() : event.currentTarget.closest('details')?.removeAttribute('open')}>Cancelar edición</Button>}</div>
     </form>
   );
@@ -207,7 +209,7 @@ function ProcedureSection({ petId, records }: { petId: string; records: HealthRe
     <section className="health-panel" id="intervenciones" aria-labelledby="procedures-heading">
       <header className="health-panel__heading"><div><h2 id="procedures-heading">Cirugías e intervenciones</h2></div><span className="section-count">{records.length} {records.length === 1 ? 'registro' : 'registros'}</span></header>
       <p className="health-panel__intro">Conserva el nombre, la fecha y notas importantes de cada procedimiento.</p>
-      {orderedRecords.length ? <ol className="health-record-list">{orderedRecords.map((record) => <li key={record.id}><article className="health-record-entry"><div className="health-record-entry__top"><div><h3>{record.label}</h3><p>Realizada el <time dateTime={record.administered_on}>{formatDate(record.administered_on)}</time></p></div></div>{record.notes && <p className="health-procedure-notes">{record.notes}</p>}<div className="health-record-actions"><details><summary className="button button--outline"><RecordActionIcon kind="edit" />Editar intervención</summary><ProcedureForm petId={petId} record={record} /></details><DeleteRecordControl petId={petId} record={record} /></div></article></li>)}</ol> : <div className="health-empty"><p>Aún no hay cirugías o intervenciones registradas.</p><span>Puedes guardar aquí procedimientos pasados y actuales.</span></div>}
+      {orderedRecords.length ? <ol className="health-record-list">{orderedRecords.map((record) => <li key={record.id}><article className="health-record-entry"><div className="health-record-entry__top"><div><h3>{record.label}</h3><p>Realizada el <time dateTime={record.administered_on}>{formatDate(record.administered_on)}</time></p></div></div>{record.notes && <p className="health-procedure-notes">{record.notes}</p>}<div className="health-record-actions"><details><summary className="button button--outline"><RecordActionIcon kind="edit" />Editar intervención</summary><ProcedureForm petId={petId} record={record} /></details><DeleteRecordControl petId={petId} record={record} /></div></article></li>)}</ol> : <EmptyState headingLevel={3} title="Aún no hay cirugías o intervenciones registradas." description="Puedes guardar aquí procedimientos pasados y actuales." />}
       <details className="health-add-panel"><summary className="button button--primary">Agregar cirugía o intervención</summary><ProcedureForm petId={petId} /></details>
     </section>
   );
@@ -226,7 +228,7 @@ function ProcedureForm({ petId, record }: { petId: string; record?: HealthRecord
         <label className="field" htmlFor={`${formId}-date`}><span>Fecha (obligatorio)</span><input id={`${formId}-date`} name="performedOn" type="date" defaultValue={record?.administered_on || ''} required /></label>
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" rows={3} maxLength={1000} defaultValue={record?.notes || ''} /></label>
       </div>
-      {state.message && <p className={`health-form-message ${state.ok ? 'health-form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
+      <FormMessage success={state.ok}>{state.message}</FormMessage>
       <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar intervención'}</Button></div>
     </form>
   );
@@ -238,7 +240,7 @@ function DocumentSection({ petId, documents }: { petId: string; documents: Healt
     <section className="health-panel" id="documentos" aria-labelledby="documents-heading">
       <header className="health-panel__heading"><div><h2 id="documents-heading">Documentos</h2></div><span className="section-count">{documents.length} {documents.length === 1 ? 'archivo' : 'archivos'}</span></header>
       <p className="health-panel__intro">Sube cartillas, recetas o estudios. Los archivos se conservan en un espacio privado y solo se entregan después de verificar tu sesión y permisos.</p>
-      {orderedDocuments.length ? <ul className="health-document-list">{orderedDocuments.map((document) => <li key={document.id}><article className="health-document-entry"><p className="health-document-category">{document.label}</p><h3>{document.original_filename}</h3><p>{document.mime_type === 'application/pdf' ? 'PDF' : document.mime_type.slice(6).toUpperCase()} · {document.document_date ? `Fecha del documento: ${formatDate(document.document_date)} · ` : ''}{formatBytes(document.size_bytes)}</p><Link className="button button--outline" href={`/mascotas/${petId}/carnet/documentos/${document.id}`} target="_blank">Abrir documento <span className="sr-only">{document.original_filename} (en una pestaña nueva)</span></Link><details><summary className="button button--outline"><RecordActionIcon kind="edit" />Editar clasificación</summary><DocumentEditForm petId={petId} document={document} /></details><DeleteDocumentControl petId={petId} document={document} /></article></li>)}</ul> : <div className="health-empty"><p>Aún no hay documentos.</p><span>Los documentos que agregues solo estarán disponibles dentro de tu cuenta.</span></div>}
+      {orderedDocuments.length ? <ul className="health-document-list">{orderedDocuments.map((document) => <li key={document.id}><article className="health-document-entry"><p className="health-document-category">{document.label}</p><h3>{document.original_filename}</h3><p>{document.mime_type === 'application/pdf' ? 'PDF' : document.mime_type.slice(6).toUpperCase()} · {document.document_date ? `Fecha del documento: ${formatDate(document.document_date)} · ` : ''}{formatBytes(document.size_bytes)}</p><Link className="button button--outline" href={`/mascotas/${petId}/carnet/documentos/${document.id}`} target="_blank">Abrir documento <span className="sr-only">{document.original_filename} (en una pestaña nueva)</span></Link><details><summary className="button button--outline"><RecordActionIcon kind="edit" />Editar clasificación</summary><DocumentEditForm petId={petId} document={document} /></details><DeleteDocumentControl petId={petId} document={document} /></article></li>)}</ul> : <EmptyState headingLevel={3} title="Aún no hay documentos." description="Los documentos que agregues solo estarán disponibles dentro de tu cuenta." />}
       <details className="health-add-panel"><summary className="button button--primary">Agregar documento</summary><DocumentUploadForm petId={petId} /></details>
     </section>
   );
@@ -259,7 +261,7 @@ function DocumentUploadForm({ petId }: { petId: string }) {
         <label className="field" htmlFor={`${formId}-date`}><span>Fecha del documento <em>opcional</em></span><input id={`${formId}-date`} name="documentDate" type="date" /></label>
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" rows={3} maxLength={1000} /></label>
       </div>
-      {state.message && <p className={`health-form-message ${state.ok ? 'health-form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
+      <FormMessage success={state.ok}>{state.message}</FormMessage>
       <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Subiendo…' : 'Guardar documento privado'}</Button></div>
     </form>
   );
@@ -276,7 +278,7 @@ function DocumentEditForm({ petId, document }: { petId: string; document: Health
       {category === 'other' && <label className="field" htmlFor={`${formId}-label`}><span>Tipo</span><input id={`${formId}-label`} name="label" defaultValue={document.category === 'other' ? document.label : ''} maxLength={120} required /></label>}
       <label className="field" htmlFor={`${formId}-date`}><span>Fecha del documento</span><input id={`${formId}-date`} name="documentDate" type="date" defaultValue={document.document_date || ''} /></label>
       <label className="field" htmlFor={`${formId}-notes`}><span>Notas</span><textarea id={`${formId}-notes`} name="notes" defaultValue={document.notes || ''} rows={2} maxLength={1000} /></label>
-      {state.message && <p className="health-form-message" role="status">{state.message}</p>}
+      <FormMessage success={state.ok}>{state.message}</FormMessage>
       <Button type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar clasificación'}</Button>
     </form>
   );
