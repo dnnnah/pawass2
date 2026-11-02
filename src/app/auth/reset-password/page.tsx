@@ -1,5 +1,7 @@
 'use client';
 
+import '@/features/auth/auth.css';
+
 import { Button } from '@/components/ui/button';
 import { FormMessage } from '@/components/ui/form-message';
 

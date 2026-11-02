@@ -1,3 +1,4 @@
+import '@/features/auth/auth.css';
 import { AuthPanel } from '@/features/auth/auth-panel';
 import { BrandMark } from '@/features/auth/brand-mark';
 import { hasSupabaseEnvironment, isLocalTestLoginEnabled } from '@/lib/supabase/env';

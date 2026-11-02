@@ -1,4 +1,5 @@
 'use client';
+import './lost-poster-disclosure.css';
 import { useState, type ReactNode } from 'react';
 export function LostPosterDisclosure({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);

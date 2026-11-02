@@ -1,4 +1,7 @@
 'use client';
+import { FormGrid, FormActions } from '@/components/ui/form-layout';
+
+import './health-record.css';
 
 import { EmptyState } from '@/components/ui/page-layout';
 import { FormMessage } from '@/components/ui/form-message';
@@ -161,7 +164,7 @@ function DoseForm({ petId, species, kind, record, onCancel }: {
       <input type="hidden" name="kind" value={kind} />
       {record && <input type="hidden" name="recordId" value={record.id} />}
       <div className="health-form__title"><h3>{record ? 'Editar registro' : `Nueva ${kindLabels[kind].toLowerCase()}`}</h3><p>Completa la aplicación y agrega los datos que tengas.</p></div>
-      <div className="health-form-grid">
+      <FormGrid columns={2}>
         <label className="field" htmlFor={`${formId}-catalog`}><span>{kind === 'vaccination' ? 'Vacuna (obligatorio)' : 'Tipo de desparasitación (obligatorio)'}</span>
           <select id={`${formId}-catalog`} name="catalogId" value={catalogId} required onChange={(event) => {
             setCatalogId(event.target.value);
@@ -186,10 +189,10 @@ function DoseForm({ petId, species, kind, record, onCancel }: {
         <label className="field" htmlFor={`${formId}-lot`}><span>Lote <em>opcional</em></span><input id={`${formId}-lot`} name="lot" maxLength={80} defaultValue={record?.lot || ''} /></label>
         <label className="field" htmlFor={`${formId}-vet`}><span>Veterinario o clínica <em>opcional</em></span><input id={`${formId}-vet`} name="veterinarian" maxLength={120} defaultValue={record?.veterinarian || ''} /></label>
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" maxLength={1000} rows={3} defaultValue={record?.notes || ''} /></label>
-      </div>
+      </FormGrid>
       {nextDoseDate && <label className="health-confirm-date" htmlFor={`${formId}-confirm`}><input id={`${formId}-confirm`} name="nextDoseConfirmed" type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} /><span>Confirmo que la próxima fecha es correcta para esta mascota.</span></label>}
       <FormMessage success={state.ok}>{state.message}</FormMessage>
-      <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar registro'}</Button>{record && <Button variant="text" onClick={(event) => onCancel ? onCancel() : event.currentTarget.closest('details')?.removeAttribute('open')}>Cancelar edición</Button>}</div>
+      <FormActions className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar registro'}</Button>{record && <Button variant="text" onClick={(event) => onCancel ? onCancel() : event.currentTarget.closest('details')?.removeAttribute('open')}>Cancelar edición</Button>}</FormActions>
     </form>
   );
 }
@@ -223,13 +226,13 @@ function ProcedureForm({ petId, record }: { petId: string; record?: HealthRecord
       <input type="hidden" name="petId" value={petId} />
       {record && <input type="hidden" name="recordId" value={record.id} />}
       <div className="health-form__title"><h3>{record ? 'Editar intervención' : 'Nueva intervención'}</h3><p>Agrega la información disponible; las notas son opcionales.</p></div>
-      <div className="health-form-grid">
+      <FormGrid columns={2}>
         <label className="field" htmlFor={`${formId}-name`}><span>Cirugía o intervención (obligatorio)</span><input id={`${formId}-name`} name="name" defaultValue={record?.label || ''} maxLength={120} required /></label>
         <label className="field" htmlFor={`${formId}-date`}><span>Fecha (obligatorio)</span><input id={`${formId}-date`} name="performedOn" type="date" defaultValue={record?.administered_on || ''} required /></label>
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" rows={3} maxLength={1000} defaultValue={record?.notes || ''} /></label>
-      </div>
+      </FormGrid>
       <FormMessage success={state.ok}>{state.message}</FormMessage>
-      <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar intervención'}</Button></div>
+      <FormActions className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : record ? 'Guardar cambios' : 'Guardar intervención'}</Button></FormActions>
     </form>
   );
 }
@@ -254,15 +257,15 @@ function DocumentUploadForm({ petId }: { petId: string }) {
     <form action={action} className="health-form">
       <input type="hidden" name="petId" value={petId} />
       <div className="health-form__title"><h3>Nuevo documento</h3><p>Formatos: PDF, JPEG, PNG o WebP · hasta 10 MB.</p></div>
-      <div className="health-form-grid">
+      <FormGrid columns={2}>
         <label className="field" htmlFor={`${formId}-category`}><span>Clasificación (obligatorio)</span><select id={`${formId}-category`} name="category" value={category} onChange={(event) => setCategory(event.target.value)} required><option value="">Elige una opción</option>{HEALTH_DOCUMENT_CATEGORIES.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}</select></label>
         {category === 'other' && <label className="field" htmlFor={`${formId}-label`}><span>Tipo de documento (obligatorio)</span><input id={`${formId}-label`} name="label" maxLength={120} required /></label>}
         <label className="field" htmlFor={`${formId}-file`}><span>Archivo (obligatorio)</span><input id={`${formId}-file`} name="file" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" required /><small>Revisa que el documento no incluya información que no quieras conservar en tu cuenta.</small></label>
         <label className="field" htmlFor={`${formId}-date`}><span>Fecha del documento <em>opcional</em></span><input id={`${formId}-date`} name="documentDate" type="date" /></label>
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" rows={3} maxLength={1000} /></label>
-      </div>
+      </FormGrid>
       <FormMessage success={state.ok}>{state.message}</FormMessage>
-      <div className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Subiendo…' : 'Guardar documento privado'}</Button></div>
+      <FormActions className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Subiendo…' : 'Guardar documento privado'}</Button></FormActions>
     </form>
   );
 }

@@ -1,4 +1,5 @@
 'use client';
+import { FormGrid } from '@/components/ui/form-layout';
 
 import { Button } from '@/components/ui/button';
 import { FormMessage } from '@/components/ui/form-message';
@@ -6,6 +7,8 @@ import { FormMessage } from '@/components/ui/form-message';
 import { useActionState, useEffect, useState } from 'react';
 import { savePetDetails } from './actions';
 import type { FormState } from '@/features/profile/actions';
+
+import './pet-details-form.css';
 
 const initialState: FormState = { ok: false, message: '' };
 const breeds: Record<'perro' | 'gato', string[]> = {
@@ -56,7 +59,7 @@ export function PetDetailsForm({
       <input type="hidden" name="petId" value={petId} />
       <input type="hidden" name="approximateDeclaredAt" value={details.approximate_age_declared_at || ''} />
       <fieldset className="editor-group"><legend>Aspecto e identidad</legend><p className="form-description">Completa lo que conozcas. Puedes dejar los datos opcionales para después.</p>
-      <div className="form-grid form-grid--two">
+      <FormGrid columns={2}>
         <label className="field"><span>Raza</span>
           <select name="breed" value={selectedBreed} onChange={(event) => setSelectedBreed(event.target.value)}>
             <option value="">Elige una raza (opcional)</option>
@@ -64,14 +67,14 @@ export function PetDetailsForm({
           </select>
         </label>
         <label className="field"><span>Mezcla estimada <em>opcional</em></span><input name="mixedBreed" defaultValue={details.mixed_breed || ''} maxLength={100} placeholder="Ej. Chihuahua con terrier" /></label>
-      </div>
+      </FormGrid>
       {customBreed && <label className="field"><span>Escribe la raza</span><input name="customBreed" maxLength={100} required defaultValue={details.breed && !breeds[species].includes(details.breed) ? details.breed : ''} />
       </label>}
-      <div className="form-grid form-grid--three">
+      <FormGrid columns={3}>
         <label className="field"><span>Sexo <em>opcional</em></span><select name="sex" defaultValue={details.sex || ''}><option value="">Sin especificar</option><option value="hembra">Hembra</option><option value="macho">Macho</option></select></label>
         <label className="field"><span>Talla <em>opcional</em></span><select name="size" defaultValue={details.size || ''}><option value="">Sin especificar</option><option value="pequena">Pequeña</option><option value="mediana">Mediana</option><option value="grande">Grande</option></select></label>
         <label className="field"><span>Color <em>opcional</em></span><input name="color" defaultValue={details.color || ''} maxLength={100} placeholder="Ej. Negro y blanco" /></label>
-      </div>
+      </FormGrid>
       </fieldset>
       <fieldset className="field age-field">
         <legend>Edad de {species === 'perro' ? 'tu perro' : 'tu gato'}</legend>
@@ -81,17 +84,17 @@ export function PetDetailsForm({
           <label><input type="radio" name="ageMode" value="approx" checked={ageMode === 'approx'} onChange={() => setAgeMode('approx')} /> Edad aproximada</label>
         </div>
         {ageMode === 'date' && <label className="field"><span>Fecha de nacimiento</span><input type="date" name="birthDate" defaultValue={details.birth_date || ''} max={new Date().toISOString().slice(0, 10)} /></label>}
-        {ageMode === 'approx' && <div className="form-grid form-grid--two"><label className="field"><span>Años</span><input type="number" name="approximateYears" min="0" max="40" defaultValue={details.approximate_age_years ?? ''} /></label><label className="field"><span>Meses</span><input type="number" name="approximateMonths" min="0" max="11" defaultValue={details.approximate_age_months ?? ''} /></label></div>}
+        {ageMode === 'approx' && <FormGrid columns={2}><label className="field"><span>Años</span><input type="number" name="approximateYears" min="0" max="40" defaultValue={details.approximate_age_years ?? ''} /></label><label className="field"><span>Meses</span><input type="number" name="approximateMonths" min="0" max="11" defaultValue={details.approximate_age_months ?? ''} /></label></FormGrid>}
       </fieldset>
       <fieldset className="editor-group"><legend>Datos privados de cuidado</legend><p className="form-description">El microchip, la clave RUAC y estos datos de salud no aparecen en la ficha QR.</p>
-      <div className="form-grid form-grid--two">
+      <FormGrid columns={2}>
         <label className="field"><span>Peso en kg <em>opcional</em></span><input type="number" name="weightKg" min="0.1" max="300" step="0.1" defaultValue={details.weight_kg ?? ''} placeholder="Ej. 12.5" /></label>
         <label className="field"><span>Microchip <em>opcional</em></span><input name="microchip" defaultValue={details.microchip || ''} maxLength={80} autoComplete="off" /></label>
-      </div>
-      <div className="form-grid form-grid--two">
+      </FormGrid>
+      <FormGrid columns={2}>
         <label className="field"><span>Clave RUAC <em>opcional</em></span><input name="ruac" defaultValue={details.ruac || ''} maxLength={40} autoComplete="off" /></label>
         <label className="field"><span>Esterilización <em>opcional</em></span><select name="sterilized" defaultValue={details.sterilized === true ? 'yes' : details.sterilized === false ? 'no' : ''}><option value="">Sin especificar</option><option value="yes">Sí</option><option value="no">No</option></select></label>
-      </div>
+      </FormGrid>
       </fieldset>
       <FormMessage success={state.ok}>{state.message}</FormMessage>
       <Button type="submit" disabled={pending}>{pending ? 'Guardando…' : continueLabel}</Button>

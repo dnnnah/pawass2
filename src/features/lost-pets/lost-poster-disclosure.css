@@ -1,0 +1,4 @@
+.poster-disclosure { margin: 1.5rem 0; border: 1px solid var(--line); border-radius: 14px; background: #f5fafc; padding: 1rem; }
+.poster-disclosure > summary { min-height: 48px; cursor: pointer; color: var(--blue-deep); font-size: 1.1rem; font-weight: 750; }
+.poster-disclosure > summary { list-style: none; width: fit-content; }
+.poster-disclosure > summary::-webkit-details-marker { display: none; }

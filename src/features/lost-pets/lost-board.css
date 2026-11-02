@@ -1,0 +1,71 @@
+
+.lost-board { padding-top: 2.4rem; }
+.lost-filters { display: grid; align-items: end; margin-bottom: 1.6rem; }
+.lost-filters .button { min-width: 140px; }
+.lost-pet-list { display: grid; }
+.lost-pet-card { display: grid; overflow: hidden; border: 1px solid #d7a8ac; background: #fff; }
+.lost-pet-card__photo { display: grid; min-height: 250px; place-items: center; background: #fcebed; color: #9d3740; }
+.lost-pet-card__photo { height: 250px; overflow: hidden; }
+.lost-pet-card__photo img { width: 100%; height: 100%; object-fit: contain; }
+.lost-pet-card__photo svg { width: 92px; fill: currentColor; }
+.lost-pet-card__meta { display: flex; flex-wrap: wrap; align-items: center; color: var(--ink-soft); font-size: .78rem; }
+.lost-status { display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; background: var(--danger-soft); padding: .28rem .6rem; color: #842932; font-weight: 800; }
+.lost-status > span { width: .48rem; height: .48rem; border-radius: 50%; background: var(--danger); }
+.lost-pet-card h2 { margin: .55rem 0 .75rem; font-family: var(--font-body); }
+.lost-pet-card p { margin: .4rem 0; color: var(--ink-soft); font-size: .9rem; }
+.lost-pet-card__location { display: grid; gap: .15rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.lost-pet-card__location strong, .lost-pet-card__location span { color: var(--ink); }
+.lost-pet-card__date { font-size: .8rem !important; }
+.lost-pet-card__actions { display: grid; gap: .5rem; }
+.lost-pet-card__actions .whatsapp-actions { margin: 0; }
+.lost-board__privacy { margin-top: 1.7rem; color: var(--ink-soft); font-size: .82rem; }
+
+@media (max-width: 760px) {
+  .lost-filters { grid-template-columns: 1fr; }
+  .lost-filters .button { width: 100%; }
+  .lost-pet-card { grid-template-columns: 1fr; }
+  .lost-pet-card__photo { min-height: 160px; }
+  .lost-pet-card__photo svg { width: 70px; }
+}
+.lost-pet-card__photo img { object-position: center 25%; }
+.lost-pet-card__photo img { min-height: 0; }
+.lost-filters { justify-content: start; gap: 1rem; border: 0; border-radius: 0; background: transparent; padding: 0 0 1.5rem; border-bottom: 1px solid var(--line); }
+.lost-results-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem 1rem; margin: 2rem 0 1.1rem; }
+.lost-results-heading h2 { margin: 0; font-family: inherit; font-size: 1.3rem; letter-spacing: -.02em; }
+.lost-results-heading p { margin: 0; color: var(--ink-soft); font-size: .85rem; }
+.lost-results-heading a { margin-left: auto; font-size: .85rem; }
+.lost-pet-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; align-items: start; }
+.lost-pet-card { grid-template-columns: 1fr; border-color: var(--line); border-radius: 16px; }
+.lost-pet-card__photo { height: 320px; min-height: 0; background: #dce9ed; color: #527483; }
+.lost-pet-card__body { padding: 1.35rem; background: #f5fafc; }
+.lost-pet-card__meta { justify-content: flex-start; gap: .65rem; }
+.lost-pet-card__meta > span:last-child { font-size: .73rem; }
+.lost-pet-card h2 { margin-top: 1rem; font-size: 2rem; }
+.lost-pet-card__location { border: 0; background: #f3f7f8; border-radius: 8px; padding: .75rem; margin-bottom: .8rem; }
+.lost-pet-card__location strong { color: var(--ink-soft); font-size: .75rem; font-weight: 600; }
+.lost-pet-card__location span { font-size: .95rem; }
+.lost-pet-card__actions { margin-top: 1.25rem; }
+@media (max-width: 620px) {
+  .lost-pet-list { grid-template-columns: 1fr; gap: 1.25rem; }
+  .lost-pet-card__photo { height: 220px; min-height: 0; }
+  .lost-pet-card__body { padding: 1.1rem; }
+  .lost-filters { gap: .65rem; }
+  .lost-filters .button { min-width: 0; }
+}
+.lost-pet-card:nth-child(even) { border-color: #c2d9ed; }
+.lost-pet-card:nth-child(even) .lost-pet-card__body { background: #f0f7ff; }
+.lost-filters { grid-template-columns: minmax(180px, 320px) minmax(0, 1fr); }
+.filter-feedback { padding-bottom: .85rem; color: var(--ink-soft); font-size: .85rem; }
+@media (max-width: 620px) {
+  .lost-filters { grid-template-columns: 1fr; }
+  .filter-feedback { padding-bottom: 0; }
+}
+.lost-encouragement { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 0 0 2rem; }
+.lost-encouragement > div { display: flex; align-items: flex-start; gap: .8rem; border-radius: 12px; background: #f4f0fc; padding: 1.1rem; }
+.lost-encouragement > div:last-child { background: #edf7fc; }
+.lost-encouragement .pet-detail { width: 30px; height: 30px; margin-top: .15rem; }
+.lost-encouragement h2 { margin: 0 0 .4rem; font-family: inherit; font-size: 1.05rem; font-weight: 750; line-height: 1.3; letter-spacing: -.015em; }
+.lost-encouragement p { margin: 0; color: var(--ink-soft); font-size: .9rem; }
+@media (max-width: 620px) {
+  .lost-encouragement { grid-template-columns: 1fr; gap: .8rem; margin-bottom: 1.5rem; }
+}

@@ -1,6 +1,7 @@
+import './owned-report.css';
 import { PageFrame, PawPlaceholder } from '@/components/ui/page-layout';
 import { CareSeverityBadge } from '@/features/brand/status-badge';
-import { QuickRecovery } from './lost-report-form';
+import { QuickRecovery } from './recovery-forms';
 import type { OwnedReport } from './owned-reports';
 import Image from 'next/image';
 import Link from 'next/link';

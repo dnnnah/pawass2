@@ -1,4 +1,7 @@
 'use client';
+import { FormGrid, FormActions } from '@/components/ui/form-layout';
+
+import './profile-pages.css';
 
 import { Button } from '@/components/ui/button';
 import { FormMessage } from '@/components/ui/form-message';
@@ -26,19 +29,19 @@ export function ProfileForm({ profile, email }: { profile: Profile; email: strin
     <form action={action} className="form-stack profile-form">
       <div className="form-heading"><div><p className="section-label">Tu cuenta</p><h2>Contacto de rescate</h2></div><span className="email-badge">{email}</span></div>
       <p className="form-description">El nombre y los apellidos son privados. El teléfono y WhatsApp aparecen en la ficha QR de tus mascotas, a menos que una tenga un contacto propio.</p>
-      <div className="form-grid form-grid--three">
+      <FormGrid columns={3}>
         <label className="field"><span>Nombre</span><input name="firstName" autoComplete="given-name" maxLength={80} defaultValue={profile.first_name || ''} required /></label>
         <label className="field"><span>Primer apellido <em>opcional</em></span><input name="surname1" autoComplete="family-name" maxLength={80} defaultValue={profile.surname1 || ''} /></label>
         <label className="field"><span>Segundo apellido <em>opcional</em></span><input name="surname2" maxLength={80} defaultValue={profile.surname2 || ''} /></label>
-      </div>
-      <div className={`form-grid ${separateWhatsapp ? 'form-grid--two' : ''}`}>
+      </FormGrid>
+      <FormGrid columns={separateWhatsapp ? 2 : 1}>
         <CountryPhoneField label="Teléfono para llamadas" inputName="phone" countryName="phoneCountry" defaultValue={nationalDefault(profile.rescue_phone)} defaultCountry={countryDefault(profile.rescue_phone)} />
         {separateWhatsapp && <CountryPhoneField label="Número distinto para WhatsApp" inputName="whatsapp" countryName="whatsappCountry" defaultValue={nationalDefault(profile.whatsapp_phone)} defaultCountry={countryDefault(profile.whatsapp_phone)} />}
-      </div>
+      </FormGrid>
       <label className="consent-check contact-editor__toggle"><input type="checkbox" checked={separateWhatsapp} onChange={(event) => setSeparateWhatsapp(event.target.checked)} /><span>Uso un número distinto para WhatsApp</span></label>
       <p className="form-description">Por defecto, WhatsApp y llamadas usan el mismo número. Solo guardamos otro número cuando eliges separarlo.</p>
       <FormMessage success={state.ok}>{state.message}</FormMessage>
-      <div className="form-actions"><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar contacto'}</Button><span>La ficha QR nunca muestra tu nombre ni apellidos.</span></div>
+      <FormActions><Button type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar contacto'}</Button><span>La ficha QR nunca muestra tu nombre ni apellidos.</span></FormActions>
     </form>
   );
 }

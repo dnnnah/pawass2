@@ -1,3 +1,4 @@
+import '@/features/lost-pets/lost-board.css';
 import { PageFrame, PageContent, PageHeading, EmptyState } from '@/components/ui/page-layout';
 import { getOwnedReports } from '@/features/lost-pets/owned-reports';
 import { LostBoardMessages } from '@/features/lost-pets/lost-board-messages';

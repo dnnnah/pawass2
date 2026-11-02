@@ -1,4 +1,6 @@
-import { QuickRecovery } from './lost-report-form';
+import './owned-report.css';
+import './lost-board.css';
+import { QuickRecovery } from './recovery-forms';
 import type { OwnedReport } from './owned-reports';
 import Link from 'next/link';
 import Image from 'next/image';

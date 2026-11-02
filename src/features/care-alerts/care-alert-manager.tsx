@@ -1,4 +1,7 @@
 'use client';
+import { FormGrid } from '@/components/ui/form-layout';
+
+import './care-alerts-pages.css';
 
 import { SectionHeading } from '@/components/ui/page-layout';
 
@@ -81,7 +84,7 @@ function CareAlertForm({ petId, alert }: { petId: string; alert?: CareAlertRecor
     <form action={action} className="form-stack care-alert-form">
       <input type="hidden" name="petId" value={petId} />
       {alert && <input type="hidden" name="alertId" value={alert.id} />}
-      <div className="form-grid form-grid--two">
+      <FormGrid columns={2}>
         <label className="field" htmlFor={`${formId}-category`}>
           <span>Tipo</span>
           <select id={`${formId}-category`} name="category" value={category} onChange={(event) => {
@@ -104,7 +107,7 @@ function CareAlertForm({ petId, alert }: { petId: string; alert?: CareAlertRecor
             <option value="other">Otra</option>
           </select>
         </label>
-      </div>
+      </FormGrid>
       {custom && (
         <label className="field" htmlFor={`${formId}-label`}>
           <span>Nombre de la alerta</span>

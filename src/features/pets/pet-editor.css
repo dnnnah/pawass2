@@ -1,3 +1,31 @@
+
+.pet-setup-step { display: grid; gap: .9rem; }
+.pet-created { border-top: 1px solid var(--line); padding-top: 1.2rem; }
+.pet-created h3 { margin-bottom: .35rem; font-family: var(--font-body); font-size: 1.6rem; }
+.pet-created p { margin-bottom: .6rem; }
+.pet-created__mark { display: grid; width: 2rem; height: 2rem; place-items: center; border-radius: 50%; background: var(--blue-light); color: var(--blue-deep); font-weight: 800; }
+.pet-details-editor { margin-top: 1.7rem; border: 1px solid var(--line); border-radius: 16px; background: #fff; padding: 1.2rem; }
+.pet-details-editor > summary { display: flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 1rem; color: var(--blue-deep); cursor: pointer; list-style: none; }
+.pet-details-editor > summary::-webkit-details-marker { display: none; }
+.pet-details-editor > summary strong, .pet-details-editor > summary small { display: block; }
+.pet-details-editor > summary strong { color: var(--ink); font-size: 1.08rem; }
+.pet-details-editor > summary small { margin-top: .2rem; color: var(--ink-soft); font-size: .82rem; }
+.pet-details-editor > summary > span:last-child { font-size: .85rem; font-weight: 750; text-decoration: underline; text-underline-offset: .2em; }
+.pet-details-editor[open] > summary { margin-bottom: 1.2rem; }
+.pet-details-editor, .pet-photo-editor, .pet-detail-contact { margin: 0 0 1.5rem; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); padding: 1.5rem; }
+.editor-heading h2, .pet-photo-editor h2, .pet-detail-contact h2 { margin-bottom: .45rem; font-family: inherit; font-size: 1.4rem; letter-spacing: -.02em; }
+.editor-heading p { margin-bottom: 1.5rem; color: var(--ink-soft); font-size: .9rem; }
+@media (max-width: 620px) {
+  .pet-details-editor, .pet-photo-editor, .pet-detail-contact { padding: 1.1rem; }
+}
+.pet-details-editor .editor-heading { margin-bottom: 1rem; }
+.pet-details-editor .editor-heading h2 { margin: 0 0 .35rem; }
+.pet-details-editor .editor-heading p:last-child { margin: 0; }
+.editor-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; }
+
+.photo-upload-form input[type="file"] { padding: .6rem; background: #f7fafb; }
+.photo-upload-form input::file-selector-button { margin-right: .65rem; border: 1px solid #527483; border-radius: 6px; background: #fff; padding: .4rem .6rem; color: var(--ink); font: inherit; cursor: pointer; }
+#cuidados, #identidad, #fotografia, #contactos { scroll-margin-top: 100px; }
 .editor-loss-notice { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .8rem; margin-bottom: 1rem; border-radius: 12px; background: var(--danger-soft); padding: .8rem 1rem; color: var(--danger); }
 .pet-editor-navbar { position: sticky; top: 76px; z-index: 2; display: flex; overflow-x: auto; max-width: 100%; overscroll-behavior-x: contain; gap: .25rem; margin: 0 0 1.5rem; border-bottom: 1px solid var(--line); background: #fff; padding: .4rem 0; }
 .pet-editor-navbar a { display: inline-flex; flex: 0 0 auto; align-items: center; min-height: 46px; gap: .4rem; border-radius: 12px; padding: .5rem .75rem; color: var(--blue-deep); font-weight: 750; text-decoration: none; }

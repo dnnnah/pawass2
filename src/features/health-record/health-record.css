@@ -40,7 +40,6 @@
 .health-form { display: grid; gap: 1rem; border: 1px solid #d4e2e7; border-radius: 14px; background: var(--surface); padding: clamp(1rem, 3vw, 1.4rem); }
 .health-form__title h3 { margin: 0 0 .2rem; font-size: 1.15rem; }
 .health-form__title p { margin: 0; color: var(--ink-soft); font-size: .9rem; }
-.health-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .health-form__wide { grid-column: 1 / -1; }
 .health-form .field small { display: block; margin-top: .25rem; color: var(--ink-soft); line-height: 1.45; }
 .health-confirm-date { display: flex; align-items: flex-start; gap: .65rem; border-radius: 10px; background: #eaf3f6; padding: .85rem; font-weight: 700; }
@@ -62,7 +61,6 @@
   .health-record-nav { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
   .health-record-nav a { min-height: 48px; justify-content: space-between; padding: .5rem .6rem; font-size: .83rem; }
   .health-panel__heading { align-items: flex-start; flex-direction: column; }
-  .health-form-grid { grid-template-columns: 1fr; gap: .85rem; }
   .health-form__wide { grid-column: auto; }
   .health-record-entry__top { flex-direction: column; gap: .55rem; }
   .health-delete-control > div { margin-left: -1rem; }

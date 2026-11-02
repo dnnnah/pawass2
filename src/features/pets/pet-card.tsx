@@ -1,7 +1,7 @@
 import { EditorIcon } from './editor-icon';
 import { PetStatusBadge } from './pet-status';
 import { PawPlaceholder } from '@/components/ui/page-layout';
-import { QuickRecovery } from '@/features/lost-pets/lost-report-form';
+import { QuickRecovery } from '@/features/lost-pets/recovery-forms';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { LostReportRow } from '@/features/lost-pets/lost-report-state';

@@ -1,3 +1,4 @@
+import '@/features/rescue/rescue-pages.css';
 import { PageFrame, PawPlaceholder } from '@/components/ui/page-layout';
 import { CareSeverityBadge } from '@/features/brand/status-badge';
 import { PetNote } from '@/features/brand/pet-note';

@@ -1,3 +1,4 @@
+import '@/features/pets/pets-dashboard.css';
 import { PageFrame, PageContent, PageHeading } from '@/components/ui/page-layout';
 import { PetNote, PetTrail } from '@/features/brand/pet-note';
 import type { Metadata } from 'next';
