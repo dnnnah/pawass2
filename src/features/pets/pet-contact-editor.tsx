@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState, useState } from 'react';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { CountryPhoneField } from '@/components/country-phone-field';
@@ -24,8 +27,8 @@ export function PetContactEditor({ petId, enabled, phone, whatsapp }: { petId: s
           {separateWhatsapp && <CountryPhoneField label="Número de WhatsApp" inputName="whatsapp" countryName="whatsappCountry" defaultValue={toNational(whatsapp)} defaultCountry={toCountry(whatsapp)} required />}
           <p className="form-description">Si no eliges un segundo número, llamadas y WhatsApp usarán el teléfono que escribiste.</p>
         </> : <p className="form-description">La mascota heredará el contacto vigente de tu cuenta, incluidos los cambios que hagas después.</p>}
-        {state.message && <p className={`form-message ${state.ok ? 'form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-        <button className="button button--outline" type="submit" disabled={pending}>{pending ? 'Guardando…' : custom ? 'Guardar contacto propio' : 'Volver al contacto de mi cuenta'}</button>
+        <FormMessage success={state.ok}>{state.message}</FormMessage>
+        <Button variant="outline" type="submit" disabled={pending}>{pending ? 'Guardando…' : custom ? 'Guardar contacto propio' : 'Volver al contacto de mi cuenta'}</Button>
       </form>
     </details>
   );

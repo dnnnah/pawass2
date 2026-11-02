@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState, useId, useState, useTransition } from 'react';
 import { createLostReport, recoverPet, updateLostReport } from './actions';
 import type { LostReportRow } from './lost-report-state';
@@ -42,9 +45,9 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
         <label className="field"><span>Recompensa informativa <em>opcional</em></span><input name="reward" inputMode="numeric" pattern="[0-9]*" maxLength={100} value={reward} onChange={(event) => { if (/^[0-9]*$/.test(event.target.value)) setReward(event.target.value); }} placeholder="Ej. 1000" /><small>Solo dígitos, sin símbolos ni decimales.</small>{legacyReward && <small>La recompensa anterior contiene texto. Escribe una cantidad en dígitos o deja el campo vacío para retirarla al guardar.</small>}</label>
         <label className="field"><span>Foto reciente <em>opcional</em></span><input type="file" name="recentPhoto" accept="image/*" /></label>
         <p className="form-description">Se convierte a WebP, con un máximo de 2000 px y 5 MB. Se borra del almacenamiento al recuperar a la mascota.</p>
-        {photoError && <p className="form-message" role="alert">{photoError}</p>}
-        {state.message && <p className={`form-message ${state.ok ? 'form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-        <button className="button button--danger" type="submit" disabled={isPending}>{isPending ? 'Guardando…' : report ? 'Guardar cambios' : 'Publicar alerta ahora'}</button>
+        <FormMessage role="alert">{photoError}</FormMessage>
+        <FormMessage success={state.ok}>{state.message}</FormMessage>
+        <Button variant="danger" type="submit" disabled={isPending}>{isPending ? 'Guardando…' : report ? 'Guardar cambios' : 'Publicar alerta ahora'}</Button>
       </form>
     </div>
   );
@@ -68,8 +71,8 @@ export function RecoverPetForm({ report }: { report: Pick<LostReportRow, 'id'> }
     <form action={action} className="recovery-form">
       <input type="hidden" name="reportId" value={report.id} />
       <label className="consent-check"><input type="checkbox" name="confirmRecovery" required /><span>Confirmo que esta mascota ya está en casa.</span></label>
-      {state.message && <p className="form-message" role="status" aria-live="polite">{state.message}</p>}
-      <button className="button button--primary button--wide" type="submit" disabled={pending}>{pending ? 'Cerrando alerta…' : 'Marcar como recuperada'}</button>
+      <FormMessage>{state.message}</FormMessage>
+      <Button fullWidth type="submit" disabled={pending}>{pending ? 'Cerrando alerta…' : 'Marcar como recuperada'}</Button>
     </form>
   );
 }
@@ -78,5 +81,5 @@ export function RecoverPetForm({ report }: { report: Pick<LostReportRow, 'id'> }
 export function QuickRecovery({ reportId }: { reportId: string }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
-  return <div className="quick-recovery"><button className="button button--outline recovery-trigger" type="button" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(!open)}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 15l2 2 4-4" /></svg>Ya está en casa</button>{open && <div id={panelId}><p>Se cerrará la búsqueda pública y se mostrará el aviso de regreso durante 30 días.</p><RecoverPetForm report={{ id: reportId }} /><button className="button button--text" type="button" onClick={() => setOpen(false)}>Cancelar</button></div>}</div>;
+  return <div className="quick-recovery"><Button variant="outline" className="recovery-trigger" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(!open)}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 15l2 2 4-4" /></svg>Ya está en casa</Button>{open && <div id={panelId}><p>Se cerrará la búsqueda pública y se mostrará el aviso de regreso durante 30 días.</p><RecoverPetForm report={{ id: reportId }} /><Button variant="text" onClick={() => setOpen(false)}>Cancelar</Button></div>}</div>;
 }

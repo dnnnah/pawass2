@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { FormMessage } from '@/components/ui/form-message';
+
 import { useActionState, useEffect, useState } from 'react';
 import { savePetDetails } from './actions';
 import type { FormState } from '@/features/profile/actions';
@@ -90,8 +93,8 @@ export function PetDetailsForm({
         <label className="field"><span>Esterilización <em>opcional</em></span><select name="sterilized" defaultValue={details.sterilized === true ? 'yes' : details.sterilized === false ? 'no' : ''}><option value="">Sin especificar</option><option value="yes">Sí</option><option value="no">No</option></select></label>
       </div>
       </fieldset>
-      {state.message && <p className={`form-message ${state.ok ? 'form-message--success' : ''}`} role="status" aria-live="polite">{state.message}</p>}
-      <button className="button button--primary" type="submit" disabled={pending}>{pending ? 'Guardando…' : continueLabel}</button>
+      <FormMessage success={state.ok}>{state.message}</FormMessage>
+      <Button type="submit" disabled={pending}>{pending ? 'Guardando…' : continueLabel}</Button>
     </form>
   );
 }
