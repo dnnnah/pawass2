@@ -7,7 +7,10 @@ const { createClient, exchangeCode } = vi.hoisted(() => ({
 }));
 // Only the external session/data client is replaced; handlers run unchanged.
 vi.mock('@/lib/supabase/server', () => ({ createClient }));
-vi.mock('@/lib/supabase/env', () => ({ getSiteUrl: () => 'https://pawpass.example' }));
+vi.mock('@/lib/supabase/env', () => ({
+  getSiteUrl: () => 'https://pawpass.example',
+  getAuthCallbackOrigin: (origin: string) => origin,
+}));
 
 import { GET } from '../src/app/auth/callback/route';
 import sitemap from '../src/app/sitemap';
