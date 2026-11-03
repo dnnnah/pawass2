@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Limpiar un stack Supabase previo del runner
+        run: npx --no-install supabase stop --no-backup
+      - run: npx --no-install supabase start
+      - run: npx --no-install supabase db reset
+      - name: Preparar entorno local efímero
+        run: npx --no-install supabase status --output env | node scripts/export-local-e2e-env.mjs
+      - run: npm test
+      - run: npx --no-install supabase test db
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm run audit:assets
+      - run: npm run test:e2e
+      - name: Guardar reporte E2E si falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore
+      - name: Detener Supabase local
+        if: always()
+        run: npx --no-install supabase stop --no-backup

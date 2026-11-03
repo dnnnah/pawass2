@@ -1,4 +1,5 @@
 import { getOwnedReports } from '@/features/lost-pets/owned-reports';
+import { cache } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PublicLostPetDetail, type PublicLostPetDetailData } from '@/features/lost-pets/public-lost-pet';
@@ -6,22 +7,25 @@ import { createClient } from '@/lib/supabase/server';
 import { getSiteUrl } from '@/lib/supabase/env';
 import { isPublicPetCode } from '@/lib/domain';
 import { createPhotoUrl } from '@/lib/supabase/photo-url';
+import { getPublicLostPet } from '@/features/lost-pets/public-queries';
 
 type Props = { params: Promise<{ code: string }> };
 type LostPet = PublicLostPetDetailData & { photo_path: string | null };
 
-async function getLostPet(code: string): Promise<LostPet | null> {
+const getLostPet = cache(async (code: string): Promise<{ status: 'found'; pet: LostPet; supabase: NonNullable<Awaited<ReturnType<typeof createClient>>> } | { status: 'missing' | 'unavailable' }> => {
+  if (!isPublicPetCode(code)) return { status: 'missing' };
   const supabase = await createClient();
-  if (!supabase || !isPublicPetCode(code)) return null;
-  const { data, error } = await supabase.rpc('get_public_lost_pet', { p_code: code });
-  if (error) return null;
-  return (data?.[0] as LostPet | undefined) || null;
-}
+  if (!supabase) return { status: 'unavailable' };
+  const result = await getPublicLostPet(supabase, code);
+  if (result.status !== 'found') return result;
+  return { status: 'found', pet: result.pet as LostPet, supabase };
+});
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { code } = await params;
-  const pet = await getLostPet(code);
-  if (!pet) return { title: 'Alerta de mascota | PawPass', robots: { index: false, follow: false, noarchive: true } };
+  const result = await getLostPet(code);
+  if (result.status !== 'found') return { title: 'Alerta de mascota | PawPass', robots: { index: false, follow: false, noarchive: true } };
+  const pet = result.pet;
   const location = pet.last_seen_location || 'Ubicación pendiente';
   return {
     title: `${pet.pet_name} está perdida | PawPass`,
@@ -35,19 +39,23 @@ export const dynamic = 'force-dynamic';
 
 export default async function LostPetPage({ params }: Props) {
   const { code } = await params;
-  const supabase = await createClient();
-  if (!supabase || !isPublicPetCode(code)) notFound();
-  const [{ data }, { data: authData }] = await Promise.all([
-    supabase.rpc('get_public_lost_pet', { p_code: code }),
+  if (!isPublicPetCode(code)) notFound();
+  const result = await getLostPet(code);
+  if (result.status !== 'found') {
+    if (result.status === 'missing') notFound();
+    throw new Error('No se pudo cargar la alerta pública.');
+  }
+  const { pet, supabase } = result;
+  const [{ data: authData }, photos] = await Promise.all([
     supabase.auth.getClaims(),
+    pet.photo_path ? Promise.resolve({ data: null, error: null }) : supabase.rpc('get_public_pet_photo', { p_code: code }),
   ]);
-  const pet = (data?.[0] as LostPet | undefined) || null;
-  if (!pet) notFound();
+  if (photos.error) throw new Error('No se pudo cargar la alerta pública.');
   const signedIn = Boolean(authData?.claims?.sub);
-  const ownedReports = typeof authData?.claims?.sub === 'string' ? await getOwnedReports(supabase, authData.claims.sub) : new Map();
-  const { data: photos } = pet.photo_path ? { data: null } : await supabase.rpc('get_public_pet_photo', { p_code: code });
-  const photoUrl = pet.photo_path
-    ? await createPhotoUrl('lost-pet-photos', pet.photo_path, supabase)
-    : await createPhotoUrl('pet-photos', photos?.[0]?.photo_path, supabase);
+  const ownedReportsPromise = typeof authData?.claims?.sub === 'string' ? getOwnedReports(supabase, authData.claims.sub) : Promise.resolve(new Map());
+  const photoUrlPromise = pet.photo_path
+    ? createPhotoUrl('lost-pet-photos', pet.photo_path, supabase)
+    : createPhotoUrl('pet-photos', (photos.data as { photo_path?: string | null }[] | null)?.[0]?.photo_path, supabase);
+  const [ownedReports, photoUrl] = await Promise.all([ownedReportsPromise, photoUrlPromise]);
   return <PublicLostPetDetail pet={pet} photoUrl={photoUrl} signedIn={signedIn} ownedReport={ownedReports.get(code)} />;
 }
