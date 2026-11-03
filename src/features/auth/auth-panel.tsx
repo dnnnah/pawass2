@@ -5,7 +5,7 @@ import { FormMessage } from '@/components/ui/form-message';
 
 import Image from 'next/image';
 import { useId, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { passwordLogin } from './password-login';
 import { createClient } from '@/lib/supabase/client';
 import { validateRegistrationPassword, getRegistrationPasswordChecks, REGISTRATION_PASSWORD_MIN_LENGTH, REGISTRATION_PASSWORD_MAX_LENGTH } from './domain';
 import { PasswordField } from './password-field';
@@ -14,7 +14,6 @@ import { signInAsDevTestAccount } from './actions';
 type Mode = 'entrar' | 'crear' | 'recuperar';
 
 export function AuthPanel({ configured, showDevTestAccount = false, initialMode = 'entrar', initialMessage = '' }: { configured: boolean; showDevTestAccount?: boolean; initialMode?: 'entrar' | 'crear'; initialMessage?: string }) {
-  const router = useRouter();
   const [mode, setMode] = useState<Mode>(initialMode);
   const [message, setMessage] = useState(initialMessage);
   const [pending, setPending] = useState(false);
@@ -66,9 +65,10 @@ export function AuthPanel({ configured, showDevTestAccount = false, initialMode 
         if (error) throw error;
         setMessage('Revisa tu correo para confirmar la cuenta y continuar.');
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        router.push('/mascotas');
+        await passwordLogin(
+          () => supabase.auth.signInWithPassword({ email, password }),
+          path => window.location.replace(path),
+        );
       }
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'No fue posible completar la solicitud. Intenta de nuevo.');

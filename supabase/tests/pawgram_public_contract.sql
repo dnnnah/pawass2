@@ -1,0 +1,48 @@
+begin;
+insert into auth.users(id) values ('11000000-0000-4000-8000-000000000001'),('11000000-0000-4000-8000-000000000002');
+insert into public.pawgram_admins values('11000000-0000-4000-8000-000000000002');
+insert into public.pets(id,owner_id,name,species,privacy_accepted_at) values('21000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000001','Luna','gato',now());
+insert into public.public_code_reservations(code,pet_id) values('PC-TESTAA','21000000-0000-4000-8000-000000000001');
+insert into public.pawgram_assets(id,pet_id,owner_id,path)
+select ('31000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'21000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000001','31000000-0000-4000-8000-'||lpad(n::text,12,'0')||'.webp' from generate_series(1,4) n;
+set local role authenticated;
+select set_config('request.jwt.claim.sub','11000000-0000-4000-8000-000000000001',true);
+select public.pawgram_save_profile('21000000-0000-4000-8000-000000000001','{"name":"Luna","species":"gato","age_months":12,"age_as_of":"2026-11-02"}',true,'31000000-0000-4000-8000-000000000004');
+select public.pawgram_create_post(('41000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'21000000-0000-4000-8000-000000000001',('31000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'Hola','Luna juega') from generate_series(1,3) n;
+update public.pets set name='Nombre privado cambiado' where id='21000000-0000-4000-8000-000000000001';
+reset role;
+update public.pawgram_posts set created_at='2026-11-02T10:00:00.123456Z';
+set local role anon;
+do $$ declare projection jsonb; page jsonb[]; next_page jsonb[]; begin
+ projection:=public.pawgram_public_profile('21000000-0000-4000-8000-000000000001');
+ assert projection->>'name'='Luna', 'Snapshot independent of private changes';
+ assert projection ? 'age' and not projection ?| array['age_as_of','age_months','owner_id','birth_date','rescue_phone','microchip','photo_path'], 'Only approved fields';
+ select array_agg(row) into page from public.pawgram_feed(p_limit=>2) row;
+ assert page[1]->>'id'='41000000-0000-4000-8000-000000000003', 'Stable ID descending';
+ select array_agg(row) into next_page from public.pawgram_feed(p_before=>(page[2]->>'created_at')::timestamptz,p_before_id=>(page[2]->>'id')::uuid,p_limit=>2) row;
+ assert cardinality(next_page)=1 and next_page[1]->>'id'='41000000-0000-4000-8000-000000000001', 'No skip or repeat with microseconds';
+ assert not page[1] ?| array['account_id','owner_id','paws','restriction_reason'], 'No reaction identities';
+ assert public.pawgram_photo_path('31000000-0000-4000-8000-000000000004',false) is not null, 'Authorized profile photo';
+end $$;
+reset role;
+set local role authenticated;
+select set_config('request.jwt.claim.sub','11000000-0000-4000-8000-000000000002',true);
+select public.pawgram_moderate('post','41000000-0000-4000-8000-000000000003','Foto restringida');
+select public.pawgram_moderate('profile','21000000-0000-4000-8000-000000000001','Perfil restringido');
+select public.pawgram_moderate('profile','21000000-0000-4000-8000-000000000001',null);
+do $$ begin assert (select count(*)=2 from public.pawgram_feed()), 'Profile restore does not restore post'; end $$;
+select set_config('request.jwt.claim.sub','11000000-0000-4000-8000-000000000001',true);
+select public.pawgram_set_published('21000000-0000-4000-8000-000000000001',false);
+select set_config('request.jwt.claim.sub','11000000-0000-4000-8000-000000000002',true);
+select public.pawgram_moderate('profile','21000000-0000-4000-8000-000000000001',null);
+do $$ begin assert (select count(*)=0 from public.pawgram_feed()), 'Admin restore cannot publish for owner'; end $$;
+select set_config('request.jwt.claim.sub','11000000-0000-4000-8000-000000000001',true);
+delete from public.pets where id='21000000-0000-4000-8000-000000000001';
+reset role;
+do $$ begin
+ assert (select count(*)=0 from public.pawgram_profiles), 'Pet cascade profiles';
+ assert (select count(*)=0 from public.pawgram_posts), 'Pet cascade posts';
+ assert (select count(*)=4 from public.pawgram_assets where state='retired'), 'Every asset queued';
+ assert (select pet_id is null from public.public_code_reservations where code='PC-TESTAA'), 'Anonymous code reservation';
+end $$;
+rollback;
