@@ -20,6 +20,7 @@ const base = process.env.PAWGRAM_QA_BASE_URL || 'http://127.0.0.1:3100';
 const mode = process.argv[2];
 const check = ({ data, error }) => { if (error) throw new Error(error.message); return data; };
 async function cleanup(state) {
+  if (state.rescuePath) check(await admin.storage.from('pet-photos').remove([state.rescuePath]));
   for (const person of state.people) check(await admin.auth.admin.deleteUser(person.id));
   assert.equal(await cleanWithClient(admin), true);
   const remaining = check(await admin.from('pawgram_assets').select('id').eq('pet_id', state.petId));
