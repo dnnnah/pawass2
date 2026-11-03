@@ -127,7 +127,11 @@ El E2E autenticado prepara una cuenta reservada con una clave temporal y solo ad
 
 ## Vercel, dominio y OAuth
 
-El repositorio está preparado para Next.js en Vercel; no necesita `vercel.json` ni la integración de Supabase del asistente de Vercel. La aplicación usa un proyecto Supabase existente. El proyecto de Vercel creado desde GitHub se llama `pawpass`, pero `https://pawpass.vercel.app` ya muestra otro sitio de PawPass y no está disponible para este proyecto. Usa el dominio `*.vercel.app` que Vercel asigne a tu proyecto o conecta un dominio propio; compruébalo en **Settings → Domains**. El dominio de preview de este PR es [pawpass-ashen.vercel.app](https://pawpass-ashen.vercel.app), no es la dirección de producción estable.
+El repositorio está preparado para Next.js en Vercel; el despliegue detectó el framework y no requiere un `vercel.json` adicional. La aplicación usa un proyecto Supabase existente. El proyecto de Vercel se llama `pawpass`; `https://pawpass.vercel.app` pertenece a otro sitio, así que asignamos `https://pawpass2.vercel.app` al entorno Production. La portada, el manifest y el service worker ya responden en ese dominio. El alias automático del proyecto es [pawpass-ashen.vercel.app](https://pawpass-ashen.vercel.app).
+
+En Vercel quedó configurada la variable pública `NEXT_PUBLIC_SITE_URL=https://pawpass2.vercel.app` para Production. Las tres variables de Supabase todavía no están configuradas. Vercel indica que hace falta un nuevo despliegue para aplicar la variable; no se inició ese redeploy.
+
+Vercel marca una implementación de `feat/vercel-pwa-oauth` como **Production**, aunque el ajuste de seguimiento de rama dice `main`. El nuevo dominio apunta al entorno Production. Revisa esta discrepancia y la rama de origen antes de publicar cambios posteriores o habilitar cuentas reales.
 
 ### Configurar Vercel
 
@@ -140,29 +144,29 @@ El repositorio está preparado para Next.js en Vercel; no necesita `vercel.json`
    | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API Keys → publishable key. |
    | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API Keys → secret/service-role key. Solo servidor; nunca uses el prefijo `NEXT_PUBLIC_`. |
 
-   Para `NEXT_PUBLIC_SITE_URL`, añade `https://<dominio-produccion-asignado>` en **Production** después de confirmar el dominio estable en **Settings → Domains**. No uses `https://pawpass.vercel.app`: actualmente pertenece a otro sitio. Déjala sin definir en **Preview**: Vercel aporta el origen de cada preview y la aplicación conserva el dominio de producción como canonical. No pongas claves de producción en previews; lo recomendable es conectar un proyecto Supabase separado, con datos de prueba, como valores de Preview. No pegues secretos en GitHub, capturas ni conversaciones.
+   Para `NEXT_PUBLIC_SITE_URL`, añade `https://pawpass2.vercel.app` en **Production**. Déjala sin definir en **Preview**: Vercel aporta el origen de cada preview y la aplicación conserva el dominio de producción como canonical. No pongas claves de producción en previews; lo recomendable es conectar un proyecto Supabase separado, con datos de prueba, como valores de Preview. No pegues secretos en GitHub, capturas ni conversaciones.
 3. Comprueba que la región de las funciones de Vercel quede cerca de la región de tu proyecto Supabase; primero identifica esa región en Supabase → Project Settings → General. Vercel suele construir y desplegar automáticamente al importar el repositorio. Usa la rama `main` como producción y revisa los despliegues de ramas/PR como previews.
 4. No pulses **Deploy** hasta configurar las variables y revisar los valores de Production/Preview. No hace falta pulsar **Add** en la tarjeta de integración Supabase: eso puede crear o conectar otro proyecto y PawPass necesita las credenciales de su proyecto Supabase actual. Tras el primer despliegue, confirma el dominio en **Settings → Domains** y ejecuta las comprobaciones de la lista de salida.
 
 ### Google OAuth en Supabase
 
-Google todavía no está configurado. Las credenciales deben crearse en Google Cloud y guardarse en Supabase, no en Vercel:
+Google Cloud ya tiene un cliente OAuth web activo llamado **PawPass Web**. Conserva su callback actual de Supabase; no crees un cliente duplicado ni generes otro secreto. El cliente aún autoriza el dominio anterior `pet-carnet.vercel.app` y `localhost`; falta autorizar `pawpass2.vercel.app` tanto en la pantalla de marca como en los orígenes del cliente. El público está en **Prueba**, con cero usuarios de prueba, así que solo podrán acceder las cuentas que se agreguen como testers. Para publicar a usuarios generales, completa primero la información legal y los enlaces de marca y sigue la verificación que Google solicite.
 
-1. En Google Cloud, configura la pantalla de consentimiento de la aplicación con el nombre PawPass, correo de soporte y enlaces públicos a `/privacidad` y `/terminos`. Crea un OAuth Client ID de tipo **Web application**. Como origen autorizado agrega `https://<dominio-produccion-asignado>` y, para desarrollo, `http://localhost:3000`.
+1. En Google Cloud existe un OAuth Client ID web llamado **PawPass Web**. Reutilízalo y añade como origen autorizado `https://pawpass2.vercel.app`, conservando `http://localhost:3000`.
 2. En Supabase → **Authentication → Sign In / Providers → Google**, habilita Google. Copia el Client ID y Client Secret de Google en los campos del proveedor. Google debe tener como URI de redirección autorizado el callback exacto que muestra Supabase en ese panel, con forma `https://<project-ref>.supabase.co/auth/v1/callback`.
-3. En Supabase → **Authentication → URL Configuration**, configura Site URL como `https://<dominio-produccion-asignado>`. En Redirect URLs agrega `https://<dominio-produccion-asignado>/auth/callback`, `https://<dominio-produccion-asignado>/auth/reset-password` y `http://localhost:3000/**`. Para previews agrega un patrón limitado a tu slug/cuenta Vercel, por ejemplo `https://*-<slug-de-tu-equipo>.vercel.app/**`; reemplaza los ejemplos y prueba un preview real. No uses un comodín abierto para cualquier host.
+3. En Supabase → **Authentication → URL Configuration**, configura Site URL como `https://pawpass2.vercel.app`. En Redirect URLs agrega `https://pawpass2.vercel.app/auth/callback`, `https://pawpass2.vercel.app/auth/reset-password` y `http://localhost:3000/**`. Para previews agrega un patrón limitado a tu slug/cuenta Vercel, por ejemplo `https://*-<slug-de-tu-equipo>.vercel.app/**`; reemplaza los ejemplos y prueba un preview real. No uses un comodín abierto para cualquier host.
 4. Prueba registro, confirmación de correo, inicio de sesión con Google, cierre de sesión, recuperación y cambio de contraseña en una preview aislada. Verifica además el callback en la URL estable y el preview antes de producción. Si Google exige verificación, completa sus requisitos de identidad y dominio desde Google Cloud.
 
-No tenemos credenciales Google ni acceso a las cuentas Supabase/Vercel para completar o probar esa configuración externa. Tampoco está definida la identidad legal ni un medio de contacto del responsable. Las páginas `/privacidad` y `/terminos` muestran un borrador visible con esa limitación; completa y revisa el responsable, contacto, conservación y regiones de tratamiento antes de abrir el servicio o pedir verificación a Google. No inventes esos datos.
+El panel de Supabase requiere una sesión que no está disponible en esta sesión de trabajo. Añade en Vercel `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` y `SUPABASE_SERVICE_ROLE_KEY` con valores del proyecto correcto antes de hacer redeploy; no compartas la clave privada por chat. Tampoco está definida la identidad legal ni un medio de contacto del responsable. Las páginas `/privacidad` y `/terminos` muestran un borrador visible con esa limitación; completa y revisa el responsable, contacto, conservación y regiones de tratamiento antes de abrir el servicio o pedir verificación a Google.
 
 ### Lista de salida
 
-- Confirma que Vercel asignó `pawpass.vercel.app`, que Production usa el proyecto Supabase esperado y que Preview no expone datos de producción.
+- Confirma que `pawpass2.vercel.app` conserva una configuración válida, que Production usa la rama y proyecto Supabase esperados y que Preview no expone datos de producción.
 - Verifica la portada, acceso, callback OAuth, recuperación, alta/edición de una mascota, QR, reporte de pérdida, subida y descarga privada de un documento, Pawgram, páginas legales y página offline.
 - Instala la PWA en Chrome Android y Safari iOS; comprueba icono, nombre y apertura independiente. El service worker solo precachea recursos públicos conocidos: no almacena páginas privadas, auth, API, documentos ni fotografías. La edición y los datos requieren conexión.
 - Revisa privacidad/SEO, lectores de pantalla y contrastes en los dispositivos objetivo. Esta revisión automatizada no certifica WCAG 2.2 AA; hace falta una comprobación manual completa.
 - Programa y monitoriza `npm run pawgram:cleanup` en un entorno operativo con Supabase. También revisa límites, retención y limpieza periódica de objetos temporales abandonados en Storage.
-- Prueba un rollback desde Vercel y conserva el último despliegue correcto. No se ha publicado un despliegue desde este trabajo.
+- Prueba un rollback desde Vercel y conserva el último despliegue correcto. El dominio nuevo ya está asignado a Production; esta fase no ejecutó un redeploy manual después de configurar `NEXT_PUBLIC_SITE_URL`.
 
 ## Next.js y archivos locales
 
