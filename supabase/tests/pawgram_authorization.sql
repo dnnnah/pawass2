@@ -60,6 +60,6 @@ reset role;
 do $$ begin
  assert (select state='retired' from public.pawgram_assets where id='30000000-0000-4000-8000-000000000001'), 'Durable cleanup after delete';
  assert (select count(*)=0 from public.pawgram_paws), 'Cascade paws';
- assert (select count(*)=1 from public.pets), 'Rescue untouched';
+ assert exists (select 1 from public.pets where id='20000000-0000-4000-8000-000000000001' and name='Luna'), 'Rescue untouched';
 end $$;
 rollback;

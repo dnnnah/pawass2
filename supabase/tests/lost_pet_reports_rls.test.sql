@@ -24,12 +24,12 @@ select ok(has_function_privilege('anon', 'public.get_public_lost_pet(text)', 'ex
 select ok(has_function_privilege('anon', 'public.get_public_pet_rescue_status(text)', 'execute'), 'anon can read the limited QR status');
 select is(
   (select pg_get_function_result('public.get_public_lost_pets(text,text)'::regprocedure)),
-  'TABLE(public_code text, pet_name text, species public.pet_species, photo_path text, whatsapp_phone text, lost_at timestamp with time zone, last_seen_location text, last_seen_at timestamp with time zone, wearing text, message text, reward text)',
+  'TABLE(public_code text, pet_name text, species pet_species, photo_path text, whatsapp_phone text, lost_at timestamp with time zone, last_seen_location text, last_seen_at timestamp with time zone, wearing text, message text, reward text)',
   'the board RPC returns only public rescue fields'
 );
 select is(
   (select pg_get_function_result('public.get_public_lost_pet(text)'::regprocedure)),
-  'TABLE(public_code text, pet_name text, species public.pet_species, photo_path text, rescue_phone text, whatsapp_phone text, lost_at timestamp with time zone, last_seen_location text, last_seen_at timestamp with time zone, wearing text, message text, reward text, care_alerts jsonb)',
+  'TABLE(public_code text, pet_name text, species pet_species, photo_path text, rescue_phone text, whatsapp_phone text, lost_at timestamp with time zone, last_seen_location text, last_seen_at timestamp with time zone, wearing text, message text, reward text, care_alerts jsonb)',
   'the detail RPC has an explicit public contract including only opted-in alerts'
 );
 

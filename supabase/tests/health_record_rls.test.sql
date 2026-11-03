@@ -33,7 +33,14 @@ select ok(
   'health documents use a private ten MiB bucket'
 );
 select is(
-  (select count(*)::integer from pg_policies where schemaname = 'storage' and tablename = 'objects' and policyname like 'Tutors % health documents'),
+  (select count(*)::integer from pg_policies
+   where schemaname = 'storage' and tablename = 'objects'
+     and policyname in (
+       'Tutors read their own health documents',
+       'Tutors upload health documents for their own pets',
+       'Tutors delete their own health documents'
+     )
+     and cmd in ('SELECT', 'INSERT', 'DELETE')),
   3,
   'Storage has separate select, insert, and delete policies for document objects'
 );
