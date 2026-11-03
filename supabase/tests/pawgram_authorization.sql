@@ -1,5 +1,6 @@
 -- Isolated integration test. Transactions roll back every fixture.
 begin;
+select plan(3);
 insert into auth.users(id) values ('10000000-0000-4000-8000-000000000001'),('10000000-0000-4000-8000-000000000002'),('10000000-0000-4000-8000-000000000003');
 insert into public.pets(id,owner_id,name,species,privacy_accepted_at) values('20000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001','Luna','gato',now());
 set local role authenticated;
@@ -62,4 +63,8 @@ do $$ begin
  assert (select count(*)=0 from public.pawgram_paws), 'Cascade paws';
  assert exists (select 1 from public.pets where id='20000000-0000-4000-8000-000000000001' and name='Luna'), 'Rescue untouched';
 end $$;
+select ok(exists(select 1 from public.pawgram_profiles where pet_id='20000000-0000-4000-8000-000000000001' and restriction_reason='Revisión de privacidad'), 'La moderación sigue activa después de quitar la publicación');
+select is((select state from public.pawgram_assets where id='30000000-0000-4000-8000-000000000001'), 'retired', 'La foto eliminada queda en la cola durable de limpieza');
+select ok(exists(select 1 from public.pets where id='20000000-0000-4000-8000-000000000001'), 'Eliminar la publicación conserva la mascota');
+select * from finish();
 rollback;

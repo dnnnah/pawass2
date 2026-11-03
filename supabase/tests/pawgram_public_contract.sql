@@ -1,4 +1,5 @@
 begin;
+select plan(4);
 insert into auth.users(id) values ('11000000-0000-4000-8000-000000000001'),('11000000-0000-4000-8000-000000000002');
 insert into public.pawgram_admins values('11000000-0000-4000-8000-000000000002');
 insert into public.pets(id,owner_id,name,species,privacy_accepted_at) values('21000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000001','Luna','gato',now());
@@ -45,4 +46,9 @@ do $$ begin
  assert (select count(*)=4 from public.pawgram_assets where state='retired'), 'Every asset queued';
  assert (select pet_id is null from public.public_code_reservations where code='PC-TESTAA'), 'Anonymous code reservation';
 end $$;
+select is((select count(*)::integer from public.pawgram_profiles), 0, 'Eliminar la mascota limpia el perfil social');
+select is((select count(*)::integer from public.pawgram_posts), 0, 'Eliminar la mascota limpia sus publicaciones');
+select is((select count(*)::integer from public.pawgram_assets where state='retired'), 4, 'Las cuatro fotos quedan marcadas para limpieza durable');
+select ok((select pet_id is null from public.public_code_reservations where code='PC-TESTAA'), 'La reserva del código queda anónima');
+select * from finish();
 rollback;
