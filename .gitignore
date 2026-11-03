@@ -10,3 +10,4 @@ test-results/
 supabase/.temp/
 .DS_Store
 .superpowers/
+.impeccable/surfaces/*.md
