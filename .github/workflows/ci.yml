@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Limpiar un stack Supabase previo del runner
+        run: npx --no-install supabase stop --no-backup
       - run: npx --no-install supabase start
       - run: npx --no-install supabase db reset
       - name: Preparar entorno local efímero

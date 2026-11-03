@@ -10,6 +10,7 @@ Esta fase endurece los estados públicos, las operaciones de recuperación y eli
 - La recuperación cierra primero el aviso público. Si Storage no consigue borrar la foto, la ruta queda registrada para que una eliminación posterior pueda reintentarlo; la respuesta informa que el aviso está cerrado y la limpieza de archivo sigue pendiente.
 - La eliminación de una mascota se detiene antes de borrar datos si falla cualquiera de las lecturas previas de relaciones o archivos.
 - El workflow de GitHub Actions instala con `npm ci`, levanta Supabase local con datos de prueba, ejecuta pruebas de base y de interfaz y aplica permisos mínimos. No configura secretos de producción.
+- Antes de iniciar Supabase, CI detiene cualquier stack residual con el mismo identificador de proyecto para evitar colisiones de puertos entre ejecuciones del runner.
 - Hay tres E2E: demo pública segura, ficha de pérdida de demo sin acciones reales y acceso autenticado a mascotas privadas con protección de rutas. El tercero se ejecuta contra Supabase local en CI.
 - El inventario de CSS cubre 21 rutas. El CSS por ruta se mide después de una compilación de producción y el script comprueba estilos faltantes y estilos de funciones ajenas.
 
