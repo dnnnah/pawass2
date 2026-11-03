@@ -1,230 +1,90 @@
----
-name: PawPass V2
-description: Identidad clara y cuidado cercano para volver a encontrarse.
-colors:
-  blue: "#176986"
-  blue-deep: "#12536b"
-  blue-light: "#e2f0f4"
-  ink: "#173b4b"
-  muted: "#506b77"
-  paper: "#ffffff"
-  surface: "#f5fafc"
-  line: "#c8d9de"
-  danger: "#b6323c"
-  danger-soft: "#fcebed"
-  accent-violet: "#6651a3"
-  accent-cyan: "#087c9f"
-  accent-cobalt: "#3154aa"
-  surface-violet: "#faf8ff"
-  photo-violet: "#efebf7"
-  line-violet: "#d5cbed"
-  surface-cobalt: "#f0f7ff"
-  line-cobalt: "#c2d9ed"
-  status-info-ink: "#574080"
-  status-info-surface: "#efebf7"
-  status-precaution-line: "#99bacb"
-  status-critical-line: "#d9a6ac"
-  status-current-line: "#9bbdc9"
-  status-precaution-ink: "#144b6b"
-  status-precaution-surface: "#e1eef5"
-  status-critical-ink: "#8d2630"
-  status-critical-surface: "#fcebed"
-  status-current-ink: "#12536b"
-  status-current-surface: "#edf5f8"
-  status-unknown-ink: "#476274"
-  status-unknown-surface: "#f3f6f8"
-typography:
-  display:
-    fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.35rem, 4vw, 3.5rem)"
-    fontWeight: 700
-    lineHeight: 1.12
-    letterSpacing: "-0.025em"
-  title:
-    fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "2rem"
-    fontWeight: 700
-    lineHeight: 1.12
-  body:
-    fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "16px"
-    fontWeight: 400
-    lineHeight: 1.55
-  label:
-    fontFamily: "Nunito Sans Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.92rem"
-    fontWeight: 700
-  section:
-    fontSize: "1.5rem"
-  compactTitle:
-    fontSize: "1.35rem"
-  compactDisplay:
-    fontSize: "clamp(2rem, 4vw, 2.7rem)"
-  small:
-    fontSize: "0.85rem"
-  date:
-    fontSize: "0.9rem"
-rounded:
-  status: "10px"
-  field: "9px"
-  button: "12px"
-  card: "16px"
-  rescue: "20px"
-  pill: "999px"
-spacing:
-  sm: "0.5rem"
-  md: "1rem"
-  lg: "1.5rem"
-  xl: "2rem"
-components:
-  button-primary:
-    backgroundColor: "{colors.blue}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.button}"
-    padding: "0.75rem 1.1rem"
-  button-secondary:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.button}"
-    padding: "0.75rem 1.1rem"
-  button-tertiary:
-    backgroundColor: "transparent"
-    textColor: "{colors.blue-deep}"
-    rounded: "{rounded.button}"
-    padding: "0.75rem 1.1rem"
-  card:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.card}"
-    padding: "1.35rem"
----
+# Diseño PawPass V2
 
-# Design System: PawPass V2
+## Dirección visual
 
-## Overview
+**Azul mineral para cuidar.** La referencia aprobada establece una identidad cercana, clara y reconocible: 75% profesional y 25% juguetona. El lienzo blanco y las superficies claras dejan que la mascota, su estado y el contacto sean protagonistas. La huella aparece después de «pawpass». La referencia orienta continuidad de identidad; el contrato funcional y la accesibilidad determinan cada pantalla.
 
-**Creative North Star: "Azul mineral para cuidar"**
+La decoración incluye huellas, estrellas, collar, perro, gato y corazón con trazos sencillos. Mensajes cálidos y personalizados acompañan los recorridos. La decoración es secundaria, no oculta datos ni sustituye etiquetas.
 
-PawPass conserva la continuidad de la maqueta azul-rescate-06 y su huella, con las decisiones posteriores aprobadas: lienzo blanco, detalles azules, fotografías completas y Nunito Sans Variable. La personalidad combina 75% profesional y 25% juguetón: información clara, mensajes cálidos y figuras visibles de corazón, gato, perro, estrella, collar y huella. Los acentos violeta, cian y cobalto aportan el color más llamativo aprobado, con tarjetas alternas pastel.
+## Tokens
 
-La decoración acompaña el cuidado sin competir con el nombre, la fotografía, el estado o el contacto. Esta documentación describe el sistema implementado en modo Operate; no sustituye la especificación funcional ni convierte la maqueta en una composición obligatoria.
+| Token | Valor | Uso |
+|---|---|---|
+| `blue` | `#176986` | Acción primaria y marca habitual |
+| `blue-deep` | `#12536b` | Enlaces, hover y texto azul profundo |
+| `blue-light` | `#e2f0f4` | Selección y superficies de estado habitual |
+| `ink` | `#173b4b` | Texto principal |
+| `muted` | `#506b77` | Texto secundario |
+| `paper` | `#ffffff` | Lienzo |
+| `surface` | `#f5fafc` | Superficie azul muy clara |
+| `line` | `#c8d9de` | Bordes y separadores |
+| `danger` | `#b6323c` | Pérdida, emergencia y alertas críticas |
+| `danger-soft` | `#fcebed` | Fondo de estados de urgencia |
+| `accent-violet` | `#6651a3` | Acentos decorativos y documentos |
+| `accent-cyan` | `#087c9f` | Acentos decorativos, fotos y cuidados |
+| `accent-cobalt` | `#3154aa` | Acentos decorativos de mascotas |
+| `surface-violet` | `#faf8ff` | Superficie alterna |
+| `photo-violet` | `#efebf7` | Fondo de fotografía alterno |
+| `line-violet` | `#d5cbed` | Borde de superficie violeta |
+| `surface-cobalt` | `#f0f7ff` | Superficie alterna del tablón |
+| `line-cobalt` | `#c2d9ed` | Borde de superficie cobalto |
 
-**Key Characteristics:**
+Estados semánticos: informativa usa tinta violeta `#574080` y superficie `#efebf7`; precaución usa tinta azul `#144b6b` y superficie `#e1eef5`; crítica usa tinta roja `#8d2630` y superficie `#fcebed`; al día usa tinta `#12536b` y superficie `#edf5f8`; desconocida usa tinta `#476274` y superficie `#f3f6f8`. La excepción de verde es localizada a la confirmación visual de requisitos de contraseña cumplidos durante el registro; no crea un color de estado general.
 
-- Blanco con superficies pastel y acentos azules, violetas y cian.
-- Fotografías completas, sin recorte.
-- Acciones sólido / contorno / texto.
-- Calidez discreta y legibilidad accesible.
+Las acciones habituales y WhatsApp usan azul. Rojo se limita a pérdida, emergencia, alertas críticas y errores que requieren corrección. No se usan verde ni amarillo como colores habituales de interfaz. El botón de Google puede mostrar su marca oficial multicolor como identidad externa.
 
-## Colors
+## Tipografía y composición
 
-### Primary
+- Nunito Sans Variable autoalojada desde npm; respaldos `ui-sans-serif`, `system-ui`, `sans-serif`.
+- Título de portada: `clamp(2.35rem, 4vw, 3.5rem)`, peso 700, interlineado 1.12, tracking `-0.025em`. Encabezados de sección: 2rem, peso 700, interlineado 1.12. Cuerpo: 16px/1.55. Etiquetas: 0.92rem y peso 700. Texto de párrafo de hasta 68ch.
+- Contenido centrado, ancho máximo habitual 1100px; ficha QR hasta 760px. Listas en dos columnas con 1.5rem de espacio; una columna bajo 620px. Ayuda del editor fluye debajo a 880px.
+- Fondo blanco, superficies pastel alternas y texto azul oscuro. Líneas y cambios tonales crean profundidad; sombras suaves solo en ficha QR, panel de contacto y menú desplegable.
+- Fotos completas con proporción natural (`object-fit: contain`); el espacio libre usa el fondo de la superficie. No recortar a la mascota para llenar tarjetas.
 
-Azul mineral (`blue`) para acciones y detalles de marca; azul profundo (`blue-deep`) para enlaces y hover; azul suave (`blue-light`) para estados habituales y selección.
+## Formas, espacio y movimiento
 
-### Secondary
+Radios: estado 10px, campo 9px, botón 12px, tarjeta 16px, ficha QR 20px y píldora 999px. Espaciado base: 0.5rem, 1rem, 1.5rem y 2rem; el carnet usa separación consistente entre sección, registro, formulario y acciones. Evitar márgenes negativos en móvil.
 
-Violeta (`accent-violet`) para corazón y collar, cian (`accent-cyan`) para gato y estrellas, y cobalto (`accent-cobalt`) para perro. Son acentos decorativos visibles; las acciones conservan su jerarquía azul. Las tarjetas pares de mascotas usan cuerpo violeta casi blanco (`surface-violet`), fondo de foto violeta suave (`photo-violet`) y borde lavanda (`line-violet`). Las tarjetas pares del tablón usan cuerpo azul pastel (`surface-cobalt`) y borde azul suave (`line-cobalt`).
+Las transiciones de controles duran 120ms y respetan `prefers-reduced-motion`. Las sombras aprobadas son `0 16px 40px rgba(32, 70, 91, 0.09)` para ficha QR, `0 10px 28px rgba(26, 66, 84, .06)` para contacto y `0 12px 30px #173b4b14` para el menú.
 
-### Neutral
+## Jerarquía de acciones
 
-Blanco (`paper`) como lienzo. Superficie azul casi blanca (`surface`) para cuerpos de tarjetas. Tinta (`ink`) para lectura principal, texto secundario (`muted`) para ayuda y línea suave (`line`) para separar grupos.
+1. **Primaria:** sólido azul para tareas habituales; sólido rojo solo para una acción urgente que el rojo identifica.
+2. **Secundaria:** contorno azul o neutral; contorno rojo para una vía urgente secundaria.
+3. **Terciaria:** enlace o texto subrayado, sin relleno.
 
-### Named Rules
+Botones de al menos 48px de alto; radios 12px, peso 700 y padding aproximado `0.75rem 1.1rem`. Hover oscurece el primario y matiza el secundario. Al pulsar, desplazamiento de 1px. Deshabilitado con opacidad 0.58. Foco visible de 3px con separación de 3px.
 
-**The Azul cotidiano Rule.** Las tareas habituales y WhatsApp usan azul; el rojo identifica pérdida, emergencia o alerta crítica. No introducir verde ni amarillo como colores de interfaz; la marca oficial multicolor de Google es una excepción de identidad externa.
+WhatsApp se muestra primero como acción azul de marca, incluso durante una pérdida; llamada va después como contorno. El rojo de emergencia no recolorea WhatsApp. Cuando está disponible, la ubicación es información textual; nunca se solicita la ubicación actual del visitante.
 
-Rojo de rescate (`danger`) y fondo rojo suave (`danger-soft`) son colores semánticos de excepción, acompañados de texto que identifique el estado.
+## Controles y navegación
 
-## Typography
+- Campos blancos con borde visible, etiqueta persistente encima, ayuda o error debajo, altura mínima de 48px y foco accesible. Los controles de contraseña tienen nombres accesibles para mostrar/ocultar.
+- Teléfono: país/lada separado del número nacional; durante edición solo dígitos, al perder foco formato legible, por ejemplo `55 1234 5678`.
+- Recompensa de pérdida: solo dígitos; no convertir silenciosamente texto, signos o decimales.
+- Registro: requisitos de 8–72 caracteres, mayúscula, número y carácter especial; confirmación de coincidencia antes de envío. Los indicadores incluyen texto y anuncios accesibles. La palomita verde se limita a la validación de contraseña y el error de coincidencia usa rojo.
+- Menú hamburguesa en todas las anchuras, con Mis mascotas, Mascotas perdidas y Mi cuenta. Cierra al elegir, pulsar fuera o usar Escape; Escape devuelve el foco al botón. Los enlaces indican destino actual.
+- Un pie global compacto comparte la marca, el motivo gráfico y un mensaje cálido. No duplicar pies locales.
+- Las tarjetas de mascota priorizan foto, nombre, especie y estado; ofrecen una acción primaria «Ver ficha pública» y enlaces discretos para editar o gestionar pérdida. No anidar tarjetas.
 
-**Display Font:** Nunito Sans Variable, con ui-sans-serif, system-ui y sans-serif de respaldo.
-**Body Font:** la misma familia, autoalojada mediante `@fontsource-variable/nunito-sans` e importada desde el layout raíz.
+## Accesibilidad y responsive
 
-La curva amable de la familia aporta cercanía sin sacrificar lectura. Los títulos cambian de tamaño según su contexto: el panel usa 2.5rem (peso 750), las tarjetas 2rem y el cuerpo 16px. En móvil el título del panel baja a 2rem y el de tarjeta a 1.9rem. Las etiquetas usan 0.92rem y peso 700. Párrafos limitados a 68ch; conservar texto en caja normal.
+WCAG 2.2 AA es el objetivo: contraste de texto 4.5:1, contraste de gráficos y controles necesarios 3:1, navegación completa por teclado, orden lógico, foco visible, nombres/instrucciones/errores comprensibles, objetivos táctiles adecuados, ampliación y reflujo a 320 CSS px, zoom de texto al 200% y movimiento reducido. No comunicar estado solo con color: combinar etiqueta, símbolo e icono con tono.
 
-## Layout
+Las imágenes informativas tienen texto alternativo útil; las decorativas se ocultan a tecnologías de asistencia. Los carteles ofrecen una descripción textual equivalente y el QR conserva URL/código legibles. Formularios asocian errores con campos y anuncian resultados. Cargas, errores y resultados de mutación muestran estado visible.
 
-Contenido centrado, ancho máximo habitual de 1100px. Listas de mascotas y tablón en dos columnas con separación de 1.5rem; a 620px pasan a una columna con separación de 1.25rem. La ficha QR tiene máximo 760px. El editor agrupa identidad, fotografía, cuidados y contactos en bloques con navegación de secciones y ayuda de privacidad lateral; a 880px esa ayuda fluye debajo del contenido. No convertir esta organización en nuevas capacidades de producto.
+La navegación se adapta a pantallas estrechas sin scroll horizontal; botones se apilan cuando hace falta. La navegación del editor puede envolver y mantiene objetivos de 48px. La navbar fija se alinea con la altura real de cabecera y no usa compensaciones laterales negativas.
 
-La navegación principal vive en un menú hamburguesa en la cabecera a todas las anchuras. Esta decisión posterior sustituye la navegación inferior móvil; no se reserva relleno inferior para ella. El tablón aplica automáticamente el filtro de especie y muestra el estado de actualización; no añade botón “Buscar alertas”, filtro de zona ni una llamada “Entrar a PawPass”. Un único SiteFooter, compuesto desde el layout raíz, cierra todas las páginas de la aplicación. Se mantiene cerca del contenido: cuenta, rescate y ficha de pérdida no fuerzan una altura de pantalla; acceso reserva `calc(100svh - 145px)` para su composición. El pie tiene margen superior de 1.25rem y relleno de .4rem 0 1rem.
+## Uso por superficie
 
-## Elevation & Depth
+- **Inicio:** presentación pública con ejemplos explícitamente ficticios; no incrusta datos personales ni contacto activo. Menú y pie compartidos.
+- **Mis mascotas:** estado y datos esenciales primero, con acciones claras para ficha, edición y pérdida.
+- **QR:** foto y nombre, WhatsApp azul primero, llamada secundaria, después alertas autorizadas. Si está perdida, franja con texto claro y tono rojo.
+- **Pérdida y tablón:** rojo solo para estado activo y alertas críticas; detalles legibles, ubicación escrita y filtros de especie automáticos. El cartel es una superficie de exportación separada y advierte que el teléfono será visible.
+- **Carnet:** bloques privados por categoría, conteo y acciones agrupadas; estado de dosis con tono, símbolo y texto. Sin impresión ni PDF clínico.
+- **Pawgram:** contenido social optativo con fotos completas y descripción accesible; no trasladar los colores ni permisos de rescate a su contrato de publicación.
+- **Demo:** avisos visibles de ficción y ausencia de acciones reales; los estados de pérdida se distinguen como simulados.
 
-Predominan líneas y fondos tonales. La ficha QR usa una sombra ambiental suave (`0 16px 40px rgba(32, 70, 91, 0.09)`); el panel de contacto de cuenta usa `0 10px 28px rgba(26, 66, 84, .06)`. No extender estas sombras a todos los bloques.
+## Identidad y decisiones aprobadas
 
-## Shapes
-
-Tarjetas y bloques con esquinas suaves (16px); ficha QR más abierta (20px); botones (12px), campos (9px) y estados en cápsula (999px). Bordes finos separan contenido; los botones de contorno usan 2px. Los motivos de mascota son SVG visibles de trazo sencillo; el protagonismo visual sigue en la mascota y no sustituyen el logo aprobado.
-
-## Components
-
-### Buttons
-
-Primario sólido azul, secundario de contorno y terciario de texto subrayado. Altura mínima habitual de 48px, peso 700 y relleno de 0.75rem 1.1rem. Hover oscurece el primario y matiza el secundario; al pulsar desciende 1px. Foco de 3px con separación de 3px; deshabilitado con opacidad 0.58. Transición de 120ms ease, reducida según preferencias del usuario.
-
-El botón compartido “Continuar con Google” usa el contorno habitual y el activo oficial multicolor autoalojado `public/google-g.svg`, decorativo junto a su etiqueta visible. Sus colores pertenecen a Google y no amplían la paleta de PawPass.
-
-### Cards / Containers
-
-Fotografía sobre fondo suave, cuerpo con detalles azules y acciones en orden claro. Fotos de tarjetas a 320px en escritorio y 220px en móvil. El nombre, especie, código y estado tienen jerarquías distintas.
-
-**The Foto completa Rule.** Mostrar la fotografía con object-fit: contain; el espacio sobrante conserva el fondo suave del contenedor.
-
-### Inputs / Fields
-
-Campo blanco con borde visible, etiqueta encima, ayuda debajo y foco consistente. Altura mínima de 48px; el selector conserva indicación de despliegue y vuelve al control nativo en colores forzados. Mostrar/ocultar contraseña usa un botón con nombre accesible.
-
-Teléfono y WhatsApp separan país/lada y número nacional. El selector usa el catálogo estático `country-options.json` para mantener el mismo contenido inicial en servidor y cliente. Durante la edición se muestran solo dígitos (máximo 15); al perder foco se agrupan dos dígitos iniciales y bloques de cuatro, por ejemplo `55 1234 5678`. La recompensa opcional admite únicamente dígitos, sin símbolos ni decimales, con la misma restricción en el normalizador. Es un contrato de entrada; no implica cambios de base de datos ni migraciones.
-
-### Navigation
-
-AppHeader muestra la marca y un botón “Menú” con icono SVG, nombre accesible, aria-expanded y aria-controls. El panel desplegable ofrece Mis mascotas, Mascotas perdidas, Mi cuenta y la acción de sesión correspondiente. Tiene ancho máximo de 340px, esquinas de 12px, borde suave y sombra `0 12px 30px #173b4b14`. Se cierra al seleccionar un destino, pulsar fuera o usar Escape; Escape devuelve el foco al botón. El activo usa fondo azul suave y aria-current. El botón mide al menos 48px (44px en móvil). La navegación del editor puede envolver líneas y conserva objetivos de 48px. Los estados y cápsulas incluyen texto además de color.
-
-### Contacto de rescate
-
-WhatsApp mantiene azul de marca y precede a la llamada de contorno, cuando exista; la llamada durante una pérdida usa contorno rojo. Los avisos de pérdida o cuidado crítico usan rojo sin cambiar la identidad habitual de WhatsApp.
-
-### PetTrail, mensajes y pie global
-
-PetTrail reúne estrella, perro, huella, corazón, gato, collar y estrella, con trazos redondeados. Las figuras principales miden 44px (34px en móvil) y las estrellas 26px (17px en móvil); perro y gato tienen inclinaciones suaves opuestas. Las figuras decorativas se ocultan a tecnología de asistencia.
-
-PetNote personaliza el mensaje con el nombre: acompañamiento en edición, petición de ayuda en rescate y agradecimiento al volver a casa. SiteFooter contiene un único PetTrail, la marca y un mensaje cálido compartido. Su variante compacta reduce las figuras a 26px y las estrellas a 18px, con separación vertical corta; el texto principal usa .9rem y el auxiliar .8rem. Evitar pies locales duplicados.
-
-El panel “Mis mascotas” saluda con el nombre del tutor cuando está disponible. El tablón incluye dos bloques de ánimo: uno acompaña al tutor y otro invita a ayudar mediante WhatsApp. Usan superficies violeta y cian suaves, figuras de 30px y encabezados de 1.05rem; pasan de dos columnas a una en móvil.
-
-## Do's and Don'ts
-
-### Do:
-
-- Do conservar la huella después de “pawpass”.
-- Do ofrecer foco visible, etiquetas claras y controles táctiles accesibles conforme a WCAG 2.2 AA.
-- Do mantener WhatsApp primero y llamada secundaria cuando esté disponible, sin control de ubicación actual.
-- Do utilizar mensajes personalizados y figuras visibles sin ocultar información.
-
-### Don't:
-
-- Don't recortar las fotografías para llenar una tarjeta.
-- Don't usar verde o amarillo como colores propios de interfaz ni rojo para estados cotidianos; conservar la marca oficial multicolor de Google.
-- Don't usar decoración como sustituto de etiquetas o estados textuales.
-
-No canonizado: los rótulos superiores en mayúsculas y espaciado amplio que persisten en `.section-label`, y el rojo heredado en eliminación de cuenta/mascota, son desviaciones existentes; no se convierten en reglas para nuevas superficies ni se reparan en esta documentación.
-
-### Tarjetas de mascotas simplificadas
-
-Foto, nombre, especie y estado preceden a una sola acción sólida: Ver ficha pública. Una línea inferior ofrece Editar mascota y Reportar/Gestionar pérdida como enlaces. No anidar tarjetas ni mostrar todos los controles del editor en el listado. El QR permanente se abre en el editor; la recuperación se confirma en la página dedicada.
-
-### Editor, QR y estado de pérdida
-
-La gestión de pérdida tiene página propia para reporte, regreso y cartel. La tarjeta usa primario público y dos acciones de contorno separadas para ficha/alerta; el regreso rápido requiere confirmar. El editor usa una navbar horizontal fija bajo la cabecera, con iconos y sección actual. El QR aparece abierto al final de cada editor, sin vista previa incrustada; Ver ficha pública está en la cabecera. Salud y documentos usan resúmenes privados con acceso al carnet. El reporte se edita antes del cartel plegable y la recuperación. Ya está en casa usa botón con icono, no un disclosure textual. Cian apoya salud/fotografía y violeta documentos/cuidados. Texto de prioridad y privacidad acompaña siempre al color. Las fotos públicas usan ancho fluido y altura natural.
-
-Los registros de cuidados sitúan lápiz y ojo en la cabecera; vacunas muestran lápiz y estado privado. Los controles de agregar quedan debajo de sus listas. El carnet conserva una escala de espacio de 1rem / 1.2rem / 1.5rem y separa sección, registro, formulario y acciones sin márgenes negativos en móvil.
-
-### Estados con color, símbolo y texto
-
-Informativa usa violeta y círculo de información; Precaución usa azul y escudo, o reloj en una dosis próxima. Urgente/Vencida usa rojo y triángulo. Al día usa azul mineral y calendario con marca; sin información/fecha usa gris y pregunta/calendario. Las próximas fechas siguen el tono de su estado. Los colores de texto/fondo superan 4.5:1; el significado siempre está escrito.
-
-La navbar mide la altura real de la cabecera para quedar pegada a ella al desplazarse, sin márgenes laterales negativos en móvil. El texto y el primer botón del QR se separan 45 px, con una línea de división. Los botones se apilan por debajo de 420 px.
-
-En registro, cada contraseña conserva su control de mostrar/ocultar. Debajo se muestran los requisitos: mínimo 8 caracteres, una mayúscula, un número y un carácter especial. Por petición expresa del autor, esta validación usa una excepción localizada: palomita verde (#17623c) para requisitos cumplidos y coincidencia; tache rojo (#a52a35) si la confirmación difiere. Los estados también incluyen texto y avisos accesibles en vivo. Crear cuenta solo se habilita al cumplir todos los requisitos y confirmar la misma contraseña; se conserva el máximo de 72 caracteres.
-
-La ayuda de requisitos del registro solo se muestra mientras Contraseña tiene el foco; la ayuda de coincidencia solo mientras Confirma tu contraseña tiene el foco. El control de mostrar/ocultar mantiene visible la ayuda de su campo.
+El orden del logo es la palabra «pawpass» seguida por la huella mineral. La aplicación mantiene un solo lenguaje visual: superficies blancas y minerales, acentos pastel, fotos completas, mensajes cálidos y jerarquía de acciones consistente. La presentación exacta cambia por ruta según el objetivo y las necesidades funcionales. La maqueta aprobada no reemplaza contratos de producto, datos, privacidad ni accesibilidad.
