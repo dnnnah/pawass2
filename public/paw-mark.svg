@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Huellita">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Huellita">
   <g fill="#176986">
-    <ellipse cx="6.1" cy="11.2" rx="3.2" ry="4.2" transform="rotate(-18 6.1 11.2)"/>
-    <ellipse cx="12.6" cy="6.9" rx="3.1" ry="4.2" transform="rotate(-6 12.6 6.9)"/>
-    <ellipse cx="20.1" cy="7.1" rx="3.1" ry="4.2" transform="rotate(8 20.1 7.1)"/>
-    <ellipse cx="26.3" cy="11.8" rx="3.1" ry="4.1" transform="rotate(19 26.3 11.8)"/>
-    <path d="M16.1 14.4c-2.8 0-4.5 2.8-6 4.7-1.5 1.9-3.4 3.5-3.4 5.5 0 2.7 2.1 4.6 4.8 4.6 2.5 0 3.6-1.5 6.6-1.5 3 0 4 1.5 6.5 1.5 2.8 0 4.9-1.9 4.9-4.6 0-2-1.8-3.6-3.3-5.5-1.5-1.9-3.2-4.7-6.1-4.7Z"/>
+    <ellipse cx="17" cy="20" rx="5" ry="7" transform="rotate(-26 17 20)"/>
+    <ellipse cx="26" cy="13" rx="5.2" ry="7" transform="rotate(-9 26 13)"/>
+    <ellipse cx="38" cy="13" rx="5.2" ry="7" transform="rotate(9 38 13)"/>
+    <ellipse cx="47" cy="20" rx="5" ry="7" transform="rotate(26 47 20)"/>
+    <path fill-rule="evenodd" d="M32 24c-5.1 0-8.4 5-11.5 9.3-2.4 3.3-6.6 6.2-6.6 10.5 0 5.1 4.1 8.4 9 8.4 3.6 0 5.8-2.1 9.1-2.1 3.4 0 5.5 2.1 9.2 2.1 4.9 0 9-3.3 9-8.4 0-4.3-4.2-7.2-6.6-10.5C40.4 29 37.1 24 32 24Zm0 18.5c-1.5-1.4-4.2-2.8-4.2-4.6 0-2.4 2.9-3.1 4.2-1.1 1.3-2 4.2-1.3 4.2 1.1 0 1.8-2.7 3.2-4.2 4.6Z"/>
   </g>
 </svg>
