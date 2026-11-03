@@ -38,6 +38,7 @@ No hubo estilos faltantes ni filtraciones entre funciones. El ahorro global en b
 - `npm run audit:assets`: 21 rutas, cero estilos faltantes y cero estilos inesperados.
 - `npm run test:e2e -- --list`: exactamente tres pruebas E2E.
 - E2E público local: dos escenarios aprobados. El flujo de autenticación se incluye en CI porque requiere Supabase local y Docker no está disponible en este equipo.
+- CI en GitHub Actions, ejecución `41687281740`: todos los pasos aprobaron, incluidos `supabase db reset`, los seis archivos SQL, las 155 pruebas unitarias y los tres E2E contra Supabase local.
 - `npm audit --omit=dev`: cero vulnerabilidades de producción.
 - `npm audit`: 16 avisos moderados en herramientas de desarrollo del árbol ESLint, relacionados con `minimatch` (DoS por amplificación de `globparts`, GHSA-g3hv-75wg-m249). No hay avisos altos o críticos. npm propone resolverlos con un downgrade mayor de ESLint a 4.0.0, por lo que no se aplicó una actualización automática incompatible.
 
