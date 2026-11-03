@@ -11,11 +11,11 @@ import { createClient } from '@/lib/supabase/server';
 import { getSiteUrl } from '@/lib/supabase/env';
 import { isRecoveryNoticeVisible } from '@/features/lost-pets/domain';
 import { createPhotoUrl } from '@/lib/supabase/photo-url';
+import { getPublicRescueData } from '@/features/rescue/public-queries';
 import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = { params: Promise<{ code: string }> };
-type PublicCareAlert = { category: string; label: string; severity: 'critical' | 'precaution' | 'informative'; instructions: string };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { code } = await params;
@@ -34,18 +34,12 @@ export default async function RescuePage({ params }: Props) {
   if (!isPublicPetCode(code)) notFound();
   const supabase = await createClient();
   if (!supabase) return <SetupNotice />;
-  const [{ data, error }, { data: careAlerts }, { data: statuses }, { data: photoRecords }] = await Promise.all([
-    supabase.rpc('get_public_rescue_card', { p_code: code }),
-    supabase.rpc('get_public_care_alerts', { p_code: code }),
-    supabase.rpc('get_public_pet_rescue_status', { p_code: code }),
-    supabase.rpc('get_public_pet_photo', { p_code: code }),
-  ]);
-  const pet = data?.[0];
-  const visibleCareAlerts = (careAlerts || []) as PublicCareAlert[];
-  const status = statuses?.[0] as { lost: boolean; recovered_at: string | null } | undefined;
-  const photoUrl = await createPhotoUrl('pet-photos', (photoRecords?.[0] as { photo_path?: string | null } | undefined)?.photo_path);
+  const result = await getPublicRescueData(supabase, code);
+  if (result.status === 'unavailable') throw new Error('No se pudo cargar la ficha de rescate.');
+  if (result.status === 'missing') notFound();
+  const { pet, careAlerts: visibleCareAlerts, rescueStatus: status } = result;
+  const photoUrl = await createPhotoUrl('pet-photos', result.photoPath);
   const showHomeNotice = Boolean(status?.recovered_at && isRecoveryNoticeVisible(status.recovered_at, new Date().toISOString()));
-  if (error || !pet?.rescue_phone || !pet.whatsapp_phone) notFound();
 
   return (
     <PageFrame className="rescue-page">
