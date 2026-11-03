@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // Evita mezclar el CSS de portada con la cabecera que comparten otras rutas.
     cssChunking: false,
-    serverActions: { bodySizeLimit: '12mb' },
+    serverActions: { bodySizeLimit: '4mb' },
   },
   async headers() {
     return [{

@@ -1,7 +1,7 @@
-const MAX_WEBP_SIZE = 5 * 1024 * 1024;
+const DEFAULT_WEBP_SIZE = 5 * 1024 * 1024;
 const MAX_IMAGE_EDGE = 2000;
 
-export async function convertImageToWebp(file: File): Promise<File> {
+export async function convertImageToWebp(file: File, maxBytes = DEFAULT_WEBP_SIZE): Promise<File> {
   if (!file.type.startsWith('image/')) throw new Error('Elige una fotografía válida.');
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height));
@@ -17,7 +17,7 @@ export async function convertImageToWebp(file: File): Promise<File> {
     'image/webp',
     0.8,
   ));
-  if (blob.size > MAX_WEBP_SIZE) throw new Error('La fotografía comprimida debe pesar menos de 5 MB.');
+  if (blob.size > maxBytes) throw new Error(`La fotografía comprimida no puede superar ${Math.round(maxBytes / (1024 * 1024))} MB.`);
   const baseName = file.name.replace(/\.[^.]+$/, '') || 'foto';
   return new File([blob], `${baseName}.webp`, { type: 'image/webp', lastModified: Date.now() });
 }

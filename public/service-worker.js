@@ -1,10 +1,14 @@
-const SHELL_CACHE = 'pawpass-shell-v2';
-const STATIC_CACHE = 'pawpass-static-v2';
+const SHELL_CACHE = 'pawpass-shell-v3';
+const STATIC_CACHE = 'pawpass-static-v3';
 const OFFLINE_PAGE = '/offline.html';
 const PUBLIC_ASSETS = new Set([
   '/paw-mark.svg',
+  '/icon.svg',
+  '/pawpass-pwa-icon-32.png',
+  '/pawpass-pwa-icon-48.png',
   '/pawpass-pwa-icon-192.png',
   '/pawpass-pwa-icon-512.png',
+  '/pawpass-pwa-icon-maskable-512.png',
 ]);
 
 self.addEventListener('install', (event) => {

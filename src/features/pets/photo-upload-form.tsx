@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { FormMessage } from '@/components/ui/form-message';
 
 import { useActionState, useState, useTransition } from 'react';
-import { uploadPrimaryPhoto } from './actions';
+import { discardPrimaryPhotoUpload, preparePrimaryPhotoUpload, uploadPrimaryPhoto } from './actions';
 import { convertImageToWebp } from '@/lib/image';
+import { createClient } from '@/lib/supabase/client';
 import type { FormState } from '@/features/profile/actions';
 
 const initialState: FormState = { ok: false, message: '' };
@@ -23,11 +24,20 @@ export function PetPhotoUploadForm({ petId, publicCode }: { petId: string; publi
     const data = new FormData(form);
     const source = data.get('photo');
     if (!(source instanceof File) || !source.size) { setError('Elige una fotografía.'); return; }
+    let stagedPath = '';
     try {
-      data.set('photo', await convertImageToWebp(source));
+      const photo = await convertImageToWebp(source);
+      const prepared = await preparePrimaryPhotoUpload(petId);
+      if (!prepared.ok) throw new Error(prepared.message);
+      stagedPath = prepared.path;
+      const { error: uploadError } = await createClient().storage.from('pet-photos').uploadToSignedUrl(prepared.path, prepared.token, photo, { contentType: 'image/webp', upsert: false });
+      if (uploadError) throw uploadError;
+      data.delete('photo');
+      data.set('stagedPhotoPath', prepared.path);
       startTransition(() => dispatch(data));
       form.reset();
     } catch (cause) {
+      if (stagedPath) await discardPrimaryPhotoUpload(petId, stagedPath);
       setError(cause instanceof Error ? cause.message : 'No pudimos preparar la fotografía.');
     }
   }

@@ -33,6 +33,8 @@
 .site-footer__content { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; }
 .site-footer__content p { margin: 0; color: var(--ink); font-weight: 650; }
 .site-footer__content > span { color: var(--ink-soft); }
+.site-footer__content nav { display: flex; gap: 1rem; }
+.site-footer__content nav a { color: var(--blue-deep); font-size: .875rem; font-weight: 700; text-underline-offset: .2em; }
 .site-footer .brand { font-size: 1.35rem; }
 .site-footer .brand__paw { width: 25px; height: 25px; }
 @media (max-width: 620px) {
