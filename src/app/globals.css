@@ -2,10 +2,8 @@
 @import "../features/brand/tokens.css";
 @import "../features/brand/actions.css";
 @import "../features/brand/brand.css";
-* { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--mineral); color: var(--ink); font-family: var(--font-body); font-size: var(--text-body); line-height: var(--leading-body); }
-button, input, select { font: inherit; }
+body { background: var(--mineral); color: var(--ink); font-family: var(--font-body); font-size: var(--text-body); line-height: var(--leading-body); caret-color: var(--blue); accent-color: var(--blue); }
 button, a, summary, select, input { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 a { color: var(--blue-deep); text-underline-offset: 0.2em; }
@@ -24,7 +22,7 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
 
 .section-panel { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: clamp(1.2rem, 3vw, 2rem); }
 .section-count { max-width: 48%; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: 999px; padding: 0.35rem 0.7rem; color: var(--ink-soft); font-size: 0.77rem; }
-.code-pill { display: inline-block; border-radius: 999px; color: #244b61; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+.code-pill { display: inline-block; margin-left: .15rem; border: 0; border-radius: 999px; background: transparent; padding: 0; color: #244b61; font-size: 0.75rem; font-weight: 500; font-variant-numeric: tabular-nums; }
 .setup-page { display: flex; min-height: 100svh; flex-direction: column; align-items: flex-start; justify-content: center; width: min(100% - 2.5rem, 600px); margin: auto; }
 .setup-page h1 { margin: 2rem 0 0.7rem; }
 .setup-page p { color: var(--ink-soft); }
@@ -40,13 +38,6 @@ code { border-radius: 5px; padding: 0.1em 0.3em; background: #eaf1f4; color: #20
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
 .back-link { display: inline-flex; min-height: 44px; align-items: center; margin-bottom: 1rem; font-weight: 700; }
-body { caret-color: var(--blue); accent-color: var(--blue); }
 button, a, summary, input, select, textarea { touch-action: manipulation; }
-textarea { font: inherit; }
 textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
-.code-pill { margin-left: .15rem; border: 0; background: transparent; padding: 0; font-weight: 500; }
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-}
 select option:checked { background: #e2f0f4; color: #12536b; }
-@media (max-width: 620px) { body { padding-bottom: 0; } }
