@@ -133,6 +133,6 @@ El despliegue también requiere el origen de producción, variables privadas, do
 
 ## Next.js y archivos locales
 
-El proyecto usa Next.js 16.4.3. Antes de cambiar APIs, convenciones o estructura, lee la guía correspondiente incluida con esa versión de Next.js y sigue sus advertencias. `next.config.ts` desactiva `agentRules` para que `next dev` no cree ni actualice un cuarto archivo Markdown administrado. No invoques un generador de instrucciones que lo vuelva a versionar. Los metadatos de Impeccable son auxiliares; la guía de diseño mantenida es `DESIGN.md`.
+El proyecto usa Next.js 16.4.3. Antes de cambiar APIs, convenciones o estructura, lee la guía correspondiente incluida con esa versión de Next.js y sigue sus advertencias. `next.config.ts` desactiva `agentRules` para que `next dev` no cree ni actualice un cuarto archivo Markdown administrado. El sidecar Markdown de superficie que puede producir Impeccable es contexto regenerable, no una guía activa; `.gitignore` lo excluye para mantener las tres guías acordadas. No invoques un generador de instrucciones que lo vuelva a versionar. Los metadatos de Impeccable son auxiliares; la guía de diseño mantenida es `DESIGN.md`.
 
 Los artefactos locales ignorados por Git, incluyendo la carpeta de experimentos visuales, no forman parte del repositorio ni de un PR. Verifica `git ls-files '*.md'` para comprobar el árbol versionado. Los archivos de build, resultados E2E y secretos locales tampoco se versionan.
