@@ -12,6 +12,7 @@ export function HomeContent({ signedIn }: { signedIn: boolean }) {
           <div className={styles.actions}>
             <Link href={signedIn ? '/mascotas' : '/acceso?modo=crear'} prefetch={false} className="button button--primary">{signedIn ? 'Ir a mis mascotas' : 'Crear cuenta'}</Link>
             <Link href="/perdidas" className="button button--outline">Ver mascotas perdidas</Link>
+            <Link href="/demo" className="button button--text">Explorar demo</Link>
           </div>
           {!signedIn && <p className={styles.login}>¿Ya tienes cuenta? <Link href="/acceso" prefetch={false}>Iniciar sesión</Link></p>}
           <p className={styles.detail}>Quien encuentra a tu mascota puede abrir su QR sin tener cuenta ni instalar la aplicación.</p>
