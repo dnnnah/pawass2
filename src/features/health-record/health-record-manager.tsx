@@ -12,7 +12,7 @@ import { DoseStatusBadge, doseStatusTone } from './dose-status-badge';
 import { StatusSymbol } from '@/features/brand/status-badge';
 import { RecordActionIcon } from '@/features/brand/record-action-icon';
 import './health-record-manager.css';
-import { useActionState, useId, useState, useSyncExternalStore } from 'react';
+import { useActionState, useId, useState, useSyncExternalStore, useTransition } from 'react';
 import type { FormState } from '@/features/profile/actions';
 import {
   HEALTH_CATALOGS,
@@ -25,11 +25,14 @@ import {
 import {
   deleteHealthDocument,
   deleteHealthRecord,
+  discardHealthDocumentUpload,
+  prepareHealthDocumentUpload,
   saveHealthRecord,
   saveProcedure,
   updateHealthDocument,
   uploadHealthDocument,
 } from './actions';
+import { createClient } from '@/lib/supabase/client';
 
 export type HealthRecordRow = {
   id: string;
@@ -251,10 +254,38 @@ function DocumentSection({ petId, documents }: { petId: string; documents: Healt
 
 function DocumentUploadForm({ petId }: { petId: string }) {
   const [state, action, pending] = useActionState(uploadHealthDocument, initialState);
+  const [pendingUpload, startTransition] = useTransition();
+  const [uploadError, setUploadError] = useState('');
   const formId = useId();
   const [category, setCategory] = useState('');
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setUploadError('');
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const file = data.get('file');
+    if (!(file instanceof File) || !file.size) { setUploadError('Elige un documento para subir.'); return; }
+    let stagedPath = '';
+    try {
+      const prepared = await prepareHealthDocumentUpload(petId, file.type);
+      if (!prepared.ok) throw new Error(prepared.message);
+      stagedPath = prepared.path;
+      const { error } = await createClient().storage.from('pet-health-documents').uploadToSignedUrl(prepared.path, prepared.token, file, { contentType: file.type, upsert: false });
+      if (error) throw error;
+      data.delete('file');
+      data.set('stagedUploadPath', prepared.path);
+      data.set('mimeType', file.type);
+      data.set('originalFilename', file.name);
+      startTransition(() => action(data));
+      form.reset();
+      setCategory('');
+    } catch (error) {
+      if (stagedPath) await discardHealthDocumentUpload(petId, stagedPath);
+      setUploadError(error instanceof Error ? error.message : 'No pudimos preparar el documento.');
+    }
+  }
   return (
-    <form action={action} className="health-form">
+    <form onSubmit={submit} className="health-form" aria-busy={pending || pendingUpload}>
       <input type="hidden" name="petId" value={petId} />
       <div className="health-form__title"><h3>Nuevo documento</h3><p>Formatos: PDF, JPEG, PNG o WebP · hasta 10 MB.</p></div>
       <FormGrid columns={2}>
@@ -264,8 +295,9 @@ function DocumentUploadForm({ petId }: { petId: string }) {
         <label className="field" htmlFor={`${formId}-date`}><span>Fecha del documento <em>opcional</em></span><input id={`${formId}-date`} name="documentDate" type="date" /></label>
         <label className="field health-form__wide" htmlFor={`${formId}-notes`}><span>Notas <em>opcional</em></span><textarea id={`${formId}-notes`} name="notes" rows={3} maxLength={1000} /></label>
       </FormGrid>
+      <FormMessage role="alert">{uploadError}</FormMessage>
       <FormMessage success={state.ok}>{state.message}</FormMessage>
-      <FormActions className="health-form__actions"><Button type="submit" disabled={pending}>{pending ? 'Subiendo…' : 'Guardar documento privado'}</Button></FormActions>
+      <FormActions className="health-form__actions"><Button type="submit" disabled={pending || pendingUpload}>{pending || pendingUpload ? 'Subiendo…' : 'Guardar documento privado'}</Button></FormActions>
     </form>
   );
 }

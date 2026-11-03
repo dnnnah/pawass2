@@ -7,6 +7,8 @@ import { normalizePhoneNumber, validateQuickPetInput } from '@/lib/domain';
 import { getPetRevalidationPaths, normalizePetDetailsInput } from './domain';
 import { getPetDeletionPlan } from './deletion-plan';
 import { createAdminClient, createClient } from '@/lib/supabase/server';
+import { normalizeUploadedPhoto } from '@/lib/image-server';
+import { discardStagedUpload, prepareStagedUpload, readStagedUpload } from '@/lib/supabase/upload-staging';
 import type { FormState } from '@/features/profile/actions';
 import { revalidatePath } from 'next/cache';
 
@@ -86,23 +88,53 @@ export async function savePetDetails(_previous: FormState, formData: FormData): 
   return { ok: true, message: 'Guardamos los detalles de esta mascota.' };
 }
 
+export async function preparePrimaryPhotoUpload(petId: string) {
+  if (!petId) return { ok: false as const, message: 'No encontramos esta mascota.' };
+  const supabase = await createClient();
+  if (!supabase) return { ok: false as const, message: 'Supabase todavía no está configurado.' };
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false as const, message: 'Inicia sesión para guardar una fotografía.' };
+  const { data: pet } = await supabase.from('pets').select('id').eq('id', petId).eq('owner_id', user.id).maybeSingle();
+  if (!pet) return { ok: false as const, message: 'No encontramos esta mascota.' };
+  const upload = await prepareStagedUpload('pet-photos', user.id, petId, 'webp');
+  return upload ? { ok: true as const, ...upload } : { ok: false as const, message: 'No pudimos preparar la subida. Inténtalo de nuevo.' };
+}
+
+export async function discardPrimaryPhotoUpload(petId: string, path: string) {
+  const supabase = await createClient();
+  if (!supabase) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) await discardStagedUpload('pet-photos', path, user.id, petId, ['webp']);
+}
+
 export async function uploadPrimaryPhoto(_previous: FormState, formData: FormData): Promise<FormState> {
   const petId = String(formData.get('petId') || '');
-  const photo = formData.get('photo');
-  if (!petId || !(photo instanceof File) || photo.size === 0) return { ok: false, message: 'Elige una fotografía para subir.' };
-  if (photo.type !== 'image/webp' || photo.size > 5 * 1024 * 1024) return { ok: false, message: 'La foto debe estar convertida a WebP y pesar menos de 5 MB.' };
+  const stagedPath = String(formData.get('stagedPhotoPath') || '');
+  if (!petId || !stagedPath) return { ok: false, message: 'Elige una fotografía para subir.' };
   const supabase = await createClient();
   if (!supabase) return { ok: false, message: 'Supabase todavía no está configurado.' };
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: 'Inicia sesión para guardar una fotografía.' };
   const { data: pet } = await supabase.from('pets').select('primary_photo_path').eq('id', petId).eq('owner_id', user.id).maybeSingle();
   if (!pet) return { ok: false, message: 'No encontramos esta mascota.' };
+  const staged = await readStagedUpload('pet-photos', stagedPath, user.id, petId, ['webp']);
+  if (!staged) return { ok: false, message: 'La fotografía temporal venció. Vuelve a elegirla.' };
+  let photo: Buffer;
+  try { photo = await normalizeUploadedPhoto(staged.bytes, 5 * 1024 * 1024); }
+  catch {
+    await discardStagedUpload('pet-photos', stagedPath, user.id, petId, ['webp']);
+    return { ok: false, message: 'La foto debe ser válida, estar convertida a WebP y pesar menos de 5 MB.' };
+  }
   const path = `${user.id}/${petId}/${crypto.randomUUID()}.webp`;
   const { error: uploadError } = await supabase.storage.from('pet-photos').upload(path, photo, { contentType: 'image/webp', upsert: false });
-  if (uploadError) return { ok: false, message: 'No pudimos subir la foto. Comprueba tu conexión e inténtalo de nuevo.' };
+  if (uploadError) {
+    await discardStagedUpload('pet-photos', stagedPath, user.id, petId, ['webp']);
+    return { ok: false, message: 'No pudimos subir la foto. Comprueba tu conexión e inténtalo de nuevo.' };
+  }
   const { error: updateError } = await supabase.from('pets').update({ primary_photo_path: path, updated_at: new Date().toISOString() }).eq('id', petId).eq('owner_id', user.id);
   if (updateError) {
     await supabase.storage.from('pet-photos').remove([path]);
+    await discardStagedUpload('pet-photos', stagedPath, user.id, petId, ['webp']);
     return { ok: false, message: 'No pudimos guardar la foto en la ficha.' };
   }
   if (pet.primary_photo_path) {
@@ -110,9 +142,11 @@ export async function uploadPrimaryPhoto(_previous: FormState, formData: FormDat
     if (removeError) {
       await supabase.from('pets').update({ primary_photo_path: pet.primary_photo_path }).eq('id', petId).eq('owner_id', user.id);
       await supabase.storage.from('pet-photos').remove([path]);
+      await discardStagedUpload('pet-photos', stagedPath, user.id, petId, ['webp']);
       return { ok: false, message: 'No pudimos reemplazar la foto anterior. Conservamos la que ya tenía.' };
     }
   }
+  await discardStagedUpload('pet-photos', stagedPath, user.id, petId, ['webp']);
   revalidatePath('/mascotas');
   revalidatePath(`/mascotas/${petId}`);
   revalidatePath(`/p/${String(formData.get('publicCode') || '')}`);

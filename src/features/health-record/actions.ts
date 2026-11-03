@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import type { FormState } from '@/features/profile/actions';
 import { createClient } from '@/lib/supabase/server';
+import { discardStagedUpload, prepareStagedUpload, readStagedUpload } from '@/lib/supabase/upload-staging';
 import {
   isDateOnly,
   normalizeHealthDocument,
@@ -106,30 +107,50 @@ export async function deleteHealthRecord(formData: FormData): Promise<void> {
   revalidateHealthViews(petId);
 }
 
+export async function prepareHealthDocumentUpload(petId: string, mimeType: string) {
+  const extension = DOCUMENT_EXTENSION[mimeType];
+  if (!isUuid(petId) || !extension) return { ok: false as const, message: 'Elige un documento PDF, JPEG, PNG o WebP.' };
+  const auth = await getOwnerClient(petId);
+  if (!auth.ok) return auth;
+  const upload = await prepareStagedUpload(DOCUMENT_BUCKET, auth.user.id, petId, extension);
+  return upload ? { ok: true as const, ...upload } : { ok: false as const, message: 'No pudimos preparar la subida. Inténtalo de nuevo.' };
+}
+
+export async function discardHealthDocumentUpload(petId: string, path: string) {
+  const auth = await getOwnerClient(petId);
+  if (auth.ok) await discardStagedUpload(DOCUMENT_BUCKET, path, auth.user.id, petId, Object.values(DOCUMENT_EXTENSION));
+}
+
 export async function uploadHealthDocument(_previous: FormState, formData: FormData): Promise<FormState> {
   const petId = String(formData.get('petId') || '');
-  const file = formData.get('file');
-  if (!isUuid(petId) || !(file instanceof File) || file.size === 0) return { ok: false, message: 'Elige un documento para subir.' };
-  if (file.size > 10 * 1024 * 1024) return { ok: false, message: 'El documento debe pesar 10 MB o menos.' };
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  if (!validateDocumentPayload(file.type, file.size, bytes)) {
+  const stagedPath = String(formData.get('stagedUploadPath') || '');
+  const mimeType = String(formData.get('mimeType') || '');
+  const extension = DOCUMENT_EXTENSION[mimeType];
+  const fileName = String(formData.get('originalFilename') || '');
+  if (!isUuid(petId) || !stagedPath || !extension || !fileName) return { ok: false, message: 'Elige un documento para subir.' };
+  const auth = await getOwnerClient(petId);
+  if (!auth.ok) return auth;
+  const staged = await readStagedUpload(DOCUMENT_BUCKET, stagedPath, auth.user.id, petId, [extension]);
+  if (!staged || staged.bytes.length > 10 * 1024 * 1024) return { ok: false, message: 'El documento temporal venció o supera 10 MB. Vuelve a elegirlo.' };
+  const discard = () => discardStagedUpload(DOCUMENT_BUCKET, stagedPath, auth.user.id, petId, [extension]);
+  const bytes = new Uint8Array(staged.bytes);
+  if (!validateDocumentPayload(mimeType, bytes.length, bytes)) {
+    await discard();
     return { ok: false, message: 'El archivo debe ser PDF, JPEG, PNG o WebP válido y no superar 10 MB.' };
   }
   const validation = normalizeHealthDocument({
     category: String(formData.get('category') || ''),
     label: String(formData.get('label') || ''),
-    fileName: file.name,
+    fileName,
   });
-  if (!validation.ok) return { ok: false, message: validation.error };
+  if (!validation.ok) { await discard(); return { ok: false, message: validation.error }; }
   const documentDate = String(formData.get('documentDate') || '');
   const notes = String(formData.get('notes') || '').trim();
-  if (documentDate && !isDateOnly(documentDate)) return { ok: false, message: 'La fecha del documento no es válida.' };
-  if (notes.length > 1000) return { ok: false, message: 'Las notas deben tener 1000 caracteres o menos.' };
+  if (documentDate && !isDateOnly(documentDate)) { await discard(); return { ok: false, message: 'La fecha del documento no es válida.' }; }
+  if (notes.length > 1000) { await discard(); return { ok: false, message: 'Las notas deben tener 1000 caracteres o menos.' }; }
 
-  const auth = await getOwnerClient(petId);
-  if (!auth.ok) return auth;
   const id = crypto.randomUUID();
-  const storagePath = `${auth.user.id}/${petId}/${id}.${DOCUMENT_EXTENSION[file.type]}`;
+  const storagePath = `${auth.user.id}/${petId}/${id}.${extension}`;
   const values = {
     id,
     pet_id: petId,
@@ -137,23 +158,25 @@ export async function uploadHealthDocument(_previous: FormState, formData: FormD
     label: validation.value.label,
     storage_path: storagePath,
     original_filename: validation.value.fileName,
-    mime_type: file.type,
-    size_bytes: file.size,
+    mime_type: mimeType,
+    size_bytes: bytes.length,
     document_date: documentDate || null,
     notes: notes || null,
   };
   const { error: insertError } = await auth.supabase.from('pet_health_documents').insert(values);
-  if (insertError) return { ok: false, message: 'No pudimos preparar el documento para guardarlo.' };
+  if (insertError) { await discard(); return { ok: false, message: 'No pudimos preparar el documento para guardarlo.' }; }
 
-  const { error: uploadError } = await auth.supabase.storage.from(DOCUMENT_BUCKET).upload(storagePath, file, {
-    contentType: file.type,
+  const { error: uploadError } = await auth.supabase.storage.from(DOCUMENT_BUCKET).upload(storagePath, bytes, {
+    contentType: mimeType,
     upsert: false,
   });
   if (uploadError) {
     await auth.supabase.from('pet_health_documents').delete().eq('id', id).eq('pet_id', petId);
+    await discard();
     return { ok: false, message: 'No pudimos subir el documento. Comprueba tu conexión e inténtalo de nuevo.' };
   }
 
+  await discard();
   revalidateHealthViews(petId);
   return { ok: true, message: 'Documento guardado de forma privada.' };
 }

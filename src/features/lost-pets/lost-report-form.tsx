@@ -7,10 +7,11 @@ import { Button } from '@/components/ui/button';
 import { FormMessage } from '@/components/ui/form-message';
 
 import { useActionState, useState, useTransition } from 'react';
-import { createLostReport, updateLostReport } from './actions';
+import { createLostReport, discardRecentPhotoUpload, prepareRecentPhotoUpload, updateLostReport } from './actions';
 import type { LostReportRow } from './lost-report-state';
 import type { FormState } from '@/features/profile/actions';
 import { convertImageToWebp } from '@/lib/image';
+import { createClient } from '@/lib/supabase/client';
 
 const initialState: FormState = { ok: false, message: '' };
 
@@ -31,8 +32,21 @@ export function LostReportForm({ petId, report }: { petId: string; report?: Lost
     const data = new FormData(form);
     const source = data.get('recentPhoto');
     if (source instanceof File && source.size) {
-      try { data.set('recentPhoto', await convertImageToWebp(source)); }
-      catch (error) { setPhotoError(error instanceof Error ? error.message : 'No pudimos preparar la fotografía.'); return; }
+      let stagedPath = '';
+      try {
+        const photo = await convertImageToWebp(source);
+        const prepared = await prepareRecentPhotoUpload(petId);
+        if (!prepared.ok) throw new Error(prepared.message);
+        stagedPath = prepared.path;
+        const { error } = await createClient().storage.from('lost-pet-photos').uploadToSignedUrl(prepared.path, prepared.token, photo, { contentType: 'image/webp', upsert: false });
+        if (error) throw error;
+        data.delete('recentPhoto');
+        data.set('recentPhotoPath', prepared.path);
+      } catch (error) {
+        if (stagedPath) await discardRecentPhotoUpload(petId, stagedPath);
+        setPhotoError(error instanceof Error ? error.message : 'No pudimos preparar la fotografía.');
+        return;
+      }
     }
     startTransition(() => action(data));
   }

@@ -5,12 +5,40 @@ import { getLostReportRevalidationPaths, normalizeLostReport, toLostReportDataba
 import { createClient } from '@/lib/supabase/server';
 import { closeReportAndRetirePhoto } from './recovery-cleanup';
 import type { FormState } from '@/features/profile/actions';
+import { normalizeUploadedPhoto } from '@/lib/image-server';
+import { discardStagedUpload, prepareStagedUpload, readStagedUpload } from '@/lib/supabase/upload-staging';
 
-async function uploadRecentPhoto(supabase: NonNullable<Awaited<ReturnType<typeof createClient>>>, userId: string, petId: string, photo: FormDataEntryValue | null) {
-  if (!(photo instanceof File) || photo.size === 0) return { path: null, error: '' };
-  if (photo.type !== 'image/webp' || photo.size > 5 * 1024 * 1024) return { path: null, error: 'La foto debe estar convertida a WebP y pesar menos de 5 MB.' };
+export async function prepareRecentPhotoUpload(petId: string) {
+  const supabase = await createClient();
+  if (!supabase) return { ok: false as const, message: 'Supabase todavía no está configurado.' };
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false as const, message: 'Inicia sesión para subir una fotografía.' };
+  const { data: pet } = await supabase.from('pets').select('id').eq('id', petId).eq('owner_id', user.id).maybeSingle();
+  if (!pet) return { ok: false as const, message: 'No encontramos esta mascota.' };
+  const upload = await prepareStagedUpload('lost-pet-photos', user.id, petId, 'webp');
+  return upload ? { ok: true as const, ...upload } : { ok: false as const, message: 'No pudimos preparar la subida. Inténtalo de nuevo.' };
+}
+
+export async function discardRecentPhotoUpload(petId: string, path: string) {
+  const supabase = await createClient();
+  if (!supabase) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) await discardStagedUpload('lost-pet-photos', path, user.id, petId, ['webp']);
+}
+
+async function uploadRecentPhoto(supabase: NonNullable<Awaited<ReturnType<typeof createClient>>>, userId: string, petId: string, stagedPath: string | null) {
+  if (!stagedPath) return { path: null, error: '' };
+  const staged = await readStagedUpload('lost-pet-photos', stagedPath, userId, petId, ['webp']);
+  if (!staged) return { path: null, error: 'La fotografía temporal venció. Vuelve a elegirla.' };
+  let photo: Buffer;
+  try { photo = await normalizeUploadedPhoto(staged.bytes, 5 * 1024 * 1024); }
+  catch {
+    await discardStagedUpload('lost-pet-photos', stagedPath, userId, petId, ['webp']);
+    return { path: null, error: 'La foto debe ser válida, estar convertida a WebP y pesar menos de 5 MB.' };
+  }
   const path = `${userId}/${petId}/${crypto.randomUUID()}.webp`;
   const { error } = await supabase.storage.from('lost-pet-photos').upload(path, photo, { contentType: 'image/webp', upsert: false });
+  await discardStagedUpload('lost-pet-photos', stagedPath, userId, petId, ['webp']);
   return error ? { path: null, error: 'No pudimos subir la foto. Comprueba tu conexión e inténtalo de nuevo.' } : { path, error: '' };
 }
 
@@ -41,7 +69,7 @@ export async function createLostReport(_previous: FormState, formData: FormData)
   if (!user) return { ok: false, message: 'Inicia sesión para reportar una mascota.' };
   const { data: pet } = await supabase.from('pets').select('id').eq('id', petId).eq('owner_id', user.id).maybeSingle();
   if (!pet) return { ok: false, message: 'No encontramos esta mascota.' };
-  const uploaded = await uploadRecentPhoto(supabase, user.id, petId, formData.get('recentPhoto'));
+  const uploaded = await uploadRecentPhoto(supabase, user.id, petId, String(formData.get('recentPhotoPath') || '') || null);
   if (uploaded.error) return { ok: false, message: uploaded.error };
   const { error } = await supabase.from('lost_pet_reports').insert({ pet_id: petId, ...toLostReportDatabaseFields(validation.value), recent_photo_path: uploaded.path });
   if (error) {
@@ -64,7 +92,7 @@ export async function updateLostReport(_previous: FormState, formData: FormData)
   if (!user) return { ok: false, message: 'Inicia sesión para editar esta alerta.' };
   const { data: existing } = await supabase.from('lost_pet_reports').select('id,pet_id,recent_photo_path').eq('id', reportId).eq('status', 'active').maybeSingle();
   if (!existing) return { ok: false, message: 'No se pudo actualizar la alerta.' };
-  const uploaded = await uploadRecentPhoto(supabase, user.id, existing.pet_id, formData.get('recentPhoto'));
+  const uploaded = await uploadRecentPhoto(supabase, user.id, existing.pet_id, String(formData.get('recentPhotoPath') || '') || null);
   if (uploaded.error) return { ok: false, message: uploaded.error };
   const nextPhotoPath = uploaded.path || existing.recent_photo_path;
   const { data: report, error } = await supabase.from('lost_pet_reports')
