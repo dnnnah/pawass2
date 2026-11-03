@@ -5,6 +5,7 @@ import { cleanSocialPhotos } from '@/features/pawgram-posts/assets';
 import { getCountries, type CountryCode } from 'libphonenumber-js';
 import { normalizePhoneNumber, validateQuickPetInput } from '@/lib/domain';
 import { getPetRevalidationPaths, normalizePetDetailsInput } from './domain';
+import { getPetDeletionPlan } from './deletion-plan';
 import { createAdminClient, createClient } from '@/lib/supabase/server';
 import type { FormState } from '@/features/profile/actions';
 import { revalidatePath } from 'next/cache';
@@ -158,19 +159,25 @@ export async function deletePet(_previous: FormState, formData: FormData): Promi
   if (!supabase) return { ok: false, message: 'Supabase todavía no está configurado.' };
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: 'Inicia sesión para eliminar esta mascota.' };
-  const [{ data: pet }, { data: code }, { data: reports }, { data: healthDocuments, error: healthDocumentsError }] = await Promise.all([
+  const [petRead, codeRead, reportsRead, healthDocumentsRead] = await Promise.all([
     supabase.from('pets').select('name,primary_photo_path').eq('id', petId).eq('owner_id', user.id).maybeSingle(),
     supabase.from('public_code_reservations').select('code').eq('pet_id', petId).maybeSingle(),
     supabase.from('lost_pet_reports').select('recent_photo_path').eq('pet_id', petId),
     supabase.from('pet_health_documents').select('storage_path').eq('pet_id', petId),
   ]);
-  if (!pet || !code || confirmation !== code.code) return { ok: false, message: 'El código de confirmación no coincide con esta mascota.' };
-  if (healthDocumentsError) return { ok: false, message: 'No pudimos preparar la limpieza de los documentos de salud.' };
+  const plan = getPetDeletionPlan({
+    pet: { data: petRead.data, error: petRead.error },
+    code: { data: codeRead.data, error: codeRead.error },
+    reports: { data: reportsRead.data, error: reportsRead.error },
+    healthDocuments: { data: healthDocumentsRead.data, error: healthDocumentsRead.error },
+  });
+  if (plan.status === 'unavailable') return { ok: false, message: 'No pudimos leer todas las fotos y documentos; no eliminamos la mascota.' };
+  if (plan.status !== 'ready' || confirmation !== plan.publicCode) return { ok: false, message: 'El código de confirmación no coincide con esta mascota.' };
 
   const admin = createAdminClient();
-  const primaryPhoto = pet.primary_photo_path;
-  const lostPhotos = (reports || []).map((report) => report.recent_photo_path).filter((path): path is string => Boolean(path));
-  const healthDocumentPaths = (healthDocuments || []).map((document) => document.storage_path);
+  const primaryPhoto = plan.primaryPhotoPath;
+  const lostPhotos = plan.lostPhotoPaths;
+  const healthDocumentPaths = plan.healthDocumentPaths;
   if ((primaryPhoto || lostPhotos.length) && !admin) return { ok: false, message: 'Falta configurar la clave privada de servidor para limpiar sus archivos.' };
   if (healthDocumentPaths.length) {
     const { error } = await supabase.storage.from('pet-health-documents').remove(healthDocumentPaths);

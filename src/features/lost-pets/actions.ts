@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { getLostReportRevalidationPaths, normalizeLostReport, toLostReportDatabaseFields } from './domain';
 import { createClient } from '@/lib/supabase/server';
+import { closeReportAndRetirePhoto } from './recovery-cleanup';
 import type { FormState } from '@/features/profile/actions';
 
 async function uploadRecentPhoto(supabase: NonNullable<Awaited<ReturnType<typeof createClient>>>, userId: string, petId: string, photo: FormDataEntryValue | null) {
@@ -95,17 +96,36 @@ export async function recoverPet(_previous: FormState, formData: FormData): Prom
   if (!supabase) return { ok: false, message: 'Supabase todavía no está configurado.' };
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, message: 'Inicia sesión para cerrar la alerta.' };
-  const { data: existing } = await supabase.from('lost_pet_reports').select('id,pet_id,recent_photo_path').eq('id', reportId).eq('status', 'active').maybeSingle();
-  if (!existing) return { ok: false, message: 'No se encontró una alerta activa para esta mascota.' };
-  if (existing.recent_photo_path) {
-    const { error: removeError } = await supabase.storage.from('lost-pet-photos').remove([existing.recent_photo_path]);
-    if (removeError) return { ok: false, message: 'No pudimos borrar la foto reciente; la alerta sigue activa. Inténtalo de nuevo.' };
-  }
-  const { data: report, error } = await supabase.from('lost_pet_reports')
-    .update({ status: 'recovered', recent_photo_path: null, recovered_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-    .eq('id', reportId).eq('status', 'active').select('pet_id').maybeSingle();
-  if (error || !report) return { ok: false, message: 'No se pudo cerrar la alerta. Actualiza la página e inténtalo de nuevo.' };
-  const { data: code } = await supabase.from('public_code_reservations').select('code').eq('pet_id', report.pet_id).maybeSingle();
-  revalidateLostReportViews(report.pet_id, code?.code || null);
-  return { ok: true, message: 'Cerramos la alerta. El QR mostrará “Ya está en casa” durante 30 días.' };
+  const { data: existing, error: existingError } = await supabase.from('lost_pet_reports').select('id,pet_id,recent_photo_path').eq('id', reportId).eq('status', 'active').maybeSingle();
+  if (existingError || !existing) return { ok: false, message: 'No se encontró una alerta activa para esta mascota.' };
+  let petId = existing.pet_id;
+  const cleanup = await closeReportAndRetirePhoto({
+    async close() {
+      const now = new Date().toISOString();
+      const { data, error } = await supabase.from('lost_pet_reports')
+        .update({ status: 'recovered', recovered_at: now, updated_at: now })
+        .eq('id', reportId).eq('status', 'active').select('pet_id').maybeSingle();
+      if (error || !data) return false;
+      petId = data.pet_id;
+      return true;
+    },
+    async removePhoto(path) {
+      const { error } = await supabase.storage.from('lost-pet-photos').remove([path]);
+      return !error;
+    },
+    async clearPhotoReference() {
+      const { data, error } = await supabase.from('lost_pet_reports').update({ recent_photo_path: null })
+        .eq('id', reportId).eq('status', 'recovered').select('id').maybeSingle();
+      return !error && Boolean(data);
+    },
+  }, existing.recent_photo_path);
+  if (cleanup.status !== 'closed') return { ok: false, message: 'No se pudo cerrar la alerta. Actualiza la página e inténtalo de nuevo.' };
+  const { data: code } = await supabase.from('public_code_reservations').select('code').eq('pet_id', petId).maybeSingle();
+  revalidateLostReportViews(petId, code?.code || null);
+  return {
+    ok: true,
+    message: cleanup.photoCleanup === 'pending'
+      ? 'Cerramos la alerta y el QR ya no muestra la foto. No pudimos completar la limpieza del archivo; conserva su referencia para volver a intentarlo al eliminar la mascota.'
+      : 'Cerramos la alerta. El QR mostrará “Ya está en casa” durante 30 días.',
+  };
 }
