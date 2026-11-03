@@ -1,6 +1,6 @@
 # Pawgram — plan técnico de fase 2
 
-Estado: propuesta para revisión del autor. Contrato funcional aprobado: PRODUCT.md, «Pawgram: contrato funcional aprobado». Los 11 criterios son obligatorios; este plan no cambia su alcance.
+Estado: aprobado por el autor e implementado; ver 2026-11-02-pawgram-verificacion.md para evidencias y pendientes. Contrato funcional aprobado: PRODUCT.md, «Pawgram: contrato funcional aprobado». Los 11 criterios son obligatorios; este plan no cambia su alcance.
 
 ## Resultado y límites
 
@@ -61,4 +61,4 @@ Hace falta un decodificador de imágenes en servidor (evaluar sharp ya instalado
 
 ## Revisión del plan
 
-El contrato funcional está aprobado. Falta revisión del presente plan técnico y selección del método de ejecución antes de implementar, según la skill brainstorming. Método propuesto: ejecución secuencial en este chat, sin subagentes ni worktree. La skill writing-plans referida por brainstorming no está instalada en las rutas disponibles; este documento deja el plan concreto para revisión sin inventar instrucciones de esa skill.
+El contrato funcional está aprobado. El autor aprobó el presente plan y su método de ejecución en este chat. Método acordado: ejecución secuencial en este chat, sin subagentes ni worktree. La skill writing-plans referida por brainstorming no está instalada en las rutas disponibles; este documento deja el plan concreto para revisión sin inventar instrucciones de esa skill.
