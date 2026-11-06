@@ -6,7 +6,7 @@ sql_paths = ["./seed.sql"]
 
 [auth]
 site_url = "http://localhost:3000"
-additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://localhost:3000/auth/reset-password"]
+additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://localhost:3000/auth/reset-password", "http://127.0.0.1:3000/**"]
 
 [auth.email]
 enable_signup = true
